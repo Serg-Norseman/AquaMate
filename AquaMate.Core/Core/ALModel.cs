@@ -53,6 +53,11 @@ namespace AquaMate.Core
         public event DataReceivedEventHandler ReceivedData;
 
 
+        static ALModel()
+        {
+            SQLiteLoader.Load();
+        }
+
         public ALModel(IBrowser browser)
         {
             fBrowser = browser;

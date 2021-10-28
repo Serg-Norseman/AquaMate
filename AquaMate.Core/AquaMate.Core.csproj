@@ -51,6 +51,9 @@
     <Reference Include="BSLib.Design">
       <HintPath>..\libs\BSLib.Design.dll</HintPath>
     </Reference>
+    <Reference Include="BSLib.SQLite">
+      <HintPath>..\libs\BSLib.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="CSProlog">
       <HintPath>..\libs\CSProlog.dll</HintPath>
     </Reference>
@@ -124,8 +127,6 @@
     <Compile Include="M3DViewer\Tanks\RoundedTankRenderer.cs" />
     <Compile Include="M3DViewer\Tanks\TankRenderer.cs" />
     <Compile Include="M3DViewer\Vector3D.cs" />
-    <Compile Include="SQLite.cs" />
-    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="Core\ALCore.cs" />
     <Compile Include="Core\ALData.cs" />
     <Compile Include="Core\ALModel.cs" />
@@ -221,14 +222,8 @@
     <Compile Include="UI\ViewerPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\libs\win32\sqlite3.dll">
-      <Link>sqlite3.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Prognostics" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
