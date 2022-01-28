@@ -636,7 +636,6 @@ namespace AquaMate.Core
             }
 
             return new WorkTime(startDate, stopDate);
-            //return new WorkTime(aquarium.StartDate, aquarium.StopDate);
         }
 
         #endregion

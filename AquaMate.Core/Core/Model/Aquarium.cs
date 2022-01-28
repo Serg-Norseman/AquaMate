@@ -24,10 +24,6 @@ namespace AquaMate.Core.Model
 
         public AquariumWaterType WaterType { get; set; }
 
-        //public DateTime StartDate { get; set; } // deprecated
-
-        //public DateTime StopDate { get; set; } // deprecated
-
         public TankShape TankShape { get; set; }
 
         public string TankProperties { get; set; }
@@ -87,12 +83,6 @@ namespace AquaMate.Core.Model
         {
             return (WaterType != AquariumWaterType.FreshWater);
         }
-
-        // deprecated
-        /*public bool IsInactive()
-        {
-            return !ALCore.IsZeroDate(StopDate);
-        }*/
 
         /// <summary>
         /// The base area of an aquarium (cm2).

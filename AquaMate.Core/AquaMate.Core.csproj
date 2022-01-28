@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Core\ALException.cs" />
     <Compile Include="Core\Model\Shop.cs" />
     <Compile Include="Core\Types\SpeciesProps.cs" />
     <Compile Include="Core\Types\WorkTime.cs" />

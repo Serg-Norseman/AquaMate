@@ -5,6 +5,7 @@
  */
 
 using System;
+using AquaMate.Core.Types;
 using NUnit.Framework;
 
 namespace AquaMate.TSDB
@@ -12,6 +13,15 @@ namespace AquaMate.TSDB
     [TestFixture]
     public class TSValueTests
     {
+        [Test]
+        public void Test_TSPoint_Common()
+        {
+            var instance = new TSPoint();
+            Assert.IsNotNull(instance);
+
+            Assert.AreEqual(EntityType.TSPoint, instance.EntityType);
+        }
+
         [Test]
         public void Test_ctor()
         {

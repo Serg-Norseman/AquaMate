@@ -23,10 +23,6 @@ namespace AquaMate.UI
         IComboBox ShapeCombo { get; }
         IComboBox WaterTypeCombo { get; }
 
-        // deprecated
-        //IDateTimeBox StartDateField { get; }
-        //IDateTimeBox StopDateField { get; }
-
         ITextBox TankVolumeField { get; }
         ITextBox UnderfillHeightField { get; }
         ITextBox SoilHeightField { get; }
@@ -66,11 +62,6 @@ namespace AquaMate.UI
 
             fView.WaterTypeCombo.SetSelectedTag(fRecord.WaterType);
 
-            // deprecated
-            //var workTime = fModel.GetWorkTime(fRecord);
-            //fView.StartDateField.SetCheckedDate(workTime.Start);
-            //fView.StopDateField.SetCheckedDate(workTime.Stop);
-
             fView.TankVolumeField.SetDecimalVal(fRecord.TankVolume);
             fView.UnderfillHeightField.SetDecimalVal(fRecord.UnderfillHeight);
             fView.SoilHeightField.SetDecimalVal(fRecord.SoilHeight);
@@ -84,10 +75,6 @@ namespace AquaMate.UI
                 fRecord.Description = fView.DescriptionField.Text;
                 fRecord.TankShape = fView.ShapeCombo.GetSelectedTag<TankShape>();
                 fRecord.WaterType = fView.WaterTypeCombo.GetSelectedTag<AquariumWaterType>();
-
-                // deprecated
-                //fRecord.StartDate = fView.StartDateField.GetCheckedDate();
-                //fRecord.StopDate = fView.StopDateField.GetCheckedDate();
 
                 fRecord.TankVolume = fView.TankVolumeField.GetDecimalVal();
                 fRecord.UnderfillHeight = fView.UnderfillHeightField.GetDecimalVal();

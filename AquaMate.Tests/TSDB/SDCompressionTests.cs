@@ -30,11 +30,20 @@ namespace AquaMate.TSDB
             var value2 = 22.1;
             Assert.AreEqual(false, instance.ReceivePoint(ref timestamp2, ref value2));
 
-            timestamp = new DateTime(2019, 08, 02, 20, 00, 02);
-            value = 23.8;
+            DateTime timestamp3 = new DateTime(2019, 08, 02, 20, 00, 02);
+            timestamp = timestamp3;
+            double value3 = 23.8;
+            value = value3;
             Assert.AreEqual(true, instance.ReceivePoint(ref timestamp, ref value));
             Assert.AreEqual(timestamp2, timestamp);
             Assert.AreEqual(value2, value);
+
+            // point exceeds CorridorTimeSec (+2h > 1h (3600sec)), save previous point
+            DateTime timestamp4 = new DateTime(2019, 08, 02, 22, 00, 02);
+            double value4 = 23.5;
+            Assert.AreEqual(true, instance.ReceivePoint(ref timestamp4, ref value4));
+            Assert.AreEqual(timestamp3, timestamp4);
+            Assert.AreEqual(value3, value4);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace AquaMate.Core
         {
             get {
                 if (fInstance == null)
-                    throw new Exception("Tried to call the singleton instance of the AppHost before the AppHost started.");
+                    throw new ALException("Tried to call the singleton instance of the AppHost before the AppHost started.");
 
                 return fInstance;
             }
@@ -140,7 +140,7 @@ namespace AquaMate.Core
                 var constructors = typeof(T).GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 return (T)constructors.Single().Invoke(null);
             } catch {
-                throw new Exception(typeof(T) + " must have a parameterless constructor and all constructors have to be NonPublic.");
+                throw new ALException(typeof(T) + " must have a parameterless constructor and all constructors have to be NonPublic.");
             }
         }
 

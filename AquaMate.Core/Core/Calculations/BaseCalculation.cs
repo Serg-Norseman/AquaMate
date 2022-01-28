@@ -176,7 +176,7 @@ namespace AquaMate.Core.Calculations
             var names = CalculationData;
             int namesLen = names.Length;
             if (valsLen != namesLen)
-                throw new Exception("Enumeration and names do not match");
+                throw new ALException("Enumeration and names do not match");
 
             var result = new ComboItem<T>[valsLen];
             for (int i = 0; i < valsLen; i++) {
