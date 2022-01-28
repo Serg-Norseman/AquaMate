@@ -3,7 +3,6 @@
 [![Wiki](https://img.shields.io/badge/browse-the%20wiki-orange.svg)](https://github.com/Serg-Norseman/AquaMate/wiki)
 [![Download AquaMate](https://img.shields.io/sourceforge/dm/aquamate.svg)](https://sourceforge.net/projects/aquamate/files/latest/download)
 
-[![Build Status](https://travis-ci.org/Serg-Norseman/AquaMate.svg?branch=master)](https://travis-ci.org/Serg-Norseman/AquaMate)
 [![Build status](https://ci.appveyor.com/api/projects/status/61is7l0ym7wvqv8r?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/AquaMate)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/AquaMate/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/AquaMate?branch=master)
 [![BCH compliance](https://bettercodehub.com/edge/badge/Serg-Norseman/AquaMate?branch=master)](https://bettercodehub.com/results/Serg-Norseman/AquaMate)

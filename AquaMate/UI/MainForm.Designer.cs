@@ -38,7 +38,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem miCalculator;
         private System.Windows.Forms.ToolStripButton btnSnapshots;
-        private System.Windows.Forms.ToolStripMenuItem miDiagnosticConsole;
 
         private void InitializeComponent()
         {
@@ -78,7 +77,6 @@
             this.pnlDate = new System.Windows.Forms.Panel();
             this.lblDate = new System.Windows.Forms.Label();
             this.pnlClient = new System.Windows.Forms.Panel();
-            this.miDiagnosticConsole = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlTools.SuspendLayout();
@@ -106,7 +104,6 @@
             this.miSettings,
             this.toolStripMenuItem3,
             this.miCalculator,
-            this.miDiagnosticConsole,
             this.toolStripMenuItem2,
             this.miExit});
             this.miFile.Name = "miFile";
@@ -407,13 +404,6 @@
             this.pnlClient.Padding = new System.Windows.Forms.Padding(10);
             this.pnlClient.Size = new System.Drawing.Size(779, 361);
             this.pnlClient.TabIndex = 5;
-            // 
-            // miDiagnosticConsole
-            // 
-            this.miDiagnosticConsole.Name = "miDiagnosticConsole";
-            this.miDiagnosticConsole.Size = new System.Drawing.Size(173, 22);
-            this.miDiagnosticConsole.Text = "DiagnosticConsole";
-            this.miDiagnosticConsole.Click += new System.EventHandler(this.miDiagnosticConsole_Click);
             // 
             // MainForm
             // 

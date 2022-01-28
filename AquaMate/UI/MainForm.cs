@@ -357,13 +357,6 @@ namespace AquaMate.UI
             AppHost.Instance.ShowCalculator();
         }
 
-        private void miDiagnosticConsole_Click(object sender, EventArgs e)
-        {
-            using (var dlg = new DiagnosticConsole()) {
-                dlg.ShowDialog();
-            }
-        }
-
         #endregion
 
         #region Views functions

@@ -91,9 +91,6 @@
     <Reference Include="csgl">
       <HintPath>..\libs\csgl.dll</HintPath>
     </Reference>
-    <Reference Include="CSProlog">
-      <HintPath>..\libs\CSProlog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -108,144 +105,255 @@
     <Compile Include="UI\ALTray.cs" />
     <Compile Include="UI\Components\ChartPoint.cs" />
     <Compile Include="UI\Components\ChartSeries.cs" />
-    <Compile Include="UI\Components\ImageViewer.cs" />
+    <Compile Include="UI\Components\ImageViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\Components\OGLRenderer.cs" />
-    <Compile Include="UI\Components\OGLViewer.cs" />
-    <Compile Include="UI\Components\QualityControl.cs" />
+    <Compile Include="UI\Components\OGLViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Components\QualityControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\Components\UserAction.cs" />
-    <Compile Include="UI\Components\WizardPages.cs" />
-    <Compile Include="UI\Components\ZChart.cs" />
+    <Compile Include="UI\Components\ZChart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\ControlHandlers.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="UI\Components\ZListView.cs" />
-    <Compile Include="UI\Dialogs\AboutDlg.cs" />
+    <Compile Include="UI\Components\ZListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Dialogs\AboutDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\AboutDlg.Designer.cs">
       <DependentUpon>AboutDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\AquariumEditDlg.cs" />
+    <Compile Include="UI\Dialogs\AquariumEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\AquariumEditDlg.Designer.cs">
       <DependentUpon>AquariumEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\BrandEditDlg.cs" />
+    <Compile Include="UI\Dialogs\BrandEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\BrandEditDlg.Designer.cs">
       <DependentUpon>BrandEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\CalculatorDlg.cs" />
+    <Compile Include="UI\Dialogs\CalculatorDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\CalculatorDlg.Designer.cs">
       <DependentUpon>CalculatorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\CommonForm.cs" />
-    <Compile Include="UI\Dialogs\DataMonitor.cs" />
+    <Compile Include="UI\Dialogs\CommonForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Dialogs\DataMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\DataMonitor.Designer.cs">
       <DependentUpon>DataMonitor.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\DeviceEditDlg.cs" />
+    <Compile Include="UI\Dialogs\DeviceEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\DeviceEditDlg.Designer.cs">
       <DependentUpon>DeviceEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\DiagnosticConsole.cs">
+    <Compile Include="UI\Dialogs\EditDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Dialogs\DiagnosticConsole.Designer.cs">
-      <DependentUpon>DiagnosticConsole.cs</DependentUpon>
+    <Compile Include="UI\Dialogs\NoteEditDlg.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Dialogs\EditDialog.cs" />
-    <Compile Include="UI\Dialogs\NoteEditDlg.cs" />
     <Compile Include="UI\Dialogs\NoteEditDlg.Designer.cs">
       <DependentUpon>NoteEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\InhabitantEditDlg.cs" />
+    <Compile Include="UI\Dialogs\InhabitantEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\InhabitantEditDlg.Designer.cs">
       <DependentUpon>InhabitantEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\InventoryEditDlg.cs" />
+    <Compile Include="UI\Dialogs\InventoryEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\InventoryEditDlg.Designer.cs">
       <DependentUpon>InventoryEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\MaintenanceEditDlg.cs" />
+    <Compile Include="UI\Dialogs\MaintenanceEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\MaintenanceEditDlg.Designer.cs">
       <DependentUpon>MaintenanceEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\MeasureEditDlg.cs" />
+    <Compile Include="UI\Dialogs\MeasureEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\MeasureEditDlg.Designer.cs">
       <DependentUpon>MeasureEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\NotificationDlg.cs" />
-    <Compile Include="UI\Dialogs\NutritionEditDlg.cs" />
+    <Compile Include="UI\Dialogs\NotificationDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Dialogs\NutritionEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\NutritionEditDlg.Designer.cs">
       <DependentUpon>NutritionEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\ScheduleEditDlg.cs" />
+    <Compile Include="UI\Dialogs\ScheduleEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\ScheduleEditDlg.Designer.cs">
       <DependentUpon>ScheduleEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\SettingsDlg.cs" />
+    <Compile Include="UI\Dialogs\SettingsDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\SettingsDlg.Designer.cs">
       <DependentUpon>SettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\ShopEditDlg.cs" />
+    <Compile Include="UI\Dialogs\ShopEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\ShopEditDlg.Designer.cs">
       <DependentUpon>ShopEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\SnapshotEditDlg.cs" />
+    <Compile Include="UI\Dialogs\SnapshotEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\SnapshotEditDlg.Designer.cs">
       <DependentUpon>SnapshotEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\SpeciesEditDlg.cs" />
+    <Compile Include="UI\Dialogs\SpeciesEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\SpeciesEditDlg.Designer.cs">
       <DependentUpon>SpeciesEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\TankEditDlg.cs" />
+    <Compile Include="UI\Dialogs\TankEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\TankEditDlg.Designer.cs">
       <DependentUpon>TankEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\TransferEditDlg.cs" />
+    <Compile Include="UI\Dialogs\TransferEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\TransferEditDlg.Designer.cs">
       <DependentUpon>TransferEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\TSPointEditDlg.cs" />
+    <Compile Include="UI\Dialogs\TSPointEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\TSPointEditDlg.Designer.cs">
       <DependentUpon>TSPointEditDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Dialogs\TSValueEditDlg.cs" />
+    <Compile Include="UI\Dialogs\TSValueEditDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\Dialogs\TSValueEditDlg.Designer.cs">
       <DependentUpon>TSValueEditDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\DrawingHelper.cs" />
-    <Compile Include="UI\MainForm.cs" />
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="UI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Panels\AquaAnalysisPanel.cs" />
-    <Compile Include="UI\Panels\AquaDetailsPanel.cs" />
-    <Compile Include="UI\Panels\AquaQualityPanel.cs" />
-    <Compile Include="UI\Panels\BioTreemapPanel.cs" />
-    <Compile Include="UI\Panels\BrandPanel.cs" />
-    <Compile Include="UI\Panels\ChartPanel.cs" />
-    <Compile Include="UI\Panels\InventoryPanel.cs" />
-    <Compile Include="UI\Panels\LifeLinesPanel.cs" />
-    <Compile Include="UI\Panels\M3DViewerPanel.cs" />
-    <Compile Include="UI\Panels\MeasurePanel.cs" />
+    <Compile Include="UI\Panels\AquaAnalysisPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\AquaDetailsPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\AquaQualityPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\BioTreemapPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\BrandPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\ChartPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\InventoryPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\LifeLinesPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\M3DViewerPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\MeasurePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Panels\MeasuresChartPanel.cs" />
-    <Compile Include="UI\Panels\NutritionPanel.cs" />
-    <Compile Include="UI\Panels\PricelistPanel.cs" />
-    <Compile Include="UI\Panels\SchedulePanel.cs" />
-    <Compile Include="UI\Panels\ShopPanel.cs" />
-    <Compile Include="UI\Panels\SnapshotPanel.cs" />
-    <Compile Include="UI\Panels\TSTrendPanel.cs" />
-    <Compile Include="UI\Panels\BudgetPanel.cs" />
-    <Compile Include="UI\Panels\DataPanel.cs" />
-    <Compile Include="UI\Panels\DevicePanel.cs" />
-    <Compile Include="UI\Panels\NotePanel.cs" />
-    <Compile Include="UI\Panels\InhabitantPanel.cs" />
-    <Compile Include="UI\Panels\ListPanel.cs" />
-    <Compile Include="UI\Panels\MaintenancePanel.cs" />
-    <Compile Include="UI\Panels\SpeciesPanel.cs" />
-    <Compile Include="UI\Panels\TanksPanel.cs" />
-    <Compile Include="UI\Panels\TankSticker.cs" />
-    <Compile Include="UI\Panels\TransferPanel.cs" />
-    <Compile Include="UI\Panels\TSDBPanel.cs" />
-    <Compile Include="UI\Panels\TSValuePanel.cs" />
+    <Compile Include="UI\Panels\NutritionPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\PricelistPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\SchedulePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\ShopPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\SnapshotPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\TSTrendPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\BudgetPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\DataPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\DevicePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\NotePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\InhabitantPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\ListPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\MaintenancePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\SpeciesPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\TanksPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\TankSticker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\TransferPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\TSDBPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Panels\TSValuePanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\UIHelper.cs" />
     <Compile Include="UI\WFAppHost.cs" />
     <Compile Include="UI\WFGfxProvider.cs" />
@@ -267,13 +375,7 @@
     <EmbeddedResource Include="Resources\btn_help.gif" />
     <EmbeddedResource Include="Resources\btn_tools.gif" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\Components" />
-    <Folder Include="Resources" />
-    <Folder Include="UI" />
-    <Folder Include="UI\Dialogs" />
-    <Folder Include="UI\Panels" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="..\libs\csgl.native.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

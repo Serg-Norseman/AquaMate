@@ -54,9 +54,6 @@
     <Reference Include="BSLib.SQLite">
       <HintPath>..\libs\BSLib.SQLite.dll</HintPath>
     </Reference>
-    <Reference Include="CSProlog">
-      <HintPath>..\libs\CSProlog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -76,10 +73,6 @@
     <Compile Include="Core\Model\Shop.cs" />
     <Compile Include="Core\Types\SpeciesProps.cs" />
     <Compile Include="Core\Types\WorkTime.cs" />
-    <Compile Include="Prognostics\IConsole.cs" />
-    <Compile Include="Prognostics\LogicResult.cs" />
-    <Compile Include="Prognostics\LogicService.cs" />
-    <Compile Include="Prognostics\WinIO.cs" />
     <Compile Include="UI\Charts\ChartStyle.cs" />
     <Compile Include="Core\ALSettings.cs" />
     <Compile Include="Core\AppHost.cs" />

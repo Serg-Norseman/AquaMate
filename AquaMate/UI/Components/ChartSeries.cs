@@ -4,7 +4,6 @@
  *  This program is licensed under the GNU General Public License.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using AquaMate.UI.Charts;

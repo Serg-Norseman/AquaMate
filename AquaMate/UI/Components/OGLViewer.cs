@@ -20,14 +20,14 @@ namespace AquaMate.UI.Components
     {
         private bool fAeration;
         private System.Timers.Timer fAnimTimer;
+        private Aquarium fAquarium;
         private bool fBusy;
         private bool fFreeRotate;
         private int fLastX;
         private int fLastY;
         private bool fMouseDrag;
         private Vector3D fRotation;
-        private OGLRenderer fSceneRenderer;
-        private Aquarium fAquarium;
+        private readonly OGLRenderer fSceneRenderer;
         private ITankRenderer fTankRenderer;
         private bool fWaterVisible;
         private float fZ;

@@ -5,7 +5,6 @@
  */
 
 using System;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -37,7 +36,7 @@ namespace AquaMate.UI.Components
     /// </summary>
     public class OGLRenderer : SceneRenderer
     {
-        private Control fViewer;
+        private readonly Control fViewer;
         private uint fListBase;
 
         public OGLRenderer(Control viewer)
