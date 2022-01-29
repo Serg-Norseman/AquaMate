@@ -30,6 +30,11 @@ namespace AquaMate.Core.Types
             return !ALCore.IsZeroDate(Start);
         }
 
+        public bool IsActive()
+        {
+            return !ALCore.IsZeroDate(Start) && ALCore.IsZeroDate(Stop);
+        }
+
         public string GetWorkDays()
         {
             string works;

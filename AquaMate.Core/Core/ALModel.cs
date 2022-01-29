@@ -302,7 +302,7 @@ namespace AquaMate.Core
             var queryResult = QueryAquariums();
             foreach (var aqm in queryResult) {
                 var workTime = GetWorkTime(aqm);
-                if (workTime.IsInactive() && !showInactive)
+                if (!workTime.IsActive() && !showInactive)
                     continue;
 
                 result.Add(new ComboItem<int>(aqm.Name, aqm.Id));
