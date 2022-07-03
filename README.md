@@ -5,7 +5,6 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/61is7l0ym7wvqv8r?svg=true)](https://ci.appveyor.com/project/Serg-Norseman/AquaMate)
 [![codecov.io](https://codecov.io/github/Serg-Norseman/AquaMate/coverage.svg?branch=master)](https://codecov.io/github/Serg-Norseman/AquaMate?branch=master)
-[![CodeFactor](https://www.codefactor.io/repository/github/serg-norseman/aquamate/badge)](https://www.codefactor.io/repository/github/serg-norseman/aquamate)
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=AquaMate&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=AquaMate)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=AquaMate&metric=coverage)](https://sonarcloud.io/dashboard?id=AquaMate)
 
