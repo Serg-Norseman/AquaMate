@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-# SharpDevelop 5.1
-VisualStudioVersion = 12.0.20827.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37516.0 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7ED294B8-DBD1-4C8C-AB67-24F9877D1051}"
 	ProjectSection(SolutionItems) = preProject
 		locales\english.xml = locales\english.xml
+		README.md = README.md
 		locales\russian.xml = locales\russian.xml
 	EndProjectSection
 EndProject
@@ -18,35 +18,38 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AquaMate.Core", "AquaMate.C
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
 		Debug|x64 = Debug|x64
-		Release|x86 = Release|x86
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Debug|x86.ActiveCfg = Debug|x86
-		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Debug|x86.Build.0 = Debug|x86
 		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Debug|x64.ActiveCfg = Debug|x64
 		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Debug|x64.Build.0 = Debug|x64
-		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Release|x86.ActiveCfg = Release|x86
-		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Release|x86.Build.0 = Release|x86
+		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Debug|x86.ActiveCfg = Debug|x86
+		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Debug|x86.Build.0 = Debug|x86
 		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Release|x64.ActiveCfg = Release|x64
 		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Release|x64.Build.0 = Release|x64
-		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Debug|x86.ActiveCfg = Debug|x86
-		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Debug|x86.Build.0 = Debug|x86
+		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Release|x86.ActiveCfg = Release|x86
+		{4BBEEAB9-562B-4360-BE8C-36E65B005593}.Release|x86.Build.0 = Release|x86
 		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Debug|x64.ActiveCfg = Debug|x64
 		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Debug|x64.Build.0 = Debug|x64
-		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Release|x86.ActiveCfg = Release|x86
-		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Release|x86.Build.0 = Release|x86
+		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Debug|x86.ActiveCfg = Debug|x86
+		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Debug|x86.Build.0 = Debug|x86
 		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Release|x64.ActiveCfg = Release|x64
 		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Release|x64.Build.0 = Release|x64
-		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Debug|x86.ActiveCfg = Debug|x86
-		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Debug|x86.Build.0 = Debug|x86
+		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Release|x86.ActiveCfg = Release|x86
+		{171ADA99-34C7-42D9-8501-37A66294BBA8}.Release|x86.Build.0 = Release|x86
 		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Debug|x64.ActiveCfg = Debug|x64
 		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Debug|x64.Build.0 = Debug|x64
-		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Release|x86.ActiveCfg = Release|x86
-		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Release|x86.Build.0 = Release|x86
+		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Debug|x86.ActiveCfg = Debug|x86
+		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Debug|x86.Build.0 = Debug|x86
 		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Release|x64.ActiveCfg = Release|x64
 		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Release|x64.Build.0 = Release|x64
+		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Release|x86.ActiveCfg = Release|x86
+		{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
