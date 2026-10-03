@@ -14,8 +14,7 @@ namespace AquaMate.Core.Model
     [TestFixture]
     public class AquariumTests
     {
-        [TestFixtureSetUp]
-        public void SetUp()
+        public AquariumTests()
         {
             Localizer.DefInit();
         }

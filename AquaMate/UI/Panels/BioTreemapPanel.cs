@@ -47,7 +47,7 @@ namespace AquaMate.UI.Panels
         static BioTreemapPanel()
         {
             string taxFile = AppHost.GetAppPath() + @"common\taxonomy.csv";
-            fCSVData = CSVReader.ReadCSVFile(taxFile, Encoding.GetEncoding(1251), true);
+            fCSVData = CSVReader.ReadCSVFile(taxFile, Encoding.UTF8, true);
         }
 
         public BioTreemapPanel()
@@ -59,7 +59,7 @@ namespace AquaMate.UI.Panels
             fDataMap.RootItem = fRootItem;
             fDataMap.Dock = DockStyle.Fill;
             fDataMap.MouseoverHighlight = true;
-            fDataMap.OnHintRequest += OnHintRequest;
+            fDataMap.HintRequest += OnHintRequest;
             fDataMap.ShowNames = true;
             fDataMap.KeyDown += DataMap_KeyDown;
             fDataMap.MouseDoubleClick += DataMap_MouseDoubleClick;
@@ -167,7 +167,7 @@ namespace AquaMate.UI.Panels
             fDataMap.UpdateView();
         }
 
-        private void OnHintRequest(object sender, HintRequestEventArgs args)
+        private void OnHintRequest(object sender, TMHintRequestEventArgs args)
         {
             args.Hint = GetFullName(args.MapItem);
         }

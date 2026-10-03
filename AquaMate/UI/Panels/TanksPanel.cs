@@ -23,9 +23,9 @@ namespace AquaMate.UI.Panels
     {
         private readonly ILogger fLogger = LogManager.GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, "TanksPanel");
 
-        private readonly ContextMenu fContextMenu;
-        private readonly MenuItem fEditItem;
-        private readonly MenuItem fDeleteItem;
+        private readonly ContextMenuStrip fContextMenu;
+        private readonly ToolStripMenuItem fEditItem;
+        private readonly ToolStripMenuItem fDeleteItem;
         private readonly FlowLayoutPanel fLayoutPanel;
 
         private TankSticker fSelectedTank;
@@ -62,14 +62,14 @@ namespace AquaMate.UI.Panels
             fLayoutPanel.Click += OnPanelClick;
             Controls.Add(fLayoutPanel);
 
-            fEditItem = new MenuItem();
+            fEditItem = new ToolStripMenuItem();
             fEditItem.Click += btnEditTank_Click;
 
-            fDeleteItem = new MenuItem();
+            fDeleteItem = new ToolStripMenuItem();
             fDeleteItem.Click += btnDeleteTank_Click;
 
-            fContextMenu = new ContextMenu();
-            fContextMenu.MenuItems.AddRange(new MenuItem[] { fEditItem, fDeleteItem});
+            fContextMenu = new ContextMenuStrip();
+            fContextMenu.Items.AddRange(new ToolStripMenuItem[] { fEditItem, fDeleteItem});
         }
 
         public override void SetLocale()
@@ -122,7 +122,7 @@ namespace AquaMate.UI.Panels
                 aqPanel.Aquarium = aqm;
                 aqPanel.Click += OnTankClick;
                 aqPanel.DoubleClick += OnTankDoubleClick;
-                aqPanel.ContextMenu = fContextMenu;
+                aqPanel.ContextMenuStrip = fContextMenu;
                 fLayoutPanel.Controls.Add(aqPanel);
             }
         }

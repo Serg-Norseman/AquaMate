@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 
 namespace AquaMate.Core.Calculations
 {

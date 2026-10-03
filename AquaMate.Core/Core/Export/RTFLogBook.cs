@@ -77,7 +77,7 @@ namespace AquaMate.Core.Export
                     }
                 }
             } finally {
-                fDocument.save(fileName);
+                fDocument.Save(fileName);
             }
         }
 
@@ -87,7 +87,7 @@ namespace AquaMate.Core.Export
             float spacingBefore, float spacingAfter,
             float indent = 0.0f, bool keepTogether = false)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
             par.Alignment = alignment;
 
             var margins = par.Margins;
@@ -105,17 +105,17 @@ namespace AquaMate.Core.Export
             par.Text.Append(text);
             int end = par.Text.Length - 1;
 
-            RtfCharFormat fmt = par.addCharFormat(beg, end);
+            RtfCharFormat fmt = par.AddCharFormat(beg, end);
             fmt.Font = fntStr.FD;
             fmt.FgColor = fntStr.Color;
             fmt.FontSize = fntStr.Size;
-            if (fntStr.Bold) fmt.FontStyle.addStyle(FontStyleFlag.Bold);
-            if (fntStr.Underline) fmt.FontStyle.addStyle(FontStyleFlag.Underline);
+            if (fntStr.Bold) fmt.FontStyle.AddStyle(FontStyleFlag.Bold);
+            if (fntStr.Underline) fmt.FontStyle.AddStyle(FontStyleFlag.Underline);
         }
 
         private static void AddListItem(string text, FontStruct fntStr)
         {
-            RtfParagraph par = fDocument.addParagraph();
+            RtfParagraph par = fDocument.AddParagraph();
 
             var symFont = CreateFont("Symbol", fntStr.Size, fntStr.Bold, fntStr.Underline, fntStr.OriginalColor);
 
@@ -123,14 +123,19 @@ namespace AquaMate.Core.Export
             AddParagraphChunk(par, text, fntStr);
         }
 
+        private static string Clr2Hex(Color color)
+        {
+            return $"{color.R:X2}{color.G:X2}{color.B:X2}";
+        }
+
         private static FontStruct CreateFont(string name, float size, bool bold, bool underline, Color color)
         {
             if (string.IsNullOrEmpty(name)) name = "Times New Roman";
 
             FontStruct fntStr = new FontStruct();
-            fntStr.FD = fDocument.createFont(name);
+            fntStr.FD = fDocument.CreateFont(name);
             fntStr.OriginalColor = color;
-            fntStr.Color = fDocument.createColor(new RtfColor(color));
+            fntStr.Color = fDocument.CreateColor(new RtfColor(Clr2Hex(color)));
             fntStr.Size = size;
             fntStr.Bold = bold;
             fntStr.Underline = underline;

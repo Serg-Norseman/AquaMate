@@ -20,7 +20,7 @@ namespace AquaMate.UI.Panels
     /// <summary>
     /// 
     /// </summary>
-    public class DataPanel : Panel, IDataPanel
+    public class DataPanel : Panel, IDataPanel, BSLib.Design.MVP.IView, IView
     {
         private readonly ILogger fLogger = LogManager.GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, "DataPanel");
 
@@ -51,6 +51,7 @@ namespace AquaMate.UI.Panels
             }
         }
 
+        public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public DataPanel()
         {
@@ -59,12 +60,12 @@ namespace AquaMate.UI.Panels
             Dock = DockStyle.Fill;
 
             fActions = new List<UserAction>();
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
         }
 
         public virtual void SetLocale()
@@ -144,6 +145,23 @@ namespace AquaMate.UI.Panels
         public virtual void TickTimer()
         {
             // dummy
+        }
+
+        public void Close()
+        {
+        }
+
+        public object GetControl(string controlName)
+        {
+            return null;
+        }
+
+        public void SetToolTip(object component, string toolTip)
+        {
+        }
+
+        public void Activate()
+        {
         }
     }
 }

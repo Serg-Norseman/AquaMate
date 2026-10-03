@@ -4,6 +4,8 @@
  *  This program is licensed under the GNU General Public License.
  */
 
+#if !NET8_0_OR_GREATER
+
 using System;
 using System.Windows.Forms;
 using AquaMate.Core.Model;
@@ -50,3 +52,5 @@ namespace AquaMate.UI.Panels
         }
     }
 }
+
+#endif

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using AquaMate.Core;
 using AquaMate.Core.Model;
 using AquaMate.Core.Types;
-using BSLib.Timeline;
+using BSLib.DataViz.Timeline;
 
 namespace AquaMate.UI.Panels
 {
@@ -59,7 +59,7 @@ namespace AquaMate.UI.Panels
                 }
 
                 Color color = ALData.SpeciesTypes[(int)speciesType].Color;
-                fGraph.AddEventFrame(new EventFrame(rec.Name, inclusionDate, exclusionDate, color));
+                fGraph.AddEventFrame(new EventFrame(rec.Name, inclusionDate, exclusionDate, color.ToArgb()));
             }
         }
     }

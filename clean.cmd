@@ -5,6 +5,9 @@ del .\*.mdb
 del .\*.xml
 del .\*.log
 
+del .\bin\* /s /q
+for /d %%p in (.\bin\*) do rd "%%p" /s /q
+
 rmdir .\.vs /s /q
 
 rmdir .\AquaMate\bin /s /q

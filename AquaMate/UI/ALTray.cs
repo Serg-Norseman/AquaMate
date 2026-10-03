@@ -19,9 +19,9 @@ namespace AquaMate.UI
             public DateTime LastTime;
         }
 
-        private MenuItem fAutorunItem;
-        private MenuItem fAboutItem;
-        private MenuItem fExitItem;
+        private ToolStripMenuItem fAutorunItem;
+        private ToolStripMenuItem fAboutItem;
+        private ToolStripMenuItem fExitItem;
         private readonly IBrowser fMainForm;
         private readonly NotifyIcon fNotifyIcon;
         private readonly StringList fTipsList;
@@ -35,7 +35,7 @@ namespace AquaMate.UI
             fNotifyIcon = new NotifyIcon();
             fNotifyIcon.DoubleClick += Icon_DoubleClick;
             fNotifyIcon.Icon = new Icon(UIHelper.LoadResourceStream("icon_aquamate.ico"));
-            fNotifyIcon.ContextMenu = InitializeMenu();
+            fNotifyIcon.ContextMenuStrip = InitializeMenu();
             fNotifyIcon.Visible = true;
 
             fAutorunItem.Checked = AppHost.IsStartupItem();
@@ -59,25 +59,27 @@ namespace AquaMate.UI
             base.Dispose(disposing);
         }
 
-        private ContextMenu InitializeMenu()
+        private ContextMenuStrip InitializeMenu()
         {
-            var appItem = new MenuItem(ALCore.AppName, Icon_DoubleClick);
-            appItem.DefaultItem = true;
+            var appItem = new ToolStripMenuItem(ALCore.AppName, null, Icon_DoubleClick);
+            //appItem.DefaultItem = true;
 
-            fAutorunItem = new MenuItem("Autorun", miAutorun_Click);
-            fAboutItem = new MenuItem("About", miAbout_Click);
-            fExitItem = new MenuItem("Exit", miExit_Click);
+            fAutorunItem = new ToolStripMenuItem("Autorun", null, miAutorun_Click);
+            fAboutItem = new ToolStripMenuItem("About", null, miAbout_Click);
+            fExitItem = new ToolStripMenuItem("Exit", null, miExit_Click);
 
-            MenuItem[] menuItems = new MenuItem[] {
+            ToolStripMenuItem[] menuItems = new ToolStripMenuItem[] {
                 appItem,
-                new MenuItem("-"),
+                new ToolStripMenuItem("-"),
                 fAutorunItem,
-                new MenuItem("-"),
+                new ToolStripMenuItem("-"),
                 fAboutItem,
                 fExitItem
             };
 
-            return new ContextMenu(menuItems);
+            var result = new ContextMenuStrip();
+            result.Items.AddRange(menuItems);
+            return result;
         }
 
         public void SetLocale()

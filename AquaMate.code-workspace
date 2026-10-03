@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "./AquaMate"
+		},
+		{
+			"path": "./AquaMate.Core"
+		},
+		{
+			"path": "./AquaMate.Tests"
+		},
+		{
+			"path": "./ALSketch"
+		},
+		{
+			"path": "./locales"
+		}
+	],
+	"settings": {
+		"dotnet.preferCSharpExtension": true
+	}
+}

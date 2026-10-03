@@ -4,6 +4,8 @@
  *  This program is licensed under the GNU General Public License.
  */
 
+#if !NET8_0_OR_GREATER
+
 using System;
 using System.Timers;
 using System.Windows.Forms;
@@ -264,3 +266,5 @@ namespace AquaMate.UI.Components
         }
     }
 }
+
+#endif

@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
+using AquaMate.Core;
 
 [assembly: AssemblyTitle("AquaMate.Tests")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyProduct("AquaMate")]
-[assembly: AssemblyCopyright("Copyright © 2019 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyDescription(ALData.AM_DESC)]
+[assembly: AssemblyProduct(ALData.AM_PRODUCT)]
+[assembly: AssemblyCopyright(ALData.AM_COPYRIGHT)]
+[assembly: AssemblyVersion(ALData.AM_VERSION)]
 [assembly: AssemblyCulture("")]

@@ -11,7 +11,7 @@ using AquaMate.Core.Model;
 using AquaMate.Core.Model.Tanks;
 using AquaMate.Core.Types;
 using BSLib;
-using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 
 namespace AquaMate.Core
 {
@@ -20,6 +20,12 @@ namespace AquaMate.Core
     /// </summary>
     public static class ALData
     {
+        public const string AM_PRODUCT = "AquaMate";
+        public const string AM_COPYRIGHT = "Copyright © 2019-2022,2026 by Sergey V. Zhdanovskih";
+        public const string AM_VERSION = "1.4.0.0";
+        public const string AM_DESC = "Home aquariums manager";
+
+
         // TODO: Move cost to settings
         public const double kWhCost = 2.76;
 

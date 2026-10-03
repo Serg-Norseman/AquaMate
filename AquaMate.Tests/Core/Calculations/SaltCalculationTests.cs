@@ -4,7 +4,6 @@
  *  This program is licensed under the GNU General Public License.
  */
 
-using System;
 using NUnit.Framework;
 
 namespace AquaMate.Core.Calculations
@@ -12,8 +11,7 @@ namespace AquaMate.Core.Calculations
     [TestFixture]
     public class SaltCalculationTests
     {
-        [TestFixtureSetUp]
-        public void SetUp()
+        public SaltCalculationTests()
         {
             Localizer.DefInit();
         }
@@ -29,7 +27,7 @@ namespace AquaMate.Core.Calculations
             instance.Calculate();
             Assert.AreEqual(4.275f, instance.ResultValue, 0.001);
 
-            Assert.IsNotNullOrEmpty(instance.Description);
+            Assert.IsNotNull(instance.Description);
         }
     }
 }

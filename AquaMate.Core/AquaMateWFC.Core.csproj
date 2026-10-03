@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <RootNamespace />
+        <OutputType>Library</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <UseWindowsForms>true</UseWindowsForms>
+        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\net\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\libs\net\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\libs\net\BSLib.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="RtfWriter">
+            <HintPath>..\libs\net\RtfWriter.dll</HintPath>
+        </Reference>
+
+        <Reference Include="ExcelLibrary">
+            <HintPath>..\libs\ExcelLibrary.dll</HintPath>
+        </Reference>
+        <Reference Include="ZedGraph">
+            <HintPath>..\libs\ZedGraph.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+        <PackageReference Include="log4net" Version="3.5.0" />
+    </ItemGroup>
+
+</Project>

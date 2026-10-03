@@ -15,7 +15,7 @@ using AquaMate.Logging;
 using AquaMate.TSDB;
 using AquaMate.UI;
 using BSLib;
-using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 using SQLite;
 
 namespace AquaMate.Core
@@ -55,7 +55,7 @@ namespace AquaMate.Core
 
         static ALModel()
         {
-            SQLiteLoader.Load();
+            //SQLiteLoader.Load();
         }
 
         public ALModel(IBrowser browser)
@@ -65,7 +65,7 @@ namespace AquaMate.Core
             fTSDB = new TSDatabase();
 
             var databasePath = Path.Combine(AppHost.GetAppDataPath(), "ALData.db");
-            fDB = new SQLiteConnection(databasePath);
+            fDB = new SQLiteConnection(databasePath, storeDateTimeAsTicks: false);
 
             fDB.CreateTable<Aquarium>();
 
@@ -96,6 +96,7 @@ namespace AquaMate.Core
             var transfers = QueryTransfers();
             foreach (Transfer rec in transfers) {
                 var itemRec = GetRecord(rec.ItemType, rec.ItemId);
+                if (itemRec == null) continue;
 
                 bool valid = true;
                 ItemType sourItemType = ItemType.None;
@@ -116,16 +117,18 @@ namespace AquaMate.Core
                         break;
 
                     case EntityType.Inhabitant:
-                        var inhab = itemRec as Inhabitant;
-                        var species = GetRecord<Species>(inhab.SpeciesId);
-                        sourItemType = ALCore.GetItemType(species.Type);
-                        valid = rec.ItemType == sourItemType;
+                        if (itemRec is Inhabitant inhab) {
+                            var species = GetRecord<Species>(inhab.SpeciesId);
+                            sourItemType = ALCore.GetItemType(species.Type);
+                            valid = rec.ItemType == sourItemType;
+                        }
                         break;
 
                     case EntityType.Inventory:
-                        var invent = itemRec as Inventory;
-                        sourItemType = ALCore.GetItemType(invent.Type);
-                        valid = rec.ItemType == sourItemType;
+                        if (itemRec is Inventory invent) {
+                            sourItemType = ALCore.GetItemType(invent.Type);
+                            valid = rec.ItemType == sourItemType;
+                        }
                         break;
                 }
 

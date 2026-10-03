@@ -12,18 +12,37 @@ namespace AquaMate.UI.Dialogs
     /// <summary>
     /// 
     /// </summary>
-    public class CommonForm : Form
+    public class CommonForm : Form, BSLib.Design.MVP.IView
     {
         private readonly ControlsManager fControlsManager;
 
+        public string Title
+        {
+            get { return this.Text; }
+            set { }
+        }
+
         public CommonForm()
         {
-            fControlsManager = new ControlsManager();
+            fControlsManager = new ControlsManager(this);
         }
 
         protected T GetControlHandler<T>(object control) where T : class, IControl
         {
-            return fControlsManager.GetControlHandler<T>(control);
+            return fControlsManager.GetControl<T>(control);
+        }
+
+        public virtual void SetLocale()
+        {
+        }
+
+        public object GetControl(string controlName)
+        {
+            return null;
+        }
+
+        public void SetToolTip(object component, string toolTip)
+        {
         }
     }
 }

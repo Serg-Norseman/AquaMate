@@ -190,6 +190,8 @@ namespace AquaMate.UI
             set { Control.SortColumn = value; }
         }
 
+        public int SelectedIndex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public void AddColumn(string caption, int width, bool autoSize)
         {
         }
@@ -259,6 +261,15 @@ namespace AquaMate.UI
 
         public void UpdateContents(bool columnsChanged = false)
         {
+        }
+
+        public void AddCheckedColumn(string caption, int width, bool autoSize = false)
+        {
+        }
+
+        public IListItem AddItem(object rowData, bool isChecked, params object[] columnValues)
+        {
+            return null;
         }
     }
 }

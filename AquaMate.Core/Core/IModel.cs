@@ -11,7 +11,7 @@ using AquaMate.Core.Types;
 using AquaMate.DataCollection;
 using AquaMate.TSDB;
 using AquaMate.UI;
-using BSLib.Design;
+using BSLib.Design.MVP.Controls;
 
 namespace AquaMate.Core
 {

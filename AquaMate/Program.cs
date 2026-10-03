@@ -10,10 +10,10 @@ using AquaMate.UI;
 
 namespace AquaMate
 {
-    internal static class Program
+    public static class Program
     {
         [STAThread]
-        private static void Main(string[] args)
+        public static void Main(string[] args)
         {
             AppHost.Start<WFAppHost, MainForm>(args);
         }

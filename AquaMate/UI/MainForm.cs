@@ -115,7 +115,8 @@ namespace AquaMate.UI
                 SetActions(fCurrentPanel);
             }
 
-            if (fTray != null) fTray.SetLocale();
+            if (fTray != null)
+                fTray.SetLocale();
 
             // other
             foreach (var props in ALData.MeasurementUnits) {
@@ -170,13 +171,15 @@ namespace AquaMate.UI
             DateTime dtx = DateTime.Now;
 
             // one check per minute
-            if (dtx.Second != 0) return;
+            if (dtx.Second != 0)
+                return;
 
             int notInterval = ALSettings.Instance.NotificationInterval;
 
             var records = fModel.QuerySchedule();
             foreach (Schedule rec in records) {
-                if (rec.Status != TaskStatus.ToDo || !rec.Reminder) continue;
+                if (rec.Status != TaskStatus.ToDo || !rec.Reminder)
+                    continue;
 
                 if (rec.Timestamp.AddMinutes(-notInterval) <= dtx && dtx <= rec.Timestamp.AddMinutes(+notInterval)) {
                     Aquarium aqm = fModel.GetRecord<Aquarium>(rec.AquariumId);
@@ -270,7 +273,8 @@ namespace AquaMate.UI
             }
 
             string recordName = fModel.GetEntityName(entity);
-            if (!UIHelper.ShowQuestionYN(string.Format(Localizer.LS(LSID.RecordDeleteQuery), recordName))) return false;
+            if (!UIHelper.ShowQuestionYN(string.Format(Localizer.LS(LSID.RecordDeleteQuery), recordName)))
+                return false;
 
             return true;
         }
@@ -457,7 +461,9 @@ namespace AquaMate.UI
                     SetView<SnapshotPanel>(extData);
                     break;
                 case MainView.M3DViewer:
+#if !NET8_0_OR_GREATER
                     SetView<M3DViewerPanel>(extData);
+#endif
                     break;
                 case MainView.Brands:
                     SetView<BrandPanel>(extData);

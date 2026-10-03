@@ -4,6 +4,8 @@
  *  This program is licensed under the GNU General Public License.
  */
 
+#if !NET8_0_OR_GREATER
+
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -374,3 +376,5 @@ namespace AquaMate.UI.Components
         #endregion
     }
 }
+
+#endif

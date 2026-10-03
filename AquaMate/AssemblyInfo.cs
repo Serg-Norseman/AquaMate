@@ -1,14 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-
-#if !NETCOREAPP30
+using AquaMate.Core;
 
 [assembly: AssemblyTitle("AquaMate")]
-[assembly: AssemblyDescription("Home aquariums manager")]
-[assembly: AssemblyProduct("AquaMate")]
-[assembly: AssemblyCopyright("Copyright © 2019-2022 by Sergey V. Zhdanovskih")]
-[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyDescription(ALData.AM_DESC)]
+[assembly: AssemblyProduct(ALData.AM_PRODUCT)]
+[assembly: AssemblyCopyright(ALData.AM_COPYRIGHT)]
+[assembly: AssemblyVersion(ALData.AM_VERSION)]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-
-#endif

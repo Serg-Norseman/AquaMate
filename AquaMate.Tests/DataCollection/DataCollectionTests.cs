@@ -4,7 +4,6 @@
  *  This program is licensed under the GNU General Public License.
  */
 
-using System;
 using System.Threading;
 using NUnit.Framework;
 
@@ -47,6 +46,7 @@ namespace AquaMate.DataCollection
     [TestFixture]
     public class DataCollectionTests
     {
+#if !NETCOREAPP30
         [Test]
         public void Test_Common()
         {
@@ -61,6 +61,7 @@ namespace AquaMate.DataCollection
             Assert.IsNotNull(ledService);
             Assert.AreEqual(ledService.Channel, serialChannel);
         }
+#endif
 
         [Test]
         public void Test_TemperatureService()
@@ -68,7 +69,7 @@ namespace AquaMate.DataCollection
             float temperature = 0.0f;
 
             var tempChannel = new TestTempChannel();
-            tempChannel.ReceivedData += delegate(object sender, DataReceivedEventArgs e) {
+            tempChannel.ReceivedData += delegate (object sender, DataReceivedEventArgs e) {
                 temperature = e.Value;
             };
             Assert.IsNotNull(tempChannel);
