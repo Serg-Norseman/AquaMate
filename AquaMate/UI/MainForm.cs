@@ -61,6 +61,9 @@ namespace AquaMate.UI
             fTray = new ALTray(this);
 
             ALSettings.Instance.LoadFromFile(Path.Combine(AppHost.GetAppDataPath(), "AquaMate.ini"));
+
+            ((WFAppHost)AppHost.Instance).RuntimeContext.Model = fModel;
+
             SetSettings();
             UpdateControls();
 
@@ -358,6 +361,11 @@ namespace AquaMate.UI
         private void miCalculator_Click(object sender, EventArgs e)
         {
             AppHost.Instance.ShowCalculator();
+        }
+
+        private void miMCPServer_Click(object sender, EventArgs e)
+        {
+            WFAppHost.mcpShowDialog();
         }
 
         #endregion

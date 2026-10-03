@@ -475,6 +475,11 @@ namespace AquaMate.Core
             return fDB.Query<Inhabitant>("select inh.Id, inh.SpeciesId, inh.Sex, inh.Name from Inhabitant inh, Transfer tran where (inh.Id = tran.ItemId and tran.ItemType in (2, 3, 4, 5) and TargetId = ?)", aquarium.Id);
         }
 
+        public IList<Inhabitant> QueryInhabitants(int aquariumId)
+        {
+            return fDB.Query<Inhabitant>("select inh.Id, inh.SpeciesId, inh.Sex, inh.Name from Inhabitant inh, Transfer tran where (inh.Id = tran.ItemId and tran.ItemType in (2, 3, 4, 5) and TargetId = ?)", aquariumId);
+        }
+
         #endregion
 
         #region Species functions
@@ -639,6 +644,11 @@ namespace AquaMate.Core
             }
 
             return new WorkTime(startDate, stopDate);
+        }
+
+        public TankState GetTankState(WorkTime workTime)
+        {
+            return (!workTime.WasStarted() || workTime.IsInactive()) ? TankState.Inactive : TankState.Normal;
         }
 
         #endregion

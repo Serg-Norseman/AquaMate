@@ -53,6 +53,9 @@
         <Reference Include="ZedGraph">
             <HintPath>..\libs\ZedGraph.dll</HintPath>
         </Reference>
+        <Reference Include="ZLMKit">
+            <HintPath>..\libs\net\ZLMKit.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 

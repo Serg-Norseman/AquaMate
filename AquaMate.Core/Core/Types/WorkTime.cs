@@ -8,6 +8,15 @@ using System;
 
 namespace AquaMate.Core.Types
 {
+    public enum TankState
+    {
+        Normal,
+        Warning,
+        Alert,
+        Inactive
+    }
+
+
     public struct WorkTime
     {
         public readonly DateTime Start;

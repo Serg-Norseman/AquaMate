@@ -15,15 +15,6 @@ using BSLib;
 
 namespace AquaMate.UI.Panels
 {
-    public enum TankState
-    {
-        Normal,
-        Warning,
-        Alert,
-        Inactive
-    }
-
-
     /// <summary>
     /// 
     /// </summary>

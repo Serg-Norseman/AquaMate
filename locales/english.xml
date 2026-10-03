@@ -252,4 +252,28 @@
   <string id="250">Lumen,lm"</string>
   <string id="251">Watt Per Square Meter,W/m2</string>
   <string id="252">AirPump</string>
+
+  <string id="301">Start</string>
+  <string id="302">Stop</string>
+  <string id="303">Server Host</string>
+  <string id="304">Server Port</string>
+  <string id="305">Trusted Hosts</string>
+  <string id="306">Cross-Origin Resource Sharing (CORS)</string>
+  <string id="307">Verbose Server Logs</string>
+  <string id="308">Autostart on application launch</string>
+  <string id="309">Server stopped</string>
+  <string id="310">Server started: {0}</string>
+  <string id="311">Error</string>
+  <string id="312">MCP server configuration</string>
+  <string id="313">Specify a valid port number (1-65535).</string>
+  <string id="314">Validation Error</string>
+  <string id="315">Starting server...</string>
+  <string id="316">Error starting server</string>
+  <string id="317">Stopping server</string>
+  <string id="318">MCP Server Settings and Control</string>
+  <string id="319">IP or host to listen on (e.g., localhost or 0.0.0.0)</string>
+  <string id="320">Port for connections</string>
+  <string id="321">Comma-separated list of allowed origins</string>
+  <string id="322">Error starting server: {0}</string>
+  <string id="323">Error stopping server: {0}</string>
 </resources>

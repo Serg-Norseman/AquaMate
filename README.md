@@ -26,3 +26,4 @@ Features:
 - Snapshots of inhabitants;
 - 3D viewer of tanks (OpenGL, only rectangular, bowfront and cylinder);
 - Units of measurements (only for size, mass, volume and temperature; only for UI yet, fixed yet);
+- AI integration via a built-in MCP server.

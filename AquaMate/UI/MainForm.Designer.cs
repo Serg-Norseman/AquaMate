@@ -38,6 +38,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem miCalculator;
         private System.Windows.Forms.ToolStripButton btnSnapshots;
+        private System.Windows.Forms.ToolStripMenuItem miMCPServer;
 
         private void InitializeComponent()
         {
@@ -77,6 +78,7 @@
             this.pnlDate = new System.Windows.Forms.Panel();
             this.lblDate = new System.Windows.Forms.Label();
             this.pnlClient = new System.Windows.Forms.Panel();
+            this.miMCPServer = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlTools.SuspendLayout();
@@ -104,6 +106,7 @@
             this.miSettings,
             this.toolStripMenuItem3,
             this.miCalculator,
+            this.miMCPServer,
             this.toolStripMenuItem2,
             this.miExit});
             this.miFile.Name = "miFile";
@@ -140,6 +143,13 @@
             this.miCalculator.Size = new System.Drawing.Size(173, 22);
             this.miCalculator.Text = "Calculator";
             this.miCalculator.Click += new System.EventHandler(this.miCalculator_Click);
+            // 
+            // miMCPServer
+            // 
+            this.miMCPServer.Name = "miMCPServer";
+            this.miMCPServer.Size = new System.Drawing.Size(173, 22);
+            this.miMCPServer.Text = "MCP Server";
+            this.miMCPServer.Click += new System.EventHandler(this.miMCPServer_Click);
             // 
             // toolStripMenuItem2
             // 

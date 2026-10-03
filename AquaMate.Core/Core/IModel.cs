@@ -49,6 +49,7 @@ namespace AquaMate.Core
 
         IList<Inhabitant> QueryInhabitants();
         IList<Inhabitant> QueryInhabitants(Aquarium aquarium);
+        IList<Inhabitant> QueryInhabitants(int aquariumId);
 
         IList<Species> QuerySpecies();
         IList<Species> QuerySpecies(int type);
@@ -70,6 +71,7 @@ namespace AquaMate.Core
         double GetWaterVolume(int aquariumId);
         void GetWaterChangeIntervals(int aquariumId, WorkTime workTime, out double avgChangeDays, out double lastChangeDays);
         WorkTime GetWorkTime(Aquarium aquarium);
+        TankState GetTankState(WorkTime workTime);
 
         IList<Schedule> QuerySchedule();
 

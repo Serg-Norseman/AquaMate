@@ -275,7 +275,31 @@ namespace AquaMate.Core
         /* 251 */ WattPerSquareMeter,
         /* 252 */ AirPump,
 
-        /* 000 */ Last = AirPump
+        /* 301 */ MCPStart = 301,
+        /* 302 */ MCPStop,
+        /* 303 */ MCPServerHost,
+        /* 304 */ MCPServerPort,
+        /* 305 */ MCPTrustedHosts,
+        /* 306 */ MCPCORS,
+        /* 307 */ MCPVerboseServerLogs,
+        /* 308 */ MCPAutoStart,
+        /* 309 */ MCPServerStopped,
+        /* 310 */ MCPServerStarted,
+        /* 311 */ MCPError,
+        /* 312 */ MCPMCPSrvConfig,
+        /* 313 */ MCPValidPortRequired,
+        /* 314 */ MCPValidationError,
+        /* 315 */ MCPStartingServer,
+        /* 316 */ MCPErrorStartingServer,
+        /* 317 */ MCPStoppingServer,
+        /* 318 */ MCPMCPServerSettings,
+        /* 319 */ MCPHostToolTip,
+        /* 320 */ MCPPortToolTip,
+        /* 321 */ MCPAllowedHostsTip,
+        /* 322 */ MCPStartingError,
+        /* 323 */ MCPStoppingError,
+
+        /* 000 */ Last = MCPStoppingError
     }
 
 
@@ -538,6 +562,30 @@ namespace AquaMate.Core
             /* 250 */ "Lumen,lm",
             /* 251 */ "Watt Per Square Meter,W/m2",
             /* 252 */ "AirPump",
+
+            /* 301 */ "Start",
+            /* 302 */ "Stop",
+            /* 303 */ "Server Host",
+            /* 304 */ "Server Port",
+            /* 305 */ "Trusted Hosts",
+            /* 306 */ "Cross-Origin Resource Sharing (CORS)",
+            /* 307 */ "Verbose Server Logs",
+            /* 308 */ "Autostart on application launch",
+            /* 309 */ "Server stopped",
+            /* 310 */ "Server started: {0}",
+            /* 311 */ "Error",
+            /* 312 */ "MCP server configuration",
+            /* 313 */ "Specify a valid port number (1-65535).",
+            /* 314 */ "Validation Error",
+            /* 315 */ "Starting server...",
+            /* 316 */ "Error starting server",
+            /* 317 */ "Stopping server",
+            /* 318 */ "MCP Server Settings & Control",
+            /* 319 */ "IP or host to listen on (e.g., localhost or 0.0.0.0)",
+            /* 320 */ "Port for connections",
+            /* 321 */ "Comma-separated list of allowed origins",
+            /* 322 */ "Error starting server: {0}",
+            /* 323 */ "Error stopping server: {0}",
         };
 
 

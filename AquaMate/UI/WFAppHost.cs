@@ -4,17 +4,23 @@
  *  This program is licensed under the GNU General Public License.
  */
 
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using AquaMate.Core;
+using AquaMate.MCP;
+using AquaMate.MCP.Features;
 using AquaMate.UI.Components;
 using AquaMate.UI.Dialogs;
+using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
 using BSLib.Design.MVP;
+using ZLMKit.MCP;
 
 namespace AquaMate.UI
 {
@@ -25,19 +31,27 @@ namespace AquaMate.UI
     {
         public WFAppHost() : base()
         {
+            Application.ApplicationExit += Application_ApplicationExit;
+        }
+
+        private void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            mcpShutdown();
         }
 
         protected override void AppInit()
         {
-            #if NETCOREAPP30
+#if NETCOREAPP30
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            #endif
+#endif
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             RegisterControlHandlers();
             RegisterViews();
+
+            mcpStartup();
         }
 
         protected override void AppRun(AquaMate.UI.IView view)
@@ -135,5 +149,107 @@ namespace AquaMate.UI
             container.Register<ISettingsDialogView, SettingsDlg>(LifeCycle.Transient);
             container.Register<ITankEditorView, TankEditDlg>(LifeCycle.Transient);
         }
+
+        #region MCP Support
+
+        private MCPServer fMCPServer;
+        private RuntimeContext fRuntimeContext;
+
+        public RuntimeContext RuntimeContext { get => fRuntimeContext; set => fRuntimeContext = value; }
+
+        public static void mcpShowDialog()
+        {
+            using (var dlg = new MCPServerForm()) {
+                dlg.ShowDialog();
+            }
+        }
+
+        public bool mcpStartup()
+        {
+            try {
+                RuntimeContext.Initialize();
+
+                fMCPServer = new MCPServer();
+                fRuntimeContext = new RuntimeContext(fMCPServer);
+                fMCPServer.Context = fRuntimeContext;
+
+                InitFeatures(fMCPServer);
+                return true;
+            } catch (Exception ex) {
+                //Logger.WriteError("GKMCPPlugin.Startup()", ex);
+                return false;
+            }
+        }
+
+        public bool mcpShutdown()
+        {
+            bool result = true;
+            try {
+                StopAsync();
+            } catch (Exception ex) {
+                //Logger.WriteError("GKMCPPlugin.Shutdown()", ex);
+                result = false;
+            }
+            return result;
+        }
+
+        internal bool IsRunning()
+        {
+            return fMCPServer.IsRunning;
+        }
+
+        internal async Task StartAsync()
+        {
+            await fMCPServer.StartAsync(ServerHost, ServerPort, EnableCors, AllowedHosts, VerboseLogging);
+        }
+
+        internal async Task StopAsync()
+        {
+            await fMCPServer.StopAsync();
+        }
+
+        internal bool AutoStart = false;
+        internal string ServerHost = "localhost";
+        internal int ServerPort = 8080;
+        internal bool EnableCors = false;
+        internal string AllowedHosts = "http://localhost:3000";
+        internal bool VerboseLogging = false;
+
+        public void mcpLoadOptions(IniFile ini)
+        {
+            AutoStart = ini.ReadBool("GKMCPPlugin", "AutoStart", false);
+            if (AutoStart) {
+                StartAsync();
+            }
+        }
+
+        public void mcpSaveOptions(IniFile ini)
+        {
+            ini.WriteBool("GKMCPPlugin", "AutoStart", AutoStart);
+        }
+
+        public static void InitFeatures(MCPServer mcpServer)
+        {
+            mcpServer.InitFeatures(false, false);
+
+            // Aquarium tools
+            mcpServer.RegisterTool(new AquariumListTool());
+            mcpServer.RegisterTool(new AquariumDetailsTool());
+
+            // Measurement tools
+            mcpServer.RegisterTool(new MeasureListTool());
+
+            // Maintenance tools
+            mcpServer.RegisterTool(new MaintenanceListTool());
+            mcpServer.RegisterTool(new MaintenanceAddTool());
+
+            // Inhabitant tools
+            mcpServer.RegisterTool(new InhabitantListTool());
+
+            // Nutrition tools
+            mcpServer.RegisterTool(new NutritionListTool());
+        }
+
+        #endregion
     }
 }
