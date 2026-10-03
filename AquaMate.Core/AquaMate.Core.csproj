@@ -1,236 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <PropertyGroup>
-    <ProjectGuid>{44B1FEC8-5ADB-4B16-8DD6-80A3A2405D2D}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>Library</OutputType>
-    <RootNamespace>AquaMate.Core</RootNamespace>
-    <AssemblyName>AquaMate.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="BSLib">
-      <HintPath>..\libs\BSLib.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\libs\BSLib.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.SQLite">
-      <HintPath>..\libs\BSLib.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="log4net">
-      <HintPath>..\libs\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetRtfWriter">
-      <HintPath>..\libs\DotNetRtfWriter.dll</HintPath>
-    </Reference>
-    <Reference Include="ExcelLibrary">
-      <HintPath>..\libs\ExcelLibrary.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Core\ALException.cs" />
-    <Compile Include="Core\Model\Shop.cs" />
-    <Compile Include="Core\Types\SpeciesProps.cs" />
-    <Compile Include="Core\Types\WorkTime.cs" />
-    <Compile Include="UI\Charts\ChartStyle.cs" />
-    <Compile Include="Core\ALSettings.cs" />
-    <Compile Include="Core\AppHost.cs" />
-    <Compile Include="Core\Average.cs" />
-    <Compile Include="Core\Cache.cs" />
-    <Compile Include="Core\Calculations\BaseCalculation.cs" />
-    <Compile Include="Core\Calculations\CalculationProps.cs" />
-    <Compile Include="Core\Calculations\CalculationType.cs" />
-    <Compile Include="Core\Calculations\SaltCalculation.cs" />
-    <Compile Include="Core\Calculations\UnitsCalculation.cs" />
-    <Compile Include="Core\ILocalizable.cs" />
-    <Compile Include="Core\IModel.cs" />
-    <Compile Include="Core\LocaleFile.cs" />
-    <Compile Include="Core\Localizer.cs" />
-    <Compile Include="Core\Model\Brand.cs" />
-    <Compile Include="Core\Model\IEntity.cs" />
-    <Compile Include="Core\Model\EntityProperties.cs" />
-    <Compile Include="Core\StringSerializer.cs" />
-    <Compile Include="Core\Types\EntityType.cs" />
-    <Compile Include="Core\Types\IBrandedItem.cs" />
-    <Compile Include="Core\Types\InventoryProps.cs" />
-    <Compile Include="Core\Types\IProps.cs" />
-    <Compile Include="Core\Types\IStateItem.cs" />
-    <Compile Include="Core\Types\MaintenanceProps.cs" />
-    <Compile Include="Core\UnitConverter.cs" />
-    <Compile Include="DataCollection\BaseChannel.cs" />
-    <Compile Include="DataCollection\DataReceivedEventArgs.cs" />
-    <Compile Include="DataCollection\PHService.cs" />
-    <Compile Include="DataCollection\RandomChannel.cs" />
-    <Compile Include="DataCollection\RedoxService.cs" />
-    <Compile Include="DataCollection\SensorService.cs" />
-    <Compile Include="DataCollection\TCPChannel.cs" />
-    <Compile Include="DataCollection\WaterLevelService.cs" />
-    <Compile Include="M3DViewer\BoundingBox3D.cs" />
-    <Compile Include="M3DViewer\M3DBubble.cs" />
-    <Compile Include="M3DViewer\M3DAeration.cs" />
-    <Compile Include="M3DViewer\M3DWaterSurface.cs" />
-    <Compile Include="M3DViewer\Point3D.cs" />
-    <Compile Include="M3DViewer\SceneRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\BowfrontTankRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\BowlTankRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\CubeTankRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\CylinderTankRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\RectangularTankRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\RoundedTankRenderer.cs" />
-    <Compile Include="M3DViewer\Tanks\TankRenderer.cs" />
-    <Compile Include="M3DViewer\Vector3D.cs" />
-    <Compile Include="Core\ALCore.cs" />
-    <Compile Include="Core\ALData.cs" />
-    <Compile Include="Core\ALModel.cs" />
-    <Compile Include="Core\Export\CSVExporter.cs" />
-    <Compile Include="Core\Export\ExcelExporter.cs" />
-    <Compile Include="Core\Export\RTFLogBook.cs" />
-    <Compile Include="Core\Model\Aquarium.cs" />
-    <Compile Include="Core\Model\AquariumDetails.cs" />
-    <Compile Include="Core\Model\Device.cs" />
-    <Compile Include="Core\Model\Entity.cs" />
-    <Compile Include="Core\Model\Note.cs" />
-    <Compile Include="Core\Model\IEventEntity.cs" />
-    <Compile Include="Core\Model\Inhabitant.cs" />
-    <Compile Include="Core\Model\Inventory.cs" />
-    <Compile Include="Core\Model\ITank.cs" />
-    <Compile Include="Core\Model\Maintenance.cs" />
-    <Compile Include="Core\Model\Measure.cs" />
-    <Compile Include="Core\Model\Nutrition.cs" />
-    <Compile Include="Core\Model\Schedule.cs" />
-    <Compile Include="Core\Model\Snapshot.cs" />
-    <Compile Include="Core\Model\Species.cs" />
-    <Compile Include="Core\Model\Tanks\BaseTank.cs" />
-    <Compile Include="Core\Model\Tanks\BowFrontTank.cs" />
-    <Compile Include="Core\Model\Tanks\BowlTank.cs" />
-    <Compile Include="Core\Model\Tanks\CubeTank.cs" />
-    <Compile Include="Core\Model\Tanks\CylinderTank.cs" />
-    <Compile Include="Core\Model\Tanks\RectangularTank.cs" />
-    <Compile Include="Core\Model\Tanks\RegularShapeTank.cs" />
-    <Compile Include="Core\Model\Transfer.cs" />
-    <Compile Include="Core\Types\AquariumWaterType.cs" />
-    <Compile Include="Core\Types\CareLevel.cs" />
-    <Compile Include="Core\Types\DeviceProps.cs" />
-    <Compile Include="Core\Types\DeviceType.cs" />
-    <Compile Include="Core\Types\InventoryType.cs" />
-    <Compile Include="Core\Types\ItemProps.cs" />
-    <Compile Include="Core\Types\ItemState.cs" />
-    <Compile Include="Core\Types\ItemType.cs" />
-    <Compile Include="Core\Types\MaintenanceType.cs" />
-    <Compile Include="Core\Types\MeasurementType.cs" />
-    <Compile Include="Core\Types\MeasurementUnit.cs" />
-    <Compile Include="Core\Types\MeasurementUnitProps.cs" />
-    <Compile Include="Core\Types\MeasureValue.cs" />
-    <Compile Include="Core\Types\QDecimal.cs" />
-    <Compile Include="Core\Types\QString.cs" />
-    <Compile Include="Core\Types\ScheduleType.cs" />
-    <Compile Include="Core\Types\Sex.cs" />
-    <Compile Include="Core\Types\SpeciesType.cs" />
-    <Compile Include="Core\Types\SwimLevel.cs" />
-    <Compile Include="Core\Types\TankShape.cs" />
-    <Compile Include="Core\Types\TaskStatus.cs" />
-    <Compile Include="Core\Types\Temperament.cs" />
-    <Compile Include="Core\Types\TransferType.cs" />
-    <Compile Include="Core\Types\ValueRange.cs" />
-    <Compile Include="DataCollection\BaseService.cs" />
-    <Compile Include="DataCollection\LEDService.cs" />
-    <Compile Include="DataCollection\IChannel.cs" />
-    <Compile Include="DataCollection\SerialChannel.cs" />
-    <Compile Include="DataCollection\TemperatureService.cs" />
-    <Compile Include="Logging\Log4NetHelper.cs" />
-    <Compile Include="Logging\LogManager.cs" />
-    <Compile Include="TSDB\SDCompression.cs" />
-    <Compile Include="TSDB\TSDatabase.cs" />
-    <Compile Include="TSDB\TSPoint.cs" />
-    <Compile Include="TSDB\TSValue.cs" />
-    <Compile Include="UI\EditorPresenter.cs" />
-    <Compile Include="UI\Extensions.cs" />
-    <Compile Include="UI\IBrowser.cs" />
-    <Compile Include="UI\IDataPanel.cs" />
-    <Compile Include="UI\IView.cs" />
-    <Compile Include="UI\MainView.cs" />
-    <Compile Include="UI\Presenter.cs" />
-    <Compile Include="UI\Presenters\AquariumEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\BrandEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\CalculatorPresenter.cs" />
-    <Compile Include="UI\Presenters\DataMonitorPresenter.cs" />
-    <Compile Include="UI\Presenters\DeviceEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\InhabitantEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\InventoryEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\MaintenanceEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\MeasureEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\ModelPresenter.cs" />
-    <Compile Include="UI\Presenters\NoteEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\NutritionEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\ScheduleEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\SettingsDialogPresenter.cs" />
-    <Compile Include="UI\Presenters\ShopEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\SnapshotEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\SpeciesEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\TankEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\TransferEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\TSPointEditorPresenter.cs" />
-    <Compile Include="UI\Presenters\TSValueEditorPresenter.cs" />
-    <Compile Include="UI\ViewerPresenter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <RootNamespace />
+        <OutputType>Library</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <UseWindowsForms>true</UseWindowsForms>
+        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\net\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\libs\net\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\libs\net\BSLib.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="RtfWriter">
+            <HintPath>..\libs\net\RtfWriter.dll</HintPath>
+        </Reference>
+        <Reference Include="ExcelLibrary">
+            <HintPath>..\libs\ExcelLibrary.dll</HintPath>
+        </Reference>
+        <Reference Include="ZedGraph">
+            <HintPath>..\libs\ZedGraph.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+        <PackageReference Include="log4net" Version="3.5.0" />
+    </ItemGroup>
+
 </Project>

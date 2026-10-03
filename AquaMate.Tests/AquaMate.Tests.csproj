@@ -1,139 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <PropertyGroup>
-    <ProjectGuid>{171ADA99-34C7-42D9-8501-37A66294BBA8}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <OutputType>Library</OutputType>
-    <RootNamespace>AquaMate</RootNamespace>
-    <AssemblyName>AquaMate.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworkProfile />
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='true'">
-    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="BSLib">
-      <HintPath>..\libs\BSLib.dll</HintPath>
-    </Reference>
-    <Reference Include="NSubstitute, Version=2.0.3.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.2.0.3\lib\net40\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\libs\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="NUnitForms">
-      <HintPath>..\libs\NUnitForms.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Core\ALCoreTests.cs" />
-    <Compile Include="Core\ALDataTests.cs" />
-    <Compile Include="Core\ALModelTests.cs" />
-    <Compile Include="Core\ALSettingsTests.cs" />
-    <Compile Include="Core\AverageTests.cs" />
-    <Compile Include="Core\Calculations\SaltCalculationTests.cs" />
-    <Compile Include="Core\Calculations\UnitsCalculationTests.cs" />
-    <Compile Include="Core\Export\CSVExporterTests.cs" />
-    <Compile Include="Core\Export\ExcelExporterTests.cs" />
-    <Compile Include="Core\Export\RTFLogBookTests.cs" />
-    <Compile Include="Core\LocalizerTests.cs" />
-    <Compile Include="Core\Model\BrandTests.cs" />
-    <Compile Include="Core\Model\InventoryTests.cs" />
-    <Compile Include="Core\Model\ShopTests.cs" />
-    <Compile Include="Core\Model\SnapshotTests.cs" />
-    <Compile Include="Core\Model\SoilTests.cs" />
-    <Compile Include="Core\StringSerializerTests.cs" />
-    <Compile Include="Core\UnitConverterTests.cs" />
-    <Compile Include="Core\Model\NoteTests.cs" />
-    <Compile Include="Core\Model\NutritionTests.cs" />
-    <Compile Include="Core\Model\AquariumTests.cs" />
-    <Compile Include="Core\Model\DeviceTests.cs" />
-    <Compile Include="Core\Model\InhabitantTests.cs" />
-    <Compile Include="Core\Model\MaintenanceTests.cs" />
-    <Compile Include="Core\Model\MeasureTests.cs" />
-    <Compile Include="Core\Model\ScheduleTests.cs" />
-    <Compile Include="Core\Model\SpeciesTests.cs" />
-    <Compile Include="Core\Model\TransferTests.cs" />
-    <Compile Include="DataCollection\DataCollectionTests.cs" />
-    <Compile Include="TSDB\SDCompressionTests.cs" />
-    <Compile Include="TSDB\TSDatabaseTests.cs" />
-    <Compile Include="TSDB\TSValueTests.cs" />
-    <Compile Include="UI\CustomFormTest.cs" />
-    <Compile Include="UI\UIPresentersTests.cs" />
-    <Compile Include="UI\UITests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AquaMate.Core\AquaMate.Core.csproj">
-      <Project>{44b1fec8-5adb-4b16-8dd6-80a3a2405d2d}</Project>
-      <Name>AquaMate.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AquaMate\AquaMate.csproj">
-      <Project>{4bbeeab9-562b-4360-be8c-36e65b005593}</Project>
-      <Name>AquaMate</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <RootNamespace />
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AquaMate.Core\AquaMate.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\net\BSLib.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.2" />
+        <PackageReference Include="NSubstitute" Version="5.0.0" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    </ItemGroup>
+
 </Project>

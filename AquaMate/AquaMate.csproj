@@ -1,399 +1,78 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
-  <PropertyGroup>
-    <ProjectGuid>{4BBEEAB9-562B-4360-BE8C-36E65B005593}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>AquaMate</RootNamespace>
-    <AssemblyName>AquaMate</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <TargetFrameworkProfile />
-    <NoWin32Manifest>False</NoWin32Manifest>
-    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-    <NoStdLib>False</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <WarningLevel>4</WarningLevel>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <ApplicationIcon>Resources\icon_aquamate.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <OutputPath>..\</OutputPath>
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>Full</DebugType>
-    <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugSymbols>False</DebugSymbols>
-    <DebugType>None</DebugType>
-    <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
-    <PlatformTarget>x86</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <LangVersion>5</LangVersion>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
-    <PlatformTarget>x64</PlatformTarget>
-    <BaseAddress>4194304</BaseAddress>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <FileAlignment>4096</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <LangVersion>5</LangVersion>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(CIMode)'=='true'">
-    <DefineConstants>$(DefineConstants);CI_MODE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(MonoCS)'=='true'">
-    <DefineConstants>$(DefineConstants);__MonoCS__</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="BSLib">
-      <HintPath>..\libs\BSLib.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Controls">
-      <HintPath>..\libs\BSLib.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.DataViz.Model">
-      <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.DataViz.WFControls">
-      <HintPath>..\libs\BSLib.DataViz.WFControls.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Design">
-      <HintPath>..\libs\BSLib.Design.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Design.WFHandlers">
-      <HintPath>..\libs\BSLib.Design.WFHandlers.dll</HintPath>
-    </Reference>
-    <Reference Include="BSLib.Timeline">
-      <HintPath>..\libs\BSLib.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="csgl">
-      <HintPath>..\libs\csgl.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph">
-      <HintPath>..\libs\ZedGraph.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="UI\ALTray.cs" />
-    <Compile Include="UI\Components\ChartPoint.cs" />
-    <Compile Include="UI\Components\ChartSeries.cs" />
-    <Compile Include="UI\Components\ImageViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\OGLRenderer.cs" />
-    <Compile Include="UI\Components\OGLViewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Components\QualityControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Components\UserAction.cs" />
-    <Compile Include="UI\Components\ZChart.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\ControlHandlers.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="UI\Components\ZListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\AboutDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\AboutDlg.Designer.cs">
-      <DependentUpon>AboutDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\AquariumEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\AquariumEditDlg.Designer.cs">
-      <DependentUpon>AquariumEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\BrandEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\BrandEditDlg.Designer.cs">
-      <DependentUpon>BrandEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\CalculatorDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\CalculatorDlg.Designer.cs">
-      <DependentUpon>CalculatorDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\CommonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\DataMonitor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\DataMonitor.Designer.cs">
-      <DependentUpon>DataMonitor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\DeviceEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\DeviceEditDlg.Designer.cs">
-      <DependentUpon>DeviceEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\EditDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\NoteEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\NoteEditDlg.Designer.cs">
-      <DependentUpon>NoteEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\InhabitantEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\InhabitantEditDlg.Designer.cs">
-      <DependentUpon>InhabitantEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\InventoryEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\InventoryEditDlg.Designer.cs">
-      <DependentUpon>InventoryEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\MaintenanceEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\MaintenanceEditDlg.Designer.cs">
-      <DependentUpon>MaintenanceEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\MeasureEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\MeasureEditDlg.Designer.cs">
-      <DependentUpon>MeasureEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\NotificationDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\NutritionEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\NutritionEditDlg.Designer.cs">
-      <DependentUpon>NutritionEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\ScheduleEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\ScheduleEditDlg.Designer.cs">
-      <DependentUpon>ScheduleEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\SettingsDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\SettingsDlg.Designer.cs">
-      <DependentUpon>SettingsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\ShopEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\ShopEditDlg.Designer.cs">
-      <DependentUpon>ShopEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\SnapshotEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\SnapshotEditDlg.Designer.cs">
-      <DependentUpon>SnapshotEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\SpeciesEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\SpeciesEditDlg.Designer.cs">
-      <DependentUpon>SpeciesEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\TankEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\TankEditDlg.Designer.cs">
-      <DependentUpon>TankEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\TransferEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\TransferEditDlg.Designer.cs">
-      <DependentUpon>TransferEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\TSPointEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\TSPointEditDlg.Designer.cs">
-      <DependentUpon>TSPointEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Dialogs\TSValueEditDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Dialogs\TSValueEditDlg.Designer.cs">
-      <DependentUpon>TSValueEditDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\DrawingHelper.cs" />
-    <Compile Include="UI\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Panels\AquaAnalysisPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\AquaDetailsPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\AquaQualityPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\BioTreemapPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\BrandPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\ChartPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\InventoryPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\LifeLinesPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\M3DViewerPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\MeasurePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\MeasuresChartPanel.cs" />
-    <Compile Include="UI\Panels\NutritionPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\PricelistPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\SchedulePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\ShopPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\SnapshotPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\TSTrendPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\BudgetPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\DataPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\DevicePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\NotePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\InhabitantPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\ListPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\MaintenancePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\SpeciesPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\TanksPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\TankSticker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\TransferPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\TSDBPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\Panels\TSValuePanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\UIHelper.cs" />
-    <Compile Include="UI\WFAppHost.cs" />
-    <Compile Include="UI\WFGfxProvider.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-    <EmbeddedResource Include="Resources\btn_accept.gif" />
-    <EmbeddedResource Include="Resources\btn_cancel.gif" />
-    <EmbeddedResource Include="Resources\btn_exit.gif" />
-    <EmbeddedResource Include="Resources\btn_left.gif" />
-    <EmbeddedResource Include="Resources\btn_right.gif" />
-    <EmbeddedResource Include="Resources\btn_rec_delete.gif" />
-    <EmbeddedResource Include="Resources\btn_rec_edit.gif" />
-    <EmbeddedResource Include="Resources\btn_rec_new.gif" />
-    <EmbeddedResource Include="Resources\btn_excel.gif" />
-    <EmbeddedResource Include="Resources\btn_chart.gif" />
-    <EmbeddedResource Include="Resources\icon_aquamate.ico" />
-    <EmbeddedResource Include="Resources\btn_help.gif" />
-    <EmbeddedResource Include="Resources\btn_tools.gif" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <None Include="..\libs\csgl.native.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AquaMate.Core\AquaMate.Core.csproj">
-      <Project>{44b1fec8-5adb-4b16-8dd6-80a3a2405d2d}</Project>
-      <Name>AquaMate.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <RootNamespace />
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <UseWindowsForms>true</UseWindowsForms>
+        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+        <StartupObject>AquaMate.Program</StartupObject>
+
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <OutputPath>..\bin</OutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <OutputPath>..\bin</OutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AquaMate.Core\AquaMate.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="BSLib">
+            <HintPath>..\libs\net\BSLib.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.Model">
+            <HintPath>..\libs\net\BSLib.DataViz.Model.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.DataViz.WFControls">
+            <HintPath>..\libs\net\BSLib.DataViz.WFControls.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design">
+            <HintPath>..\libs\net\BSLib.Design.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Design.WFHandlers">
+            <HintPath>..\libs\net\BSLib.Design.WFHandlers.dll</HintPath>
+        </Reference>
+        <Reference Include="BSLib.Controls">
+            <HintPath>..\libs\net\BSLib.Controls.dll</HintPath>
+        </Reference>
+        <Reference Include="RtfWriter">
+            <HintPath>..\libs\net\RtfWriter.dll</HintPath>
+        </Reference>
+        <Reference Include="ExcelLibrary">
+            <HintPath>..\libs\ExcelLibrary.dll</HintPath>
+        </Reference>
+        <Reference Include="ZedGraph">
+            <HintPath>..\libs\ZedGraph.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="log4net" Version="3.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\btn_accept.gif" />
+        <EmbeddedResource Include="Resources\btn_cancel.gif" />
+        <EmbeddedResource Include="Resources\btn_exit.gif" />
+        <EmbeddedResource Include="Resources\btn_left.gif" />
+        <EmbeddedResource Include="Resources\btn_right.gif" />
+        <EmbeddedResource Include="Resources\btn_rec_delete.gif" />
+        <EmbeddedResource Include="Resources\btn_rec_edit.gif" />
+        <EmbeddedResource Include="Resources\btn_rec_new.gif" />
+        <EmbeddedResource Include="Resources\btn_excel.gif" />
+        <EmbeddedResource Include="Resources\btn_chart.gif" />
+        <EmbeddedResource Include="Resources\icon_aquamate.ico" />
+        <EmbeddedResource Include="Resources\btn_help.gif" />
+        <EmbeddedResource Include="Resources\btn_tools.gif" />
+    </ItemGroup>
 </Project>
