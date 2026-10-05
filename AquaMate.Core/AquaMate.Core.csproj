@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace />
+        <RootNamespace>AquaMate</RootNamespace>
         <OutputType>Library</OutputType>
         <TargetFramework>net8.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
@@ -30,6 +30,9 @@
         </Reference>
         <Reference Include="ZedGraph">
             <HintPath>..\libs\ZedGraph.dll</HintPath>
+        </Reference>
+        <Reference Include="ZLMKit">
+            <HintPath>..\libs\net\ZLMKit.dll</HintPath>
         </Reference>
     </ItemGroup>
 

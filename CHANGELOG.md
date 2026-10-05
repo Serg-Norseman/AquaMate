@@ -1,5 +1,6 @@
 
-## ??.??.2020 [v1.4.0]
+## ??.??.2026 [v1.5.0]
+- Added built-in MCP server.
 - Added the function of viewing the transfers of selected items.
 - Added support of soils (inventory subtype).
 - Added checks for record's links on deletion.

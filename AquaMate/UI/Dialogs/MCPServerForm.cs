@@ -1,22 +1,23 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
-
-#pragma warning disable CA1416 // Validate platform compatibility
 
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using AquaMate.Core;
-using AquaMate.UI;
+using AquaMate.MCP;
 
-namespace AquaMate.MCP;
+namespace AquaMate.UI.Dialogs;
 
 public class MCPServerForm : Form
 {
-    private WFAppHost fInstance;
+    private readonly WFAppHost fInstance;
+    private readonly MCPSettings fSettings;
 
     private TextBox _hostTextBox;
     private TextBox _portTextBox;
@@ -35,12 +36,13 @@ public class MCPServerForm : Form
     public MCPServerForm()
     {
         fInstance = (WFAppHost)AppHost.Instance;
+        fSettings = ALSettings.Instance.MCPSettings;
 
         InitializeComponent();
         UpdateUIState();
 
         if (fInstance.IsRunning()) {
-            _statusLabel.Text = string.Format(Localizer.LS(LSID.MCPServerStarted), $"http://{fInstance.ServerHost}:{fInstance.ServerPort}/mcp");
+            _statusLabel.Text = string.Format(Localizer.LS(LSID.MCPServerStarted), $"http://{fSettings.ServerHost}:{fSettings.ServerPort}/mcp");
             _statusLabel.ForeColor = Color.Green;
         }
     }
@@ -77,7 +79,7 @@ public class MCPServerForm : Form
         lblHost.TextAlign = ContentAlignment.MiddleLeft;
 
         _hostTextBox = new TextBox();
-        _hostTextBox.Text = fInstance.ServerHost;
+        _hostTextBox.Text = fSettings.ServerHost;
         _hostTextBox.Width = 200;
         //_hostTextBox.ToolTipText = Localizer.LS(LSID.MCPHostToolTip);
 
@@ -88,14 +90,14 @@ public class MCPServerForm : Form
         lblPort.TextAlign = ContentAlignment.MiddleLeft;
 
         _portTextBox = new TextBox();
-        _portTextBox.Text = fInstance.ServerPort.ToString();
+        _portTextBox.Text = fSettings.ServerPort.ToString();
         _portTextBox.Width = 200;
         //_portTextBox.ToolTipText = Localizer.LS(LSID.MCPPortToolTip);
 
         // CORS checkbox
         _corsCheckBox = new CheckBox();
         _corsCheckBox.Text = Localizer.LS(LSID.MCPCORS);
-        _corsCheckBox.Checked = fInstance.EnableCors;
+        _corsCheckBox.Checked = fSettings.EnableCors;
         _corsCheckBox.CheckedChanged += (sender, e) => {
             _allowedHostsTextBox.Enabled = _corsCheckBox.Checked;
         };
@@ -108,7 +110,7 @@ public class MCPServerForm : Form
         lblAllowedHosts.TextAlign = ContentAlignment.MiddleLeft;
 
         _allowedHostsTextBox = new TextBox();
-        _allowedHostsTextBox.Text = fInstance.AllowedHosts;
+        _allowedHostsTextBox.Text = fSettings.AllowedHosts;
         _allowedHostsTextBox.Width = 200;
         _allowedHostsTextBox.Enabled = _corsCheckBox.Checked;
         //_allowedHostsTextBox.ToolTipText = Localizer.LS(LSID.MCPAllowedHostsTip);
@@ -116,13 +118,13 @@ public class MCPServerForm : Form
         // Verbose logging checkbox
         _verboseLoggingCheckBox = new CheckBox();
         _verboseLoggingCheckBox.Text = Localizer.LS(LSID.MCPVerboseServerLogs);
-        _verboseLoggingCheckBox.Checked = fInstance.VerboseLogging;
+        _verboseLoggingCheckBox.Checked = fSettings.VerboseLogging;
 
         // Auto-start checkbox
         _autoStartCheckBox = new CheckBox();
         _autoStartCheckBox.Text = Localizer.LS(LSID.MCPAutoStart);
-        _autoStartCheckBox.Checked = fInstance.AutoStart;
-        _autoStartCheckBox.CheckedChanged += (s, e) => { fInstance.AutoStart = _autoStartCheckBox.Checked; };
+        _autoStartCheckBox.Checked = fSettings.AutoStart;
+        _autoStartCheckBox.CheckedChanged += (s, e) => { fSettings.AutoStart = _autoStartCheckBox.Checked; };
 
         // Start button
         _startButton = new Button();
@@ -226,21 +228,21 @@ public class MCPServerForm : Form
             MessageBox.Show(this, Localizer.LS(LSID.MCPValidPortRequired), Localizer.LS(LSID.MCPValidationError), MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
         }
-        fInstance.ServerPort = port;
+        fSettings.ServerPort = port;
 
         UpdateUIState();
         _statusLabel.Text = Localizer.LS(LSID.MCPStartingServer);
         _statusLabel.ForeColor = Color.Orange;
 
         try {
-            fInstance.ServerHost = _hostTextBox.Text;
-            fInstance.EnableCors = _corsCheckBox.Checked;
-            fInstance.AllowedHosts = _allowedHostsTextBox.Text;
-            fInstance.VerboseLogging = _verboseLoggingCheckBox.Checked;
+            fSettings.ServerHost = _hostTextBox.Text;
+            fSettings.EnableCors = _corsCheckBox.Checked;
+            fSettings.AllowedHosts = _allowedHostsTextBox.Text;
+            fSettings.VerboseLogging = _verboseLoggingCheckBox.Checked;
 
             await fInstance.StartAsync();
 
-            _statusLabel.Text = string.Format(Localizer.LS(LSID.MCPServerStarted), $"http://{fInstance.ServerHost}:{fInstance.ServerPort}/mcp");
+            _statusLabel.Text = string.Format(Localizer.LS(LSID.MCPServerStarted), $"http://{fSettings.ServerHost}:{fSettings.ServerPort}/mcp");
             _statusLabel.ForeColor = Color.Green;
         } catch (Exception ex) {
             _statusLabel.Text = Localizer.LS(LSID.MCPErrorStartingServer);

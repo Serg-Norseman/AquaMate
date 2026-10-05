@@ -1,7 +1,9 @@
 /*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System.Collections.Generic;
@@ -12,9 +14,9 @@ using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
 
-namespace AquaMate.MCP.Features;
+namespace AquaMate.MCP;
 
-internal class MeasureListTool : BaseTool
+public class MeasureListTool : BaseTool
 {
     public MeasureListTool() : base("measure_list") { }
 
@@ -41,12 +43,13 @@ internal class MeasureListTool : BaseTool
 
         int aquariumId = MCPHelper.GetOptionalInt(args, "aquarium_id", -1);
 
-        IList<Measure> measures;
+        List<Measure> measures;
         if (aquariumId > 0) {
             measures = model.QueryMeasures(aquariumId);
         } else {
             measures = model.QueryMeasures();
         }
+        measures.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
 
         if (measures.Count == 0)
             return MCPContent.CreateSimpleContent("No measurements found.");

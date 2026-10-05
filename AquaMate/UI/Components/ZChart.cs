@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -54,15 +56,13 @@ namespace AquaMate.UI.Components
 
             fGraph.GraphPane.Title.Text = title;
 
-            var seriesList = data as Dictionary<string, ChartSeries>;
-            if (seriesList != null) {
+            if (data is Dictionary<string, ChartSeries> seriesList) {
                 foreach (var pair in seriesList) {
                     var series = pair.Value;
                     ShowSeries(xAxis, yAxis, series);
                 }
             } else {
-                var series = data as ChartSeries;
-                if (series != null) {
+                if (data is ChartSeries series) {
                     ShowSeries(xAxis, yAxis, series);
                 }
             }
@@ -125,18 +125,15 @@ namespace AquaMate.UI.Components
 
         private string Graph_PointValueEvent(ZedGraphControl sender, GraphPane pane, CurveItem curve, int iPt)
         {
-            var pieItem = curve as PieItem;
-            if (pieItem != null) {
+            if (curve is PieItem pieItem) {
                 return string.Format("{0}: {1:0.00}", pieItem.Label.Text, pieItem.Value);
             }
 
-            var barItem = curve as BarItem;
-            if (barItem != null) {
+            if (curve is BarItem barItem) {
                 return string.Format("{0}: {1:0.00}", DateTime.FromOADate(barItem[iPt].X), barItem[iPt].Y);
             }
 
-            var lineItem = curve as LineItem;
-            if (lineItem != null) {
+            if (curve is LineItem lineItem) {
                 return string.Format("{0} ({1}): {2:0.00}", lineItem.Label.Text, DateTime.FromOADate(lineItem[iPt].X), lineItem[iPt].Y);
             }
 

@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -91,26 +93,6 @@ namespace AquaMate.UI.Components
                 fTimer.Stop();
             else
                 fButtonsPanel.Top -= (fButtonsPanel.Top - 5 > Height - fButtonsPanel.Height) ? fPixelSpeed : fButtonsPanel.Top - (Height - fButtonsPanel.Height);
-        }
-
-        private void PictureBox_MouseHover(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void ButtonsPanel_MouseHover(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void PictureBox_MouseLeave(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
-        }
-
-        private void ButtonsPanel_MouseLeave(object sender, EventArgs e)
-        {
-            CheckCursorPosition(sender, e);
         }
 
         private void CheckCursorPosition(object sender, EventArgs e)
@@ -250,8 +232,8 @@ namespace AquaMate.UI.Components
             fPictureBox.Dock = DockStyle.Fill;
             fPictureBox.TabIndex = 0;
             fPictureBox.TabStop = false;
-            fPictureBox.MouseLeave += PictureBox_MouseLeave;
-            fPictureBox.MouseHover += PictureBox_MouseHover;
+            fPictureBox.MouseLeave += CheckCursorPosition;
+            fPictureBox.MouseHover += CheckCursorPosition;
 
             fButtonsPanel = new Panel();
             fButtonsPanel.BackColor = SystemColors.ButtonShadow;
@@ -259,8 +241,8 @@ namespace AquaMate.UI.Components
             fButtonsPanel.Name = "panel1";
             fButtonsPanel.Size = new Size(178, 36);
             fButtonsPanel.TabIndex = 1;
-            fButtonsPanel.MouseLeave += ButtonsPanel_MouseLeave;
-            fButtonsPanel.MouseHover += ButtonsPanel_MouseHover;
+            fButtonsPanel.MouseLeave += CheckCursorPosition;
+            fButtonsPanel.MouseHover += CheckCursorPosition;
 
             fAddButton = new Button();
             fAddButton.Location = new Point(618, 148);

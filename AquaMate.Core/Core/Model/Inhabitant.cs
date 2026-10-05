@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using AquaMate.Core.Types;
@@ -47,6 +49,29 @@ namespace AquaMate.Core.Model
         public override string ToString()
         {
             return Name;
+        }
+    }
+
+
+    public sealed class InhabitantDispItem : Inhabitant
+    {
+        public string AquariumName { get; set; }
+        public string SpeciesName { get; set; }
+        public string SexName { get; set; }
+        public string StateStr { get; set; }
+        public ItemType ItemType { get; set; }
+        public bool Fin { get; set; }
+        public string InclusionDate { get; set; }
+        public string ExclusionDate { get; set; }
+        public string LifeSpan { get; set; }
+        public string Temp { get; set; }
+        public string PH { get; set; }
+        public string GH { get; set; }
+        public int iDays { get; set; }
+
+
+        public InhabitantDispItem()
+        {
         }
     }
 }

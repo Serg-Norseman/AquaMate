@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 #if !NET8_0_OR_GREATER
@@ -13,22 +15,19 @@ using AquaMate.UI.Components;
 
 namespace AquaMate.UI.Panels
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class M3DViewerPanel : DataPanel
     {
         private readonly OGLViewer fViewer;
 
         public M3DViewerPanel()
         {
-            var infoPanel = new StatusBarPanel();
-            infoPanel.AutoSize = StatusBarPanelAutoSize.Contents;
+            var infoPanel = new ToolStripStatusLabel();
+            infoPanel.Spring = true;
             infoPanel.Text = "Free-rotate (R); Water visible (W); Aeration (A)";
 
-            var statusBar = new StatusBar();
-            statusBar.Panels.AddRange(new StatusBarPanel[] { infoPanel });
-            statusBar.ShowPanels = true;
+            var statusBar = new StatusStrip();
+            statusBar.Items.AddRange(new ToolStripStatusLabel[] { infoPanel });
+            //statusBar.ShowPanels = true;
 
             fViewer = new OGLViewer();
             fViewer.Dock = DockStyle.Fill;

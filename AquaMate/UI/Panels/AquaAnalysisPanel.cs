@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -13,9 +15,6 @@ using AquaMate.Core.Types;
 
 namespace AquaMate.UI.Panels
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class AquaAnalysisPanel : ListPanel
     {
         private Aquarium fAquarium;
@@ -73,9 +72,7 @@ namespace AquaMate.UI.Panels
                         prevTime = curTime;
                     }
 
-                    if (evnt is Maintenance) {
-                        Maintenance mnt = (Maintenance)evnt;
-
+                    if (evnt is Maintenance mnt) {
                         double changeValue = mnt.Value;
                         switch (mnt.Type) {
                             case MaintenanceType.Restart:
@@ -118,9 +115,7 @@ namespace AquaMate.UI.Panels
                                    );
                     }
 
-                    if (evnt is Measure) {
-                        Measure msr = (Measure)evnt;
-
+                    if (evnt is Measure msr) {
                         var item = ListView.AddItemEx(msr,
                                        curTime,
                                        Localizer.LS(LSID.Measure),
@@ -141,9 +136,7 @@ namespace AquaMate.UI.Panels
                                    );
                     }
 
-                    if (evnt is Note) {
-                        Note note = (Note)evnt;
-
+                    if (evnt is Note note) {
                         var item = ListView.AddItemEx(note,
                                        curTime,
                                        Localizer.LS(LSID.Event),
@@ -155,8 +148,7 @@ namespace AquaMate.UI.Panels
                                    );
                     }
 
-                    if (evnt is Transfer) {
-                        Transfer transfer = (Transfer)evnt;
+                    if (evnt is Transfer transfer) {
                         if (ALCore.IsInhabitant(transfer.ItemType)) {
                             string strType = Localizer.LS(ALData.TransferTypes[(int)transfer.Type]);
                             var itemRec = fModel.GetRecord(transfer.ItemType, transfer.ItemId);

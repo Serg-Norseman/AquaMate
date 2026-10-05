@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -15,9 +17,6 @@ using AquaMate.UI.Components;
 
 namespace AquaMate.UI.Panels
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed class AquaDetailsPanel : DataPanel
     {
         private Aquarium fAquarium;
@@ -121,7 +120,7 @@ namespace AquaMate.UI.Panels
             fInhabitantsLV.Columns.Add("PH", 100, HorizontalAlignment.Left);
             fInhabitantsLV.Columns.Add("GH", 100, HorizontalAlignment.Left);
 
-            IList<Inhabitant> records = fModel.QueryInhabitants(fAquarium);
+            IList<Inhabitant> records = fModel.QueryInhabitants(fAquarium.Id);
             foreach (Inhabitant rec in records) {
                 Species spc = fModel.GetRecord<Species>(rec.SpeciesId);
 

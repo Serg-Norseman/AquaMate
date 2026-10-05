@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -39,6 +41,7 @@ namespace AquaMate.UI
         {
             try {
                 listView.Clear();
+                //listView.AddColumn("#", 50, true, BSDTypes.HorizontalAlignment.Left);
                 listView.AddColumn(Localizer.LS(LSID.Name), 200, true, BSDTypes.HorizontalAlignment.Left);
                 listView.AddColumn(Localizer.LS(LSID.Sex), 50, true, BSDTypes.HorizontalAlignment.Left);
                 listView.AddColumn(Localizer.LS(LSID.Quantity), 50, true, BSDTypes.HorizontalAlignment.Right);
@@ -53,73 +56,29 @@ namespace AquaMate.UI
                 listView.AddColumn("GH", 100, true, BSDTypes.HorizontalAlignment.Left);
 
                 Average avgLifespan = new Average();
-                IList<Inhabitant> records = model.QueryInhabitants();
-                foreach (Inhabitant rec in records) {
-                    Species spc = model.GetRecord<Species>(rec.SpeciesId);
-
-                    SpeciesType spType;
-                    string spName, spTemp, spGH, spPH;
-                    if (spc == null) {
-                        spType = SpeciesType.Fish;
-                        spName = string.Empty;
-                        spTemp = string.Empty;
-                        spGH = string.Empty;
-                        spPH = string.Empty;
-                    } else {
-                        spType = spc.Type;
-                        spName = spc.Name;
-                        spTemp = spc.GetTempRange();
-                        spGH = spc.GetGHRange();
-                        spPH = spc.GetPHRange();
+                var records = model.PrepareInhabitants(-1);
+                foreach (var rec in records) {
+                    if (rec.iDays > 0) {
+                        avgLifespan.AddValue(rec.iDays);
                     }
-
-                    SpeciesType speciesType = model.GetSpeciesType(rec.SpeciesId);
-                    ItemType itemType = ALCore.GetItemType(speciesType);
-
-                    rec.Quantity = model.QueryInhabitantsCount(rec.Id, itemType);
-                    bool fin = (rec.Quantity == 0);
-
-                    if (fin && ALSettings.Instance.HideLosses) continue;
-
-                    int currAqmId = 0;
-                    DateTime inclusionDate, exclusionDate;
-                    model.GetInhabitantDates(rec.Id, itemType, out inclusionDate, out exclusionDate, out currAqmId);
-
-                    string aqmName = model.GetRecordName(ItemType.Aquarium, currAqmId);
-                    string strInclusDate = ALCore.IsZeroDate(inclusionDate) ? string.Empty : ALCore.GetDateStr(inclusionDate);
-                    string strExclusDate = ALCore.IsZeroDate(exclusionDate) || !fin ? string.Empty : ALCore.GetDateStr(exclusionDate);
-
-                    DateTime endDate = ALCore.IsZeroDate(exclusionDate) || !fin ? DateTime.Now.Date : exclusionDate;
-                    string strLifespan = ALCore.IsZeroDate(inclusionDate) ? string.Empty : ALCore.GetTimespanText(inclusionDate, endDate);
-
-                    if (!ALCore.IsZeroDate(exclusionDate)) {
-                        int iDays = (exclusionDate - inclusionDate).Days;
-                        avgLifespan.AddValue(iDays);
-                    }
-
-                    ItemState itemState;
-                    string strState = model.GetItemStateStr(rec.Id, itemType, out itemState);
-                    if (itemState == ItemState.Unknown || !fin) {
-                        strState = Localizer.LS(ALData.ItemStates[(int)rec.State]);
-                    }
-                    string sx = ALCore.IsAnimal(spType) ? Localizer.LS(ALData.SexNames[(int)rec.Sex]) : "–";
 
                     var item = listView.AddItem(rec,
+                               //rec.Id,
                                rec.Name,
-                               sx,
+                               rec.SexName,
                                rec.Quantity.ToString(),
-                               spName,
-                               strState,
-                               aqmName,
-                               strInclusDate,
-                               strExclusDate,
-                               strLifespan,
-                               spTemp,
-                               spPH,
-                               spGH
+                               rec.SpeciesName,
+                               rec.StateStr,
+                               rec.AquariumName,
+                               rec.InclusionDate,
+                               rec.ExclusionDate,
+                               rec.LifeSpan,
+                               rec.Temp,
+                               rec.PH,
+                               rec.GH
                            );
 
-                    if (fin) {
+                    if (rec.Fin) {
                         item.SetForeColor(BSDConsts.Colors.Gray); // death, sale or gift?
                     }
                 }
@@ -342,6 +301,8 @@ namespace AquaMate.UI
                 listView.AddColumn(Localizer.LS(LSID.Note), 250, true, BSDTypes.HorizontalAlignment.Left);
 
                 var records = model.QueryMaintenances();
+                records.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
+
                 foreach (Maintenance rec in records) {
                     Aquarium aqm = model.Cache.Get<Aquarium>(ItemType.Aquarium, rec.AquariumId);
                     string aqmName = (aqm == null) ? "" : aqm.Name;
@@ -386,6 +347,8 @@ namespace AquaMate.UI
                 listView.AddColumn("PO4", 60, true, BSDTypes.HorizontalAlignment.Right);
 
                 var records = model.QueryMeasures();
+                records.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
+
                 foreach (Measure rec in records) {
                     Aquarium aqm = model.Cache.Get<Aquarium>(ItemType.Aquarium, rec.AquariumId);
                     string aqmName = (aqm == null) ? "" : aqm.Name;
@@ -427,6 +390,8 @@ namespace AquaMate.UI
                 listView.AddColumn(Localizer.LS(LSID.Text), 250, true, BSDTypes.HorizontalAlignment.Left);
 
                 var records = model.QueryNotes();
+                records.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
+
                 foreach (Note rec in records) {
                     Aquarium aqm = model.GetRecord<Aquarium>(rec.AquariumId);
                     string aqmName = (aqm == null) ? "" : aqm.Name;
@@ -500,6 +465,8 @@ namespace AquaMate.UI
             listView.AddColumn(Localizer.LS(LSID.Cause), 80, true, BSDTypes.HorizontalAlignment.Left);
 
             var records = model.QueryTransfers();
+            records.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
+
             foreach (Transfer rec in records) {
                 ItemType itemType = rec.ItemType;
 
@@ -829,6 +796,8 @@ namespace AquaMate.UI
                 listView.AddColumn(Localizer.LS(LSID.Date), 120, true, BSDTypes.HorizontalAlignment.Left);
 
                 var records = model.QuerySnapshots();
+                records.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
+
                 foreach (Snapshot rec in records) {
                     var item = listView.AddItem(rec,
                                rec.Name,

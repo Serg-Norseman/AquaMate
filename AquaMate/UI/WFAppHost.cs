@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -12,10 +14,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AquaMate.Core;
 using AquaMate.MCP;
-using AquaMate.MCP.Features;
 using AquaMate.UI.Components;
 using AquaMate.UI.Dialogs;
-using BSLib;
 using BSLib.Design.Graphics;
 using BSLib.Design.Handlers;
 using BSLib.Design.IoC;
@@ -62,12 +62,11 @@ namespace AquaMate.UI
 
         public override byte[] ImageToByte(IImage image)
         {
-            var handler = image as ImageHandler;
-            if (handler == null) {
-                return null;
-            } else {
+            if (image is ImageHandler handler) {
                 var wfImage = handler.Handle;
                 return UIHelper.ImageToByte(wfImage, ImageFormat.Jpeg);
+            } else {
+                return null;
             }
         }
 
@@ -139,7 +138,7 @@ namespace AquaMate.UI
 
         public static void RegisterViews()
         {
-            IContainer container = Container;
+            var container = Container;
             container.Reset();
 
             container.Register<IGraphicsProvider, WFGfxProvider>(LifeCycle.Singleton);
@@ -155,7 +154,7 @@ namespace AquaMate.UI
         private MCPServer fMCPServer;
         private RuntimeContext fRuntimeContext;
 
-        public RuntimeContext RuntimeContext { get => fRuntimeContext; set => fRuntimeContext = value; }
+        public RuntimeContext RuntimeContext { get => fRuntimeContext; }
 
         public static void mcpShowDialog()
         {
@@ -173,7 +172,7 @@ namespace AquaMate.UI
                 fRuntimeContext = new RuntimeContext(fMCPServer);
                 fMCPServer.Context = fRuntimeContext;
 
-                InitFeatures(fMCPServer);
+                RuntimeContext.InitFeatures(fMCPServer);
                 return true;
             } catch (Exception ex) {
                 //Logger.WriteError("GKMCPPlugin.Startup()", ex);
@@ -200,7 +199,8 @@ namespace AquaMate.UI
 
         internal async Task StartAsync()
         {
-            await fMCPServer.StartAsync(ServerHost, ServerPort, EnableCors, AllowedHosts, VerboseLogging);
+            var mcpSettings = ALSettings.Instance.MCPSettings;
+            await fMCPServer.StartAsync(mcpSettings.ServerHost, mcpSettings.ServerPort, mcpSettings.EnableCors, mcpSettings.AllowedHosts, mcpSettings.VerboseLogging);
         }
 
         internal async Task StopAsync()
@@ -208,46 +208,17 @@ namespace AquaMate.UI
             await fMCPServer.StopAsync();
         }
 
-        internal bool AutoStart = false;
-        internal string ServerHost = "localhost";
-        internal int ServerPort = 8080;
-        internal bool EnableCors = false;
-        internal string AllowedHosts = "http://localhost:3000";
-        internal bool VerboseLogging = false;
-
-        public void mcpLoadOptions(IniFile ini)
+        public void LoadOptions()
         {
-            AutoStart = ini.ReadBool("GKMCPPlugin", "AutoStart", false);
-            if (AutoStart) {
+            ALSettings.Instance.LoadFromFile(Path.Combine(AppHost.GetAppDataPath(), "AquaMate.ini"));
+            if (ALSettings.Instance.MCPSettings.AutoStart) {
                 StartAsync();
             }
         }
 
-        public void mcpSaveOptions(IniFile ini)
+        public void SaveOptions()
         {
-            ini.WriteBool("GKMCPPlugin", "AutoStart", AutoStart);
-        }
-
-        public static void InitFeatures(MCPServer mcpServer)
-        {
-            mcpServer.InitFeatures(false, false);
-
-            // Aquarium tools
-            mcpServer.RegisterTool(new AquariumListTool());
-            mcpServer.RegisterTool(new AquariumDetailsTool());
-
-            // Measurement tools
-            mcpServer.RegisterTool(new MeasureListTool());
-
-            // Maintenance tools
-            mcpServer.RegisterTool(new MaintenanceListTool());
-            mcpServer.RegisterTool(new MaintenanceAddTool());
-
-            // Inhabitant tools
-            mcpServer.RegisterTool(new InhabitantListTool());
-
-            // Nutrition tools
-            mcpServer.RegisterTool(new NutritionListTool());
+            ALSettings.Instance.SaveToFile(Path.Combine(AppHost.GetAppDataPath(), "AquaMate.ini"));
         }
 
         #endregion

@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -10,9 +12,6 @@ using AquaMate.Core;
 
 namespace AquaMate.UI.Dialogs
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public sealed partial class AboutDlg : Form
     {
         public AboutDlg()
@@ -30,8 +29,7 @@ namespace AquaMate.UI.Dialogs
 
         private void LabelMail_Click(object sender, EventArgs e)
         {
-            Label lbl = sender as Label;
-            if (lbl != null) {
+            if (sender is Label lbl) {
                 AppHost.LoadExtFile(lbl.Text);
             }
         }

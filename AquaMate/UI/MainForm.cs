@@ -1,13 +1,14 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 using AquaMate.Core;
 using AquaMate.Core.Model;
@@ -20,21 +21,18 @@ using BSLib.Controls;
 
 namespace AquaMate.UI
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public partial class MainForm : Form, IBrowser
     {
         private readonly ILogger fLogger = LogManager.GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, "MainForm");
 
         private DataPanel fCurrentPanel;
-        private DrawingHelper fDrawingHelper;
-        private IModel fModel;
-        private NavigationStack<DataPanel> fNavigationStack;
+        private readonly DrawingHelper fDrawingHelper;
+        private readonly IModel fModel;
+        private readonly NavigationStack<DataPanel> fNavigationStack;
         private NotificationDlg fNotificationDlg;
-        private Dictionary<Type, DataPanel> fPanels;
-        private Timer fTimer;
-        private ALTray fTray;
+        private readonly Dictionary<Type, DataPanel> fPanels;
+        private readonly Timer fTimer;
+        private readonly ALTray fTray;
 
 
         public IModel Model
@@ -60,8 +58,7 @@ namespace AquaMate.UI
             fDrawingHelper = new DrawingHelper(this);
             fTray = new ALTray(this);
 
-            ALSettings.Instance.LoadFromFile(Path.Combine(AppHost.GetAppDataPath(), "AquaMate.ini"));
-
+            ((WFAppHost)AppHost.Instance).LoadOptions();
             ((WFAppHost)AppHost.Instance).RuntimeContext.Model = fModel;
 
             SetSettings();
@@ -102,7 +99,7 @@ namespace AquaMate.UI
                 if (components != null) {
                     components.Dispose();
                 }
-                ALSettings.Instance.SaveToFile(Path.Combine(AppHost.GetAppDataPath(), "AquaMate.ini"));
+                ((WFAppHost)AppHost.Instance).SaveOptions();
                 fTray.Dispose();
             }
             base.Dispose(disposing);
@@ -498,8 +495,7 @@ namespace AquaMate.UI
         {
             try {
                 Type type = typeof(T);
-                DataPanel panel;
-                bool exists = fPanels.TryGetValue(type, out panel);
+                bool exists = fPanels.TryGetValue(type, out DataPanel panel);
 
                 if (!exists) {
                     panel = new T();

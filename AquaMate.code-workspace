@@ -13,7 +13,7 @@
 			"path": "./AquaMate.Tests"
 		},
 		{
-			"path": "./ALSketch"
+			"path": "./common"
 		},
 		{
 			"path": "./locales"

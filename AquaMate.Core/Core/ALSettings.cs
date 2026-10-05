@@ -1,12 +1,15 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
 using AquaMate.Core.Types;
 using AquaMate.Logging;
+using AquaMate.MCP;
 using BSLib;
 
 namespace AquaMate.Core
@@ -113,6 +116,7 @@ namespace AquaMate.Core
             set { fChannelParameters = value; }
         }
 
+        public MCPSettings MCPSettings { get; } = new MCPSettings();
 
         #region Instance
 
@@ -146,8 +150,7 @@ namespace AquaMate.Core
 
         public void LoadFromFile(IniFile ini)
         {
-            if (ini == null)
-                throw new ArgumentNullException("ini");
+            ArgumentNullException.ThrowIfNull(ini);
 
             fHideClosedTanks = ini.ReadBool("Common", "HideClosedTanks", true);
             fExitOnClose = ini.ReadBool("Common", "ExitOnClose", true);
@@ -169,12 +172,14 @@ namespace AquaMate.Core
         public void LoadFromFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             try {
                 IniFile ini = new IniFile(fileName);
                 try {
                     LoadFromFile(ini);
+
+                    MCPSettings.LoadOptions(ini);
                 } finally {
                     ini.Dispose();
                 }
@@ -186,8 +191,7 @@ namespace AquaMate.Core
 
         public void SaveToFile(IniFile ini)
         {
-            if (ini == null)
-                throw new ArgumentNullException("ini");
+            ArgumentNullException.ThrowIfNull(ini);
 
             ini.WriteBool("Common", "HideClosedTanks", fHideClosedTanks);
             ini.WriteBool("Common", "ExitOnClose", fExitOnClose);
@@ -209,12 +213,14 @@ namespace AquaMate.Core
         public void SaveToFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException("fileName");
+                throw new ArgumentNullException(nameof(fileName));
 
             try {
                 IniFile ini = new IniFile(fileName);
                 try {
                     SaveToFile(ini);
+
+                    MCPSettings.SaveOptions(ini);
                 } finally {
                     ini.Dispose();
                 }

@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 #if !NET8_0_OR_GREATER
@@ -15,7 +17,8 @@ using AquaMate.Core.Model;
 using AquaMate.M3DViewer;
 using AquaMate.M3DViewer.Tanks;
 using BSLib;
-using CsGL.OpenGL;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 
 namespace AquaMate.UI.Components
 {
@@ -39,7 +42,7 @@ namespace AquaMate.UI.Components
     public class OGLRenderer : SceneRenderer
     {
         private readonly Control fViewer;
-        private uint fListBase;
+        private int fListBase;
 
         public OGLRenderer(Control viewer)
         {
@@ -48,116 +51,126 @@ namespace AquaMate.UI.Components
 
         public override void PushMatrix()
         {
-            OpenGL.glPushMatrix();
+            GL.PushMatrix();
         }
 
         public override void PopMatrix()
         {
-            OpenGL.glPopMatrix();
+            GL.PopMatrix();
         }
 
         public override void Translatef(float x, float y, float z)
         {
-            OpenGL.glTranslatef(x, y, z);
+            GL.Translate(x, y, z);
         }
 
         public override void Rotatef(float angle, float x, float y, float z)
         {
-            OpenGL.glRotatef(angle, x, y, z);
+            GL.Rotate(angle, x, y, z);
         }
 
         public override void Vertex3f(float x, float y, float z)
         {
-            OpenGL.glVertex3f(x, y, z);
+            GL.Vertex3(x, y, z);
         }
 
         public override void Normal3f(float nx, float ny, float nz)
         {
-            OpenGL.glNormal3f(nx, ny, nz);
+            GL.Normal3(nx, ny, nz);
         }
 
         public override void Begin(uint mode)
         {
-            OpenGL.glBegin(mode);
+            //GL.Begin(mode);
         }
 
         public override void End()
         {
-            OpenGL.glEnd();
+            GL.End();
         }
 
         public override void BeginTriangleStrip()
         {
-            OpenGL.glBegin(OpenGL.GL_TRIANGLE_STRIP);
+            GL.Begin(BeginMode.TriangleStrip);
         }
 
         public override void BeginPolygon()
         {
-            OpenGL.glBegin(OpenGL.GL_POLYGON);
+            GL.Begin(BeginMode.Polygon);
         }
 
         public override void BeginTriangleFan()
         {
-            OpenGL.glBegin(OpenGL.GL_TRIANGLE_FAN);
+            GL.Begin(BeginMode.TriangleFan);
         }
 
         public override void Color4f(float red, float green, float blue, float alpha)
         {
-            OpenGL.glColor4f(red, green, blue, alpha);
+            GL.Color4(red, green, blue, alpha);
         }
 
         public override void DrawSolidSphere(double radius, int slices, int stacks)
         {
-            GLUT.glutSolidSphere(radius, slices, stacks);
+            //GLUT.glutSolidSphere(radius, slices, stacks);
         }
 
         public override void SetMaterial(float[] diffParams, float[] specParams, float[] shin)
         {
             if (diffParams != null) {
-                GL.glMaterialfv(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_DIFFUSE, diffParams);
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Diffuse, diffParams);
             }
             if (specParams != null) {
-                GL.glMaterialfv(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_SPECULAR, specParams);
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Specular, specParams);
             }
             if (shin != null) {
-                GL.glMaterialfv(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_SHININESS, shin);
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, shin);
             }
             //GL.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_EMISSION, new float[] { 0.7f, 0.7f, 0.7f, 0.1f });
         }
 
         public override void SetLight(uint index, float[] ambiParams, float[] diffParams, float[] specParams, float[] pos)
         {
-            uint light = OpenGL.GL_LIGHT0 + index;
-            OpenGL.glEnable(light);
+            LightName light = (LightName)((int)LightName.Light0 + index);
+
+            EnableCap lightCap = (EnableCap)((int)EnableCap.Light0 + index);
+            GL.Enable(lightCap);
 
             if (ambiParams != null) {
-                GL.glLightfv(light, OpenGL.GL_AMBIENT, ambiParams);
+                GL.Light(light, LightParameter.Ambient, ambiParams);
             }
 
             if (diffParams != null) {
-                GL.glLightfv(light, OpenGL.GL_DIFFUSE, diffParams);
+                GL.Light(light, LightParameter.Diffuse, diffParams);
             }
 
             if (specParams != null) {
-                GL.glLightfv(light, OpenGL.GL_SPECULAR, specParams);
+                GL.Light(light, LightParameter.Specular, specParams);
             }
 
             if (pos != null) {
-                GL.glLightfv(light, OpenGL.GL_POSITION, pos);
+                GL.Light(light, LightParameter.Position, pos);
             }
         }
 
         public override void SetViewport(int width, int height, float fovY, float zNear, float zFar)
         {
             if (width > 0 && height > 0) {
-                OpenGL.glViewport(0, 0, width, height);
-                OpenGL.glMatrixMode(OpenGL.GL_PROJECTION);
-                OpenGL.glLoadIdentity();
+                GL.Viewport(0, 0, width, height);
 
-                GLU.gluPerspective(fovY, (float)width / height, zNear, zFar);
+                GL.MatrixMode(MatrixMode.Projection);
+                GL.LoadIdentity();
 
-                OpenGL.glMatrixMode(OpenGL.GL_MODELVIEW);
-                OpenGL.glLoadIdentity();
+                //GLU.gluPerspective(fovY, (float)width / height, zNear, zFar);
+                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(
+                    OpenTK.Mathematics.MathHelper.DegreesToRadians(fovY),
+                    (float)width / (float)height,
+                    (float)Math.Max(0.0001, zNear),
+                    zFar
+                );
+                GL.LoadMatrix(ref perspective);
+
+                GL.MatrixMode(MatrixMode.Modelview);
+                GL.LoadIdentity();
             }
         }
 
@@ -167,77 +180,77 @@ namespace AquaMate.UI.Components
                 normal = CalculateSurfaceNormal(point1, point2, point3);
             }
 
-            OpenGL.glBegin(OpenGL.GL_TRIANGLES);
+            GL.Begin(BeginMode.Triangles);
 
-            OpenGL.glNormal3f(normal.X, normal.Y, normal.Z);
-            OpenGL.glVertex3f(point1.X, point1.Y, point1.Z);
+            GL.Normal3(normal.X, normal.Y, normal.Z);
+            GL.Vertex3(point1.X, point1.Y, point1.Z);
 
-            OpenGL.glNormal3f(normal.X, normal.Y, normal.Z);
-            OpenGL.glVertex3f(point2.X, point2.Y, point2.Z);
+            GL.Normal3(normal.X, normal.Y, normal.Z);
+            GL.Vertex3(point2.X, point2.Y, point2.Z);
 
-            OpenGL.glNormal3f(normal.X, normal.Y, normal.Z);
-            OpenGL.glVertex3f(point3.X, point3.Y, point3.Z);
+            GL.Normal3(normal.X, normal.Y, normal.Z);
+            GL.Vertex3(point3.X, point3.Y, point3.Z);
 
-            OpenGL.glEnd();
+            GL.End();
         }
 
         public override void InitScene()
         {
-            OpenGL.glClearDepth(1.0f);
-            OpenGL.glShadeModel(OpenGL.GL_SMOOTH); // GL_FLAT?
-            OpenGL.glEnable(OpenGL.GL_DEPTH_TEST);
-            OpenGL.glHint(OpenGL.GL_PERSPECTIVE_CORRECTION_HINT, OpenGL.GL_NICEST);
-            OpenGL.glEnable(OpenGL.GL_COLOR_MATERIAL);
-            OpenGL.glEnable(OpenGL.GL_CULL_FACE);
+            GL.ClearDepth(1.0f);
+            GL.ShadeModel(ShadingModel.Smooth); // GL_FLAT?
+            GL.Enable(EnableCap.DepthTest);
+            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
+            GL.Enable(EnableCap.ColorMaterial);
+            GL.Enable(EnableCap.CullFace);
 
-            OpenGL.glEnable(OpenGL.GL_POINT_SMOOTH);
-            OpenGL.glHint(OpenGL.GL_POINT_SMOOTH_HINT, OpenGL.GL_NICEST);
+            GL.Enable(EnableCap.PointSmooth);
+            GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
 
-            OpenGL.glEnable(OpenGL.GL_LINE_SMOOTH);
-            OpenGL.glHint(OpenGL.GL_LINE_SMOOTH_HINT, OpenGL.GL_NICEST);
+            GL.Enable(EnableCap.LineSmooth);
+            GL.Hint(HintTarget.LineSmoothHint, HintMode.Nicest);
 
-            OpenGL.glEnable(OpenGL.GL_POLYGON_SMOOTH);
-            OpenGL.glHint(OpenGL.GL_POLYGON_SMOOTH_HINT, OpenGL.GL_NICEST);
+            GL.Enable(EnableCap.PolygonSmooth);
+            GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 
-            OpenGL.glDisable(OpenGL.GL_LIGHT0);
-            OpenGL.glDisable(OpenGL.GL_LIGHT1);
-            OpenGL.glDisable(OpenGL.GL_LIGHT2);
-            OpenGL.glDisable(OpenGL.GL_LIGHT3);
-            OpenGL.glDisable(OpenGL.GL_LIGHT4);
-            OpenGL.glDisable(OpenGL.GL_LIGHT5);
-            OpenGL.glDisable(OpenGL.GL_LIGHT6);
-            OpenGL.glDisable(OpenGL.GL_LIGHT7);
+            GL.Disable(EnableCap.Light0);
+            GL.Disable(EnableCap.Light1);
+            GL.Disable(EnableCap.Light2);
+            GL.Disable(EnableCap.Light3);
+            GL.Disable(EnableCap.Light4);
+            GL.Disable(EnableCap.Light5);
+            GL.Disable(EnableCap.Light6);
+            GL.Disable(EnableCap.Light7);
         }
 
         public override void BeginDrawing()
         {
             BuildFont();
 
-            OpenGL.glClearColor(0.25f, 0.25f, 0.25f, 0.0f);
-            OpenGL.glClear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-            OpenGL.glLoadIdentity();
+            GL.ClearColor(0.25f, 0.25f, 0.25f, 0.0f);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.LoadIdentity();
 
-            OpenGL.glEnable(OpenGL.GL_LIGHTING);
-            OpenGL.glEnable(OpenGL.GL_NORMALIZE);
-            OpenGL.glLightModelf(OpenGL.GL_LIGHT_MODEL_TWO_SIDE, (int)GL.GL_TRUE);
-            OpenGL.glEnable(OpenGL.GL_BLEND);
-            OpenGL.glBlendFunc(OpenGL.GL_SRC_ALPHA, OpenGL.GL_ONE_MINUS_SRC_ALPHA);
+            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.Normalize);
+            GL.LightModel(LightModelParameter.LightModelTwoSide, (int)OpenTK.Graphics.OpenGL.Boolean.True);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            OpenGL.glPushMatrix();
+            GL.PushMatrix();
         }
 
         public override void EndDrawing()
         {
-            OpenGL.glPopMatrix();
+            GL.PopMatrix();
         }
 
         private void BuildFont()
         {
             //fViewer.Font = new Font("Courier New", 24.0f, FontStyle.Bold);
-            fListBase = GL.glGenLists(128);
+            /*fListBase = GL.GenLists(128);
             using (var gfx = fViewer.CreateGraphics()) {
                 wglUseFontBitmaps(gfx.GetHdc(), 0, 128, fListBase);
-            }
+            }*/
         }
 
         public override void DrawText(string text, float x, float y, float z)
@@ -246,14 +259,14 @@ namespace AquaMate.UI.Components
             OpenGL.glLoadIdentity();
             OpenGL.glTranslatef(0, 0, 0.0f);*/
 
-            OpenGL.glDisable(OpenGL.GL_LIGHTING);
-            OpenGL.glColor3f(1.0f, 0.0f, 0.0f);
-            OpenGL.glRasterPos3f(x, y, z);
+            /*GL.Disable(EnableCap.Lighting);
+            GL.Color3(1.0f, 0.0f, 0.0f);
+            GL.RasterPos3(x, y, z);
 
-            OpenGL.glPushAttrib(OpenGL.GL_LIST_BIT);
-            GL.glListBase((uint)fListBase);
-            GL.glCallLists(text.Length, OpenGL.GL_UNSIGNED_SHORT, text);
-            OpenGL.glPopAttrib();
+            GL.PushAttrib(AttribMask.ListBit);
+            GL.ListBase((uint)fListBase);
+            GL.CallLists(text.Length, ListNameType.UnsignedShort, text);
+            GL.PopAttrib();*/
         }
 
         [DllImport("opengl32.dll")]
@@ -351,10 +364,10 @@ namespace AquaMate.UI.Components
 
         public void ObjDraw(DeviceModel morph)
         {
-            OpenGL.glPushMatrix();
+            GL.PushMatrix();
 
             Translatef(-0.25f, 0.4f, 0.0f);
-            OpenGL.glEnable(OpenGL.GL_LIGHTING);
+            GL.Enable(EnableCap.Lighting);
 
             for (uint i = 0; i < morph.LightsNum; i++) {
                 var vtx = morph.Lights[i];
@@ -363,14 +376,14 @@ namespace AquaMate.UI.Components
 
             SetMaterial(AlumDiffuse, AlumSpecular, AlumShininess);
 
-            OpenGL.glBegin(OpenGL.GL_QUADS);
+            GL.Begin(BeginMode.Quads);
             for (int i = 0; i < morph.VertsNum; i++) {
                 var vtx = morph.Vertices[i];
-                OpenGL.glVertex3f(vtx.x, vtx.y, vtx.z);
+                GL.Vertex3(vtx.x, vtx.y, vtx.z);
             }
-            OpenGL.glEnd();
+            GL.End();
 
-            OpenGL.glPopMatrix();
+            GL.PopMatrix();
         }
 
         #endregion

@@ -1,7 +1,9 @@
 /*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System.Collections.Generic;
@@ -11,9 +13,9 @@ using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
 
-namespace AquaMate.MCP.Features;
+namespace AquaMate.MCP;
 
-internal class NutritionListTool : BaseTool
+public class NutritionListTool : BaseTool
 {
     public NutritionListTool() : base("nutrition_list") { }
 

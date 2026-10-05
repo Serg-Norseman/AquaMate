@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace />
+        <RootNamespace>AquaMate</RootNamespace>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
@@ -20,6 +20,10 @@
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <OutputPath>..\bin</OutputPath>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Include="..\AquaMate.Core\GlobalSuppressions.cs" Link="GlobalSuppressions.cs" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\AquaMate.Core\AquaMate.Core.csproj" />
@@ -61,6 +65,7 @@
 
     <ItemGroup>
         <PackageReference Include="log4net" Version="3.5.0" />
+        <PackageReference Include="OpenTK.GLControl" Version="4.0.2" />
     </ItemGroup>
 
     <ItemGroup>

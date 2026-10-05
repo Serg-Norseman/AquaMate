@@ -1,7 +1,9 @@
 /*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -14,9 +16,9 @@ using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
 
-namespace AquaMate.MCP.Features;
+namespace AquaMate.MCP;
 
-internal class MaintenanceListTool : BaseTool
+public class MaintenanceListTool : BaseTool
 {
     public MaintenanceListTool() : base("maintenance_list") { }
 
@@ -44,12 +46,13 @@ internal class MaintenanceListTool : BaseTool
         int page = MCPHelper.GetOptionalInt(args, "page", 1);
         int aquariumId = MCPHelper.GetOptionalInt(args, "aquarium_id", -1);
 
-        IList<Maintenance> maintenances;
+        List<Maintenance> maintenances;
         if (aquariumId > 0) {
             maintenances = model.QueryMaintenances(aquariumId);
         } else {
             maintenances = model.QueryMaintenances();
         }
+        maintenances.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
 
         if (maintenances.Count == 0)
             return MCPContent.CreateSimpleContent("No maintenance records found.");
@@ -71,7 +74,7 @@ internal class MaintenanceListTool : BaseTool
 }
 
 
-internal class MaintenanceAddTool : BaseTool
+public class MaintenanceAddTool : BaseTool
 {
     public MaintenanceAddTool() : base("maintenance_add") { }
 

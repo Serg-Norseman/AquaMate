@@ -12,15 +12,31 @@ indent_style = space
 indent_size = 4
 dotnet_sort_system_directives_first = true
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:always
-csharp_preserve_single_line_statements = false
-csharp_preserve_single_line_blocks = true
 dotnet_style_coalesce_expression = false
 dotnet_style_null_propagation = false
+dotnet_style_prefer_auto_properties = false:silent
+csharp_preserve_single_line_statements = true
+csharp_preserve_single_line_blocks = true
 csharp_new_line_before_open_brace = methods, properties, events, indexers, types
 csharp_new_line_before_else = false
 csharp_new_line_before_catch = false
 csharp_new_line_before_finally = false
+csharp_style_prefer_switch_expression = false
+csharp_style_prefer_primary_constructors = false
 
-[*.{md,yml}]
+[*.{xeto,md,yml,yaml,lng}]
 indent_style = space
 indent_size = 2
+
+[*.sh]
+end_of_line = lf
+
+; Specially protected style tradition of this project
+[*.cs]
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.f_pascal_style.capitalization = pascal_case
+dotnet_naming_style.f_pascal_style.required_prefix = f
+dotnet_naming_rule.private_fields_with_f.symbols = private_fields
+dotnet_naming_rule.private_fields_with_f.style = f_pascal_style
+dotnet_naming_rule.private_fields_with_f.severity = warning

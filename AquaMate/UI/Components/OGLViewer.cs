@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 #if !NET8_0_OR_GREATER
@@ -14,11 +16,14 @@ using AquaMate.Core.Model.Tanks;
 using AquaMate.Core.Types;
 using AquaMate.M3DViewer;
 using AquaMate.M3DViewer.Tanks;
-using CsGL.OpenGL;
+using BSLib.Design.MVP;
+using OpenTK.GLControl;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.Common;
 
 namespace AquaMate.UI.Components
 {
-    public sealed class OGLViewer : OpenGLControl
+    public sealed class OGLViewer : GLControl
     {
         private bool fAeration;
         private System.Timers.Timer fAnimTimer;
@@ -29,7 +34,7 @@ namespace AquaMate.UI.Components
         private int fLastY;
         private bool fMouseDrag;
         private Vector3D fRotation;
-        private readonly OGLRenderer fSceneRenderer;
+        private OGLRenderer fSceneRenderer;
         private ITankRenderer fTankRenderer;
         private bool fWaterVisible;
         private float fZ;
@@ -49,13 +54,25 @@ namespace AquaMate.UI.Components
         }
 
 
-        public OGLViewer()
+        public OGLViewer() : base(
+            new GLControlSettings {
+                API = ContextAPI.OpenGL,
+                APIVersion = new Version(3, 3, 0, 0),
+                Profile = ContextProfile.Core,
+                Flags = ContextFlags.Default,
+                AutoLoadBindings = true,
+                RedBits = 8,
+                GreenBits = 8,
+                BlueBits = 8,
+                AlphaBits = 8,
+                DepthBits = 24,
+                StencilBits = 8,
+                NumberOfSamples = 1
+            }
+        )
         {
-            fSceneRenderer = new OGLRenderer(this);
+            MakeCurrent();
 
-            Reset();
-
-            fSceneRenderer.InitScene();
         }
 
         protected override void Dispose(bool disposing)
@@ -64,6 +81,19 @@ namespace AquaMate.UI.Components
                 StopTimer();
             }
             base.Dispose(disposing);
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            //this.MakeCurrent();
+            //GL.LoadBindings(base.WindowInfo);
+            //GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            //GL.Enable(EnableCap.DepthTest);
+
+            fSceneRenderer = new OGLRenderer(this);
+            fSceneRenderer.InitScene();
+            Reset();
         }
 
         public void Reset()
@@ -149,9 +179,11 @@ namespace AquaMate.UI.Components
             fAnimTimer.Stop();
             fAnimTimer = null;
         }
- 
-        public override void glDraw()
+
+        protected override void OnPaint(PaintEventArgs e)
         {
+            base.OnPaint(e);
+
             fSceneRenderer.BeginDrawing();
 
             fSceneRenderer.SetLight(0, new float[] { 0.5f, 0.5f, 0.5f, 1.0f }, null, SceneRenderer.LightSpecular, null);
@@ -175,17 +207,17 @@ namespace AquaMate.UI.Components
             fSceneRenderer.EndDrawing();
         }
 
-        protected override OpenGLContext CreateContext()
+        /*protected override OpenGLContext CreateContext()
         {
             ControlGLContext context = new ControlGLContext(this);
             DisplayType displayType = new DisplayType(32, 32, 32, 32);
             context.Create(displayType, null);
             return context;
-        }
+        }*/
 
         protected override void OnSizeChanged(EventArgs e)
         {
-            GrabContext();
+            //GrabContext();
             var sz = Size;
             fSceneRenderer.SetViewport(sz.Width, sz.Height, 45.0f, 0.0f, 100.0f);
         }

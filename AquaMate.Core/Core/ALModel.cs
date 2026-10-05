@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -253,8 +255,7 @@ namespace AquaMate.Core
                     result = entity.ToString();
                     break;
 
-                case EntityType.Maintenance:
-                    {
+                case EntityType.Maintenance: {
                         var mntRec = entity as Maintenance;
                         string strType = Localizer.LS(ALData.MaintenanceTypes[(int)mntRec.Type].Name);
                         string timestamp = ALCore.GetDateStr(mntRec.Timestamp);
@@ -262,8 +263,7 @@ namespace AquaMate.Core
                     }
                     break;
 
-                case EntityType.Measure:
-                    {
+                case EntityType.Measure: {
                         var msrRec = entity as Measure;
                         string strType = Localizer.LS(LSID.Measure);
                         string timestamp = ALCore.GetDateStr(msrRec.Timestamp);
@@ -271,8 +271,7 @@ namespace AquaMate.Core
                     }
                     break;
 
-                case EntityType.Transfer:
-                    {
+                case EntityType.Transfer: {
                         var trnRec = entity as Transfer;
                         var itemRec = GetRecord(trnRec.ItemType, trnRec.ItemId);
                         string itName = (itemRec == null) ? string.Empty : itemRec.ToString();
@@ -470,14 +469,93 @@ namespace AquaMate.Core
             return fDB.Query<Inhabitant>("select * from Inhabitant");
         }
 
-        public IList<Inhabitant> QueryInhabitants(Aquarium aquarium)
-        {
-            return fDB.Query<Inhabitant>("select inh.Id, inh.SpeciesId, inh.Sex, inh.Name from Inhabitant inh, Transfer tran where (inh.Id = tran.ItemId and tran.ItemType in (2, 3, 4, 5) and TargetId = ?)", aquarium.Id);
-        }
-
         public IList<Inhabitant> QueryInhabitants(int aquariumId)
         {
             return fDB.Query<Inhabitant>("select inh.Id, inh.SpeciesId, inh.Sex, inh.Name from Inhabitant inh, Transfer tran where (inh.Id = tran.ItemId and tran.ItemType in (2, 3, 4, 5) and TargetId = ?)", aquariumId);
+        }
+
+        public List<InhabitantDispItem> PrepareInhabitants(int aquariumId)
+        {
+            var result = new List<InhabitantDispItem>();
+
+            IList<Inhabitant> records = QueryInhabitants();
+            foreach (Inhabitant rec in records) {
+                Species spc = GetRecord<Species>(rec.SpeciesId);
+
+                SpeciesType spType;
+                string spName, spTemp, spGH, spPH;
+                if (spc == null) {
+                    spType = SpeciesType.Fish;
+                    spName = string.Empty;
+                    spTemp = string.Empty;
+                    spGH = string.Empty;
+                    spPH = string.Empty;
+                } else {
+                    spType = spc.Type;
+                    spName = spc.Name;
+                    spTemp = spc.GetTempRange();
+                    spGH = spc.GetGHRange();
+                    spPH = spc.GetPHRange();
+                }
+
+                SpeciesType speciesType = GetSpeciesType(rec.SpeciesId);
+                ItemType itemType = ALCore.GetItemType(speciesType);
+
+                rec.Quantity = QueryInhabitantsCount(rec.Id, itemType);
+                bool fin = (rec.Quantity == 0);
+
+                if (fin && ALSettings.Instance.HideLosses) continue;
+
+                int currAqmId = 0;
+                DateTime inclusionDate, exclusionDate;
+                GetInhabitantDates(rec.Id, itemType, out inclusionDate, out exclusionDate, out currAqmId);
+
+                if (aquariumId > 0 && currAqmId != aquariumId) continue;
+
+                string aqmName = GetRecordName(ItemType.Aquarium, currAqmId);
+                string strInclusDate = ALCore.IsZeroDate(inclusionDate) ? string.Empty : ALCore.GetDateStr(inclusionDate);
+                string strExclusDate = ALCore.IsZeroDate(exclusionDate) || !fin ? string.Empty : ALCore.GetDateStr(exclusionDate);
+
+                DateTime endDate = ALCore.IsZeroDate(exclusionDate) || !fin ? DateTime.Now.Date : exclusionDate;
+                string strLifespan = ALCore.IsZeroDate(inclusionDate) ? string.Empty : ALCore.GetTimespanText(inclusionDate, endDate);
+
+                int iDays = (!ALCore.IsZeroDate(exclusionDate)) ? (exclusionDate - inclusionDate).Days : 0;
+
+                ItemState itemState;
+                string strState = GetItemStateStr(rec.Id, itemType, out itemState);
+                if (itemState == ItemState.Unknown || !fin) {
+                    strState = Localizer.LS(ALData.ItemStates[(int)rec.State]);
+                }
+                string sx = ALCore.IsAnimal(spType) ? Localizer.LS(ALData.SexNames[(int)rec.Sex]) : "–";
+
+                var inhDisp = new InhabitantDispItem() {
+                    Id = rec.Id,
+                    Name = rec.Name,
+                    Sex = rec.Sex,
+                    SexName = sx,
+                    Quantity = rec.Quantity,
+                    SpeciesId = rec.SpeciesId,
+                    SpeciesName = spName,
+                    State = rec.State,
+                    StateStr = strState,
+                    AquariumId = rec.AquariumId,
+                    AquariumName = aqmName,
+                    InclusionDate = strInclusDate,
+                    ExclusionDate = strExclusDate,
+                    LifeSpan = strLifespan,
+                    Temp = spTemp,
+                    PH = spPH,
+                    GH = spGH,
+                    iDays = iDays,
+                    Fin = fin,
+                    Note = rec.Note,
+                    ItemType = itemType
+                };
+
+                result.Add(inhDisp);
+            }
+
+            return result;
         }
 
         #endregion
@@ -527,6 +605,11 @@ namespace AquaMate.Core
             return fDB.Query<Device>("select * from Device");
         }
 
+        public IList<Device> QueryDevices(int aquariumId)
+        {
+            return fDB.Query<Device>("select * from Device where AquariumId = ?", aquariumId);
+        }
+
         public IList<Device> QueryDevices(Aquarium aquarium)
         {
             return fDB.Query<Device>("select * from Device where AquariumId = ?", aquarium.Id);
@@ -557,12 +640,12 @@ namespace AquaMate.Core
 
         #region Maintenance functions
 
-        public IList<Maintenance> QueryMaintenances()
+        public List<Maintenance> QueryMaintenances()
         {
             return fDB.Query<Maintenance>("select * from Maintenance order by [Timestamp]");
         }
 
-        public IList<Maintenance> QueryMaintenances(int aquariumId)
+        public List<Maintenance> QueryMaintenances(int aquariumId)
         {
             return fDB.Query<Maintenance>("select * from Maintenance where (AquariumId = ?) order by [Timestamp]", aquariumId);
         }
@@ -660,11 +743,16 @@ namespace AquaMate.Core
             return fDB.Query<Schedule>("select * from Schedule order by [Timestamp]");
         }
 
+        public IList<Schedule> QuerySchedule(int aquariumId)
+        {
+            return fDB.Query<Schedule>("select * from Schedule where (AquariumId = ?) order by [Timestamp]", aquariumId);
+        }
+
         #endregion
 
         #region Transfer functions
 
-        public IList<Transfer> QueryTransfers()
+        public List<Transfer> QueryTransfers()
         {
             return fDB.Query<Transfer>("select * from Transfer order by [Timestamp]");
         }
@@ -688,12 +776,12 @@ namespace AquaMate.Core
 
         #region Note functions
 
-        public IList<Note> QueryNotes()
+        public List<Note> QueryNotes()
         {
             return fDB.Query<Note>("select * from Note order by [Timestamp]");
         }
 
-        public IList<Note> QueryNotes(int aquariumId)
+        public List<Note> QueryNotes(int aquariumId)
         {
             return fDB.Query<Note>("select * from Note where (AquariumId = ?) order by [Timestamp]", aquariumId);
         }
@@ -702,12 +790,12 @@ namespace AquaMate.Core
 
         #region Measure functions
 
-        public IList<Measure> QueryMeasures()
+        public List<Measure> QueryMeasures()
         {
             return fDB.Query<Measure>("select * from Measure order by [Timestamp]");
         }
 
-        public IList<Measure> QueryMeasures(int aquariumId)
+        public List<Measure> QueryMeasures(int aquariumId)
         {
             return fDB.Query<Measure>("select * from Measure where AquariumId = ? order by [Timestamp]", aquariumId);
         }
@@ -866,7 +954,7 @@ namespace AquaMate.Core
 
         #region Snapshot functions
 
-        public IList<Snapshot> QuerySnapshots()
+        public List<Snapshot> QuerySnapshots()
         {
             return fDB.Query<Snapshot>("select * from Snapshot");
         }
@@ -917,16 +1005,14 @@ namespace AquaMate.Core
             bool result = false;
 
             switch (entity.EntityType) {
-                case EntityType.Aquarium:
-                    {
+                case EntityType.Aquarium: {
                         var aqmRec = entity as Aquarium;
                         ItemType itemType = ItemType.Aquarium;
                         result = HasTransfers(fDB, entity.Id, itemType) || HasAquariumLinks(fDB, entity.Id) || HasAquariumSTT(fDB, entity.Id);
                     }
                     break;
 
-                case EntityType.Inhabitant:
-                    {
+                case EntityType.Inhabitant: {
                         var inhRec = entity as Inhabitant;
                         SpeciesType speciesType = GetSpeciesType(inhRec.SpeciesId);
                         ItemType itemType = ALCore.GetItemType(speciesType);
@@ -934,32 +1020,28 @@ namespace AquaMate.Core
                     }
                     break;
 
-                case EntityType.Species:
-                    {
+                case EntityType.Species: {
                         var spcRec = entity as Species;
                         string query = string.Format("select count(*) as value from Inhabitant where SpeciesId = {0}", entity.Id);
                         result = HasCount(fDB, query);
                     }
                     break;
 
-                case EntityType.Nutrition:
-                    {
+                case EntityType.Nutrition: {
                         var nutrRec = entity as Nutrition;
                         ItemType itemType = ItemType.Nutrition;
                         result = HasTransfers(fDB, entity.Id, itemType);
                     }
                     break;
 
-                case EntityType.Device:
-                    {
+                case EntityType.Device: {
                         var devRec = entity as Device;
                         ItemType itemType = ItemType.Device;
                         result = HasTransfers(fDB, entity.Id, itemType);
                     }
                     break;
 
-                case EntityType.Inventory:
-                    {
+                case EntityType.Inventory: {
                         // for Soils in the future - links from aquarium records
                         var invRec = entity as Inventory;
                         ItemType itemType = ALCore.GetItemType(invRec.Type);
@@ -981,8 +1063,7 @@ namespace AquaMate.Core
                     // default, because it is not used as a reference table
                     break;
 
-                case EntityType.TSPoint:
-                    {
+                case EntityType.TSPoint: {
                         var tspRec = entity as TSPoint;
                         string query = string.Format("select count(*) as value from Device where PointId = {0}", entity.Id);
                         result = HasCount(fDB, query);

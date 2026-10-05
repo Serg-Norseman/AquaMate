@@ -1,7 +1,9 @@
 ﻿/*
- *  This file is part of the "AquaMate".
- *  Copyright (C) 2019-2022 by Sergey V. Zhdanovskih.
- *  This program is licensed under the GNU General Public License.
+ *  AquaMate, home aquariums manager.
+ *  Copyright (C) 2019-2026 by Sergey V. Zhdanovskih.
+ *  
+ *  Licensed under the GNU General Public License (GPL) v3.
+ *  See LICENSE file in the project root for full license information.
  */
 
 using System;
@@ -48,8 +50,8 @@ namespace AquaMate.Core
         string GetItemStateStr(int recId, ItemType itemType, out ItemState itemState);
 
         IList<Inhabitant> QueryInhabitants();
-        IList<Inhabitant> QueryInhabitants(Aquarium aquarium);
         IList<Inhabitant> QueryInhabitants(int aquariumId);
+        List<InhabitantDispItem> PrepareInhabitants(int aquariumId);
 
         IList<Species> QuerySpecies();
         IList<Species> QuerySpecies(int type);
@@ -59,14 +61,15 @@ namespace AquaMate.Core
         IList<string> QuerySpeciesHabitats();
 
         IList<Device> QueryDevices();
+        IList<Device> QueryDevices(int aquariumId);
         IList<Device> QueryDevices(Aquarium aquarium);
         IList<string> QueryDeviceBrands();
 
         IList<Inventory> QueryInventory();
         IList<string> QueryInventoryBrands();
 
-        IList<Maintenance> QueryMaintenances();
-        IList<Maintenance> QueryMaintenances(int aquariumId);
+        List<Maintenance> QueryMaintenances();
+        List<Maintenance> QueryMaintenances(int aquariumId);
         IList<Maintenance> QueryWaterChanges(int aquariumId);
         double GetWaterVolume(int aquariumId);
         void GetWaterChangeIntervals(int aquariumId, WorkTime workTime, out double avgChangeDays, out double lastChangeDays);
@@ -74,17 +77,18 @@ namespace AquaMate.Core
         TankState GetTankState(WorkTime workTime);
 
         IList<Schedule> QuerySchedule();
+        IList<Schedule> QuerySchedule(int aquariumId);
 
-        IList<Transfer> QueryTransfers();
+        List<Transfer> QueryTransfers();
         IList<Transfer> QueryTransfers(int aquariumId);
         IList<Transfer> QueryTransfers(int itemId, int itemType);
         IList<Transfer> QueryLastTransfers(int itemId, int itemType);
 
-        IList<Note> QueryNotes();
-        IList<Note> QueryNotes(int aquariumId);
+        List<Note> QueryNotes();
+        List<Note> QueryNotes(int aquariumId);
 
-        IList<Measure> QueryMeasures();
-        IList<Measure> QueryMeasures(int aquariumId);
+        List<Measure> QueryMeasures();
+        List<Measure> QueryMeasures(int aquariumId);
         QDecimal QueryLastMeasure(Aquarium aquarium, string field);
         double GetCurrentMeasureValue(Aquarium aquarium, string field);
         List<MeasureValue> CollectData(Aquarium aquarium);
@@ -101,7 +105,7 @@ namespace AquaMate.Core
 
         IList<Shop> QueryShops();
 
-        IList<Snapshot> QuerySnapshots();
+        List<Snapshot> QuerySnapshots();
         IList<Snapshot> QuerySnapshots(int itemId, int itemType);
 
         void ApplySettings(ALSettings settings);
