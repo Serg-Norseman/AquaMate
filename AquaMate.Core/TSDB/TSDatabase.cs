@@ -22,7 +22,7 @@ namespace AquaMate.TSDB
     /// </summary>
     public class TSDatabase
     {
-        private readonly ILogger fLogger = LogManager.GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, "TSDatabase");
+        private readonly ILogger fLogger = LogManager.GetLogger<TSDatabase>();
 
         private readonly Dictionary<int, SDCompression> fCompressionCache;
         private readonly SQLiteConnection fDB;

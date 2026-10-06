@@ -6,8 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#if !NET8_0_OR_GREATER
-
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -17,6 +15,7 @@ using AquaMate.Core.Model;
 using AquaMate.M3DViewer;
 using AquaMate.M3DViewer.Tanks;
 using BSLib;
+using OpenTK.GLControl;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
@@ -41,10 +40,10 @@ namespace AquaMate.UI.Components
     /// </summary>
     public class OGLRenderer : SceneRenderer
     {
-        private readonly Control fViewer;
+        private readonly GLControl fViewer;
         private int fListBase;
 
-        public OGLRenderer(Control viewer)
+        public OGLRenderer(GLControl viewer)
         {
             fViewer = viewer;
         }
@@ -81,7 +80,7 @@ namespace AquaMate.UI.Components
 
         public override void Begin(uint mode)
         {
-            //GL.Begin(mode);
+            GL.Begin((BeginMode)mode);
         }
 
         public override void End()
@@ -111,7 +110,43 @@ namespace AquaMate.UI.Components
 
         public override void DrawSolidSphere(double radius, int slices, int stacks)
         {
-            //GLUT.glutSolidSphere(radius, slices, stacks);
+            // Generate vertices for a sphere
+            for (int i = 0; i < stacks; i++) {
+                double phi1 = Math.PI * i / stacks;
+                double phi2 = Math.PI * (i + 1) / stacks;
+
+                GL.Begin(BeginMode.QuadStrip);
+                for (int j = 0; j <= slices; j++) {
+                    double theta = 2 * Math.PI * j / slices;
+
+                    // First point
+                    float x1 = (float)(radius * Math.Sin(phi1) * Math.Cos(theta));
+                    float y1 = (float)(radius * Math.Cos(phi1));
+                    float z1 = (float)(radius * Math.Sin(phi1) * Math.Sin(theta));
+
+                    // Normal for first point
+                    float nx1 = x1 / (float)radius;
+                    float ny1 = y1 / (float)radius;
+                    float nz1 = z1 / (float)radius;
+
+                    GL.Normal3(nx1, ny1, nz1);
+                    GL.Vertex3(x1, y1, z1);
+
+                    // Second point
+                    float x2 = (float)(radius * Math.Sin(phi2) * Math.Cos(theta));
+                    float y2 = (float)(radius * Math.Cos(phi2));
+                    float z2 = (float)(radius * Math.Sin(phi2) * Math.Sin(theta));
+
+                    // Normal for second point
+                    float nx2 = x2 / (float)radius;
+                    float ny2 = y2 / (float)radius;
+                    float nz2 = z2 / (float)radius;
+
+                    GL.Normal3(nx2, ny2, nz2);
+                    GL.Vertex3(x2, y2, z2);
+                }
+                GL.End();
+            }
         }
 
         public override void SetMaterial(float[] diffParams, float[] specParams, float[] shin)
@@ -160,12 +195,9 @@ namespace AquaMate.UI.Components
                 GL.MatrixMode(MatrixMode.Projection);
                 GL.LoadIdentity();
 
-                //GLU.gluPerspective(fovY, (float)width / height, zNear, zFar);
-                Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(
+                var perspective = Matrix4.CreatePerspectiveFieldOfView(
                     OpenTK.Mathematics.MathHelper.DegreesToRadians(fovY),
-                    (float)width / (float)height,
-                    (float)Math.Max(0.0001, zNear),
-                    zFar
+                    (float)width / (float)height, (float)Math.Max(0.0001, zNear), zFar
                 );
                 GL.LoadMatrix(ref perspective);
 
@@ -197,10 +229,10 @@ namespace AquaMate.UI.Components
         public override void InitScene()
         {
             GL.ClearDepth(1.0f);
-            GL.ShadeModel(ShadingModel.Smooth); // GL_FLAT?
+            GL.ShadeModel(ShadingModel.Smooth);
             GL.Enable(EnableCap.DepthTest);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-            GL.Enable(EnableCap.ColorMaterial);
+            //GL.Enable(EnableCap.ColorMaterial);
             GL.Enable(EnableCap.CullFace);
 
             GL.Enable(EnableCap.PointSmooth);
@@ -220,11 +252,13 @@ namespace AquaMate.UI.Components
             GL.Disable(EnableCap.Light5);
             GL.Disable(EnableCap.Light6);
             GL.Disable(EnableCap.Light7);
+
+            BuildFont();
         }
 
         public override void BeginDrawing()
         {
-            BuildFont();
+            fViewer.MakeCurrent();
 
             GL.ClearColor(0.25f, 0.25f, 0.25f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -242,31 +276,79 @@ namespace AquaMate.UI.Components
         public override void EndDrawing()
         {
             GL.PopMatrix();
+            GL.Flush();
+            fViewer.SwapBuffers();
         }
 
         private void BuildFont()
         {
-            //fViewer.Font = new Font("Courier New", 24.0f, FontStyle.Bold);
-            /*fListBase = GL.GenLists(128);
-            using (var gfx = fViewer.CreateGraphics()) {
-                wglUseFontBitmaps(gfx.GetHdc(), 0, 128, fListBase);
-            }*/
+            // Proper implementation using Windows fonts and display lists
+            try {
+                fListBase = GL.GenLists(256);
+                if (fListBase == 0) {
+                    // Failed to generate display lists
+                    return;
+                }
+
+                // Create a bitmap font using system font
+                using (var font = new System.Drawing.Font("Arial", 12, System.Drawing.FontStyle.Regular))
+                using (var bmp = new System.Drawing.Bitmap(1, 1))
+                using (var gfx = System.Drawing.Graphics.FromImage(bmp)) {
+                    // Get device context
+                    IntPtr hdc = gfx.GetHdc();
+
+                    // Select font into device context
+                    IntPtr fontHandle = font.ToHfont();
+                    IntPtr oldFont = Win32.SelectObject(hdc, fontHandle);
+
+                    // Create bitmap font from current font
+                    wglUseFontBitmaps(hdc, 0, 256, (uint)fListBase);
+
+                    // Restore old font and clean up
+                    Win32.SelectObject(hdc, oldFont);
+                    Win32.DeleteObject(fontHandle);
+                    gfx.ReleaseHdc(hdc);
+                }
+            } catch (Exception ex) {
+                // Handle any errors in font creation
+                System.Diagnostics.Debug.WriteLine($"Failed to build font: {ex.Message}");
+                if (fListBase != 0) {
+                    GL.DeleteLists(fListBase, 256);
+                    fListBase = 0;
+                }
+            }
         }
 
         public override void DrawText(string text, float x, float y, float z)
         {
-            /* if required static position of text?
-            OpenGL.glLoadIdentity();
-            OpenGL.glTranslatef(0, 0, 0.0f);*/
+            if (string.IsNullOrEmpty(text) || fListBase == 0)
+                return;
 
-            /*GL.Disable(EnableCap.Lighting);
-            GL.Color3(1.0f, 0.0f, 0.0f);
-            GL.RasterPos3(x, y, z);
+            // Disable lighting to render text properly
+            GL.Disable(EnableCap.Lighting);
+            GL.Color3(1.0f, 1.0f, 1.0f); // White color for text
 
+            // Push current matrix and set up modelview matrix
+            GL.PushMatrix();
+            GL.LoadIdentity();
+
+            // Translate to the desired position
+            GL.Translate(x, y, z);
+
+            // Set up raster position for text rendering
+            GL.RasterPos2(0, 0);
+
+            // Render the text using the bitmap font
             GL.PushAttrib(AttribMask.ListBit);
-            GL.ListBase((uint)fListBase);
-            GL.CallLists(text.Length, ListNameType.UnsignedShort, text);
-            GL.PopAttrib();*/
+            GL.ListBase(fListBase);
+
+            // Convert string to byte array for OpenGL
+            byte[] textBytes = Encoding.ASCII.GetBytes(text);
+            GL.CallLists(textBytes.Length, ListNameType.UnsignedByte, textBytes);
+
+            GL.PopAttrib();
+            GL.PopMatrix();
+            GL.Enable(EnableCap.Lighting);
         }
 
         [DllImport("opengl32.dll")]
@@ -387,7 +469,21 @@ namespace AquaMate.UI.Components
         }
 
         #endregion
+
+        // Win32 API imports for font handling
+        internal static class Win32
+        {
+            [DllImport("gdi32.dll")]
+            public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hglb);
+
+            [DllImport("gdi32.dll")]
+            public static extern bool DeleteObject(IntPtr ho);
+
+            [DllImport("gdi32.dll")]
+            public static extern IntPtr CreateFont(int nHeight, int nWidth, int nEscapement, int nOrientation,
+                int fnWeight, uint fdwItalic, uint fdwUnderline, uint fdwStrikeOut, uint fdwCharSet,
+                uint fdwOutputPrecision, uint fdwClipPrecision, uint fdwQuality, uint fdwPitchAndFamily,
+                string lpszFace);
+        }
     }
 }
-
-#endif

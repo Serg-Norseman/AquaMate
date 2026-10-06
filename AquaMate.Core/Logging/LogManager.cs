@@ -7,6 +7,7 @@
  */
 
 using System;
+using AquaMate.Core;
 using BSLib;
 
 namespace AquaMate.Logging
@@ -32,6 +33,11 @@ namespace AquaMate.Logging
                 fLogManager = new LogManager(logFileName, logLevel);
             }
             return new Log4NetHelper(loggerName);
+        }
+
+        public static ILogger GetLogger<T>()
+        {
+            return GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, typeof(T).Name);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace AquaMate.UI
 
     public class BrandEditorPresenter : EditorPresenter<IModel, Brand, IBrandEditorView>
     {
-        private readonly ILogger fLogger = LogManager.GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, "BrandEditorPresenter");
+        private readonly ILogger fLogger = LogManager.GetLogger<BrandEditorPresenter>();
 
 
         public BrandEditorPresenter(IBrandEditorView view) : base(view)

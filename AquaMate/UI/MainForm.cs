@@ -466,9 +466,8 @@ namespace AquaMate.UI
                     SetView<SnapshotPanel>(extData);
                     break;
                 case MainView.M3DViewer:
-#if !NET8_0_OR_GREATER
-                    SetView<M3DViewerPanel>(extData);
-#endif
+                    var frm = new M3DViewerPanel(extData);
+                    frm.Show();
                     break;
                 case MainView.Brands:
                     SetView<BrandPanel>(extData);

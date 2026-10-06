@@ -37,7 +37,7 @@ namespace AquaMate.UI
 
     public class AquariumEditorPresenter : EditorPresenter<IModel, Aquarium, IAquariumEditorView>
     {
-        private readonly ILogger fLogger = LogManager.GetLogger(ALCore.LOG_FILE, ALCore.LOG_LEVEL, "AquariumEditorPresenter");
+        private readonly ILogger fLogger = LogManager.GetLogger<AquariumEditorPresenter>();
 
 
         public AquariumEditorPresenter(IAquariumEditorView view) : base(view)

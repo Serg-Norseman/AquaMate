@@ -6,8 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#if !NET8_0_OR_GREATER
-
 using System;
 using System.Timers;
 using System.Windows.Forms;
@@ -16,15 +14,14 @@ using AquaMate.Core.Model.Tanks;
 using AquaMate.Core.Types;
 using AquaMate.M3DViewer;
 using AquaMate.M3DViewer.Tanks;
-using BSLib.Design.MVP;
 using OpenTK.GLControl;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Windowing.Common;
 
 namespace AquaMate.UI.Components
 {
-    public sealed class OGLViewer : GLControl
+    public sealed class OGLViewer
     {
+        private readonly GLControl fViewer;
+
         private bool fAeration;
         private System.Timers.Timer fAnimTimer;
         private Aquarium fAquarium;
@@ -54,46 +51,41 @@ namespace AquaMate.UI.Components
         }
 
 
-        public OGLViewer() : base(
-            new GLControlSettings {
-                API = ContextAPI.OpenGL,
-                APIVersion = new Version(3, 3, 0, 0),
-                Profile = ContextProfile.Core,
-                Flags = ContextFlags.Default,
-                AutoLoadBindings = true,
-                RedBits = 8,
-                GreenBits = 8,
-                BlueBits = 8,
-                AlphaBits = 8,
-                DepthBits = 24,
-                StencilBits = 8,
-                NumberOfSamples = 1
-            }
-        )
+        public OGLViewer(GLControl viewer)
         {
-            MakeCurrent();
-
+            fViewer = viewer;
+            fViewer.HandleCreated += OnHandleCreated;
+            fViewer.Paint += OnPaint;
+            fViewer.SizeChanged += OnSizeChanged;
+            fViewer.KeyDown += OnKeyDown;
+            fViewer.MouseDown += OnMouseDown;
+            fViewer.MouseUp += OnMouseUp;
+            fViewer.MouseMove += OnMouseMove;
+            fViewer.MouseWheel += OnMouseWheel;
         }
 
-        protected override void Dispose(bool disposing)
+        /*protected override void Dispose(bool disposing)
         {
             if (disposing) {
                 StopTimer();
             }
             base.Dispose(disposing);
-        }
+        }*/
 
-        protected override void OnHandleCreated(EventArgs e)
+        private void OnHandleCreated(object sender, EventArgs e)
         {
-            base.OnHandleCreated(e);
-            //this.MakeCurrent();
-            //GL.LoadBindings(base.WindowInfo);
-            //GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            //GL.Enable(EnableCap.DepthTest);
-
-            fSceneRenderer = new OGLRenderer(this);
+            fSceneRenderer = new OGLRenderer(fViewer);
             fSceneRenderer.InitScene();
             Reset();
+
+            var sz = fViewer.Size;
+            fSceneRenderer?.SetViewport(sz.Width, sz.Height, 45.0f, 0.0f, 100.0f);
+        }
+
+        private void OnSizeChanged(object sender, EventArgs e)
+        {
+            var sz = fViewer.Size;
+            fSceneRenderer?.SetViewport(sz.Width, sz.Height, 45.0f, 0.0f, 100.0f);
         }
 
         public void Reset()
@@ -127,9 +119,6 @@ namespace AquaMate.UI.Components
 
                 case TankShape.Rectangular:
                     fTankRenderer = new RectangularTankRenderer(fSceneRenderer, (RectangularTank)tank);
-
-                    // debug, only for `Eheim Aquastar 54 LED`
-                    //fAquaLight = fSceneRenderer.ObjLoad(@".\common\eheim_classic_led_55.m3d");
                     break;
 
                 case TankShape.BowFront:
@@ -155,7 +144,7 @@ namespace AquaMate.UI.Components
                     fRotation.Y -= 0.3f;
                 }
 
-                Invalidate(false);
+                fViewer.Invalidate();
 
                 fBusy = false;
             }
@@ -180,10 +169,8 @@ namespace AquaMate.UI.Components
             fAnimTimer = null;
         }
 
-        protected override void OnPaint(PaintEventArgs e)
+        private void OnPaint(object sender, PaintEventArgs e)
         {
-            base.OnPaint(e);
-
             fSceneRenderer.BeginDrawing();
 
             fSceneRenderer.SetLight(0, new float[] { 0.5f, 0.5f, 0.5f, 1.0f }, null, SceneRenderer.LightSpecular, null);
@@ -207,25 +194,8 @@ namespace AquaMate.UI.Components
             fSceneRenderer.EndDrawing();
         }
 
-        /*protected override OpenGLContext CreateContext()
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            ControlGLContext context = new ControlGLContext(this);
-            DisplayType displayType = new DisplayType(32, 32, 32, 32);
-            context.Create(displayType, null);
-            return context;
-        }*/
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            //GrabContext();
-            var sz = Size;
-            fSceneRenderer.SetViewport(sz.Width, sz.Height, 45.0f, 0.0f, 100.0f);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-
             switch (e.KeyCode) {
                 case Keys.PageDown:
                     fZ -= 0.5f;
@@ -249,11 +219,9 @@ namespace AquaMate.UI.Components
             }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        private void OnMouseDown(object sender, MouseEventArgs e)
         {
-            base.OnMouseDown(e);
-
-            if (!Focused) Focus();
+            if (!fViewer.Focused) fViewer.Focus();
 
             if (e.Button == MouseButtons.Left) {
                 fMouseDrag = true;
@@ -262,19 +230,15 @@ namespace AquaMate.UI.Components
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        private void OnMouseUp(object sender, MouseEventArgs e)
         {
-            base.OnMouseUp(e);
-
             if (e.Button == MouseButtons.Left) {
                 fMouseDrag = false;
             }
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-
             if (fMouseDrag) {
                 int dx = e.X - fLastX;
                 int dy = e.Y - fLastY;
@@ -288,15 +252,11 @@ namespace AquaMate.UI.Components
             }
         }
 
-        protected override void OnMouseWheel(MouseEventArgs e)
+        private void OnMouseWheel(object sender, MouseEventArgs e)
         {
-            base.OnMouseWheel(e);
-
             if (e.Delta != 0) {
                 fZ += 0.001f * e.Delta;
             }
         }
     }
 }
-
-#endif

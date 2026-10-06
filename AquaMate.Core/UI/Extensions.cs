@@ -9,7 +9,6 @@
 using System;
 using AquaMate.Core;
 using BSLib;
-using BSLib.Design.Graphics;
 using BSLib.Design.MVP.Controls;
 
 namespace AquaMate.UI
