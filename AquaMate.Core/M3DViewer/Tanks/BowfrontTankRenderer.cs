@@ -23,13 +23,14 @@ namespace AquaMate.M3DViewer.Tanks
         {
         }
 
-        public override void Render(bool showWater = true, bool aeration = false, bool showInfo = false)
+        public override void Render()
         {
             float length = fTank.Length;
             float width = fTank.Width;
             float fullWidth = fTank.CentreWidth;
             float height = fTank.Height;
             float thickness = fTank.GlassThickness;
+            float underfillHeight = fTank.UnderfillHeight;
 
             length *= ScaleFactor;
             width *= ScaleFactor;
@@ -81,9 +82,9 @@ namespace AquaMate.M3DViewer.Tanks
             // front
             DrawBowfrontPlate(x1s, x2s, 0.0f, width, fullWidth, height, thickness);
 
-            if (showWater) {
+            if (ShowWater) {
                 SetWaterMaterial();
-                float watHeight = height - thickness - (StdWaterOffset * ScaleFactor);
+                float watHeight = height - thickness - (underfillHeight * ScaleFactor);
 
                 var x1w = x1s + thickness;
                 var x2w = x2s - thickness;
@@ -93,7 +94,7 @@ namespace AquaMate.M3DViewer.Tanks
                 var z2w = 0.0f + width;
                 DrawBowBox(x1w, x2w, y1w, y2w, z1w, z2w, fullWidth - width - thickness);
 
-                if (aeration) {
+                if (Aeration) {
                     var aeraPt = new Point3D(0.0f, 0.0f, width / 2.0f);
                     var surfacedBubbles = new List<M3DBubble>();
                     fAeration.DrawBubbles(fScene, aeraPt, watHeight, surfacedBubbles);

@@ -20,9 +20,9 @@ namespace AquaMate.M3DViewer.Tanks
         {
         }
 
-        public override void Render(bool showWater = true, bool aeration = false, bool showInfo = false)
+        public override void Render()
         {
-            DrawRectangularTank(fTank.EdgeSize, fTank.EdgeSize, fTank.EdgeSize, fTank.GlassThickness, showWater, aeration, showInfo);
+            DrawRectangularTank(fTank.EdgeSize, fTank.EdgeSize, fTank.EdgeSize, fTank.GlassThickness, fTank.UnderfillHeight);
         }
     }
 }

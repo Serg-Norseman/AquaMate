@@ -20,12 +20,13 @@ namespace AquaMate.M3DViewer.Tanks
         {
         }
 
-        public override void Render(bool showWater = true, bool aeration = false, bool showInfo = false)
+        public override void Render()
         {
             float height = fTank.Height;
             float bottomDiameter = fTank.BottomDiameter;
             float topDiameter = fTank.TopDiameter;
             float thickness = fTank.GlassThickness;
+            float underfillHeight = fTank.UnderfillHeight;
 
             bottomDiameter *= ScaleFactor;
             topDiameter *= ScaleFactor;
@@ -46,13 +47,13 @@ namespace AquaMate.M3DViewer.Tanks
             var points1o = GetArcPoints(36, topDiameter / 2.0f, 0.0f, 360.0f);
             DrawCylinderFace(points1i, points1o, 0.0f + height);
 
-            if (showWater) {
+            if (ShowWater) {
                 SetWaterMaterial();
-                float watHeight = height - thickness - (StdWaterOffset * ScaleFactor);
+                float watHeight = height - thickness - (underfillHeight * ScaleFactor);
 
                 //M3DHelper.DrawCylinder(36, height, bottomDiameter / 2.0f, 0.0f, 360.0f);
 
-                if (aeration) {
+                if (Aeration) {
                     var aeraPt = new Point3D(0.0f, 0.0f, bottomDiameter / 2.0f);
                     var surfacedBubbles = new List<M3DBubble>();
                     fAeration.DrawBubbles(fScene, aeraPt, watHeight, surfacedBubbles);

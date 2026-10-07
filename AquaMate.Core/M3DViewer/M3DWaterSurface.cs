@@ -13,11 +13,6 @@ namespace AquaMate.M3DViewer
 {
     public sealed class M3DWaterSurface
     {
-        public static readonly float[] Water2Diffuse = new float[] { 0.1f, 0.4f, 1.0f, 0.5f };
-        public static readonly float[] Water2Specular = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
-        public static readonly float[] Water2Shininess = new float[] { 32.0f }; // 50f
-
-
         private class Cell
         {
             public float Y, V;
@@ -71,7 +66,9 @@ namespace AquaMate.M3DViewer
             for (int row = 0; row < fRowsCount + 2; row++) {
                 for (int col = 0; col < fColsCount + 2; col++) {
                     var cell = new Cell();
-                    cell.Y = 0.1f * (fRandom.Next(1000) / 100 - 5);
+                    // Improved initialization with smaller initial values for stability
+                    cell.Y = 0.01f * (fRandom.Next(100) - 50); // Smaller range of initial values
+                    cell.V = 0.0f; // Initial velocity is zero
                     fCells[row, col] = cell;
                 }
             }
@@ -92,7 +89,7 @@ namespace AquaMate.M3DViewer
                 }
             }
 
-            renderer.SetMaterial(Water2Diffuse, Water2Specular, Water2Shininess);
+            renderer.SetMaterial(M3DMaterials.Water2Diffuse, M3DMaterials.Water2Specular, M3DMaterials.Water2Shininess);
 
             for (int row = 1; row <= fRowsCount - 1; row++) {
                 renderer.BeginTriangleStrip();
@@ -128,9 +125,23 @@ namespace AquaMate.M3DViewer
             fCurrentTime = (DateTime.Now.Ticks - fStartTime) / 1000.0f;
             float dt = (-fLastTime + fCurrentTime) / 100.0f;
 
-            // ???
-            const float w = 0.01f;
-            const float b = 0.01f;
+            // Limit time step for stability
+            dt = Math.Min(dt, 0.5f);
+
+            // Improved wave algorithm for a more realistic effect
+            const float waveFrequency = 0.02f; // Reduced wave frequency for stability
+            const float waveAmplitude = 0.02f; // Reduced wave amplitude
+            const float damping = 0.05f; // Increased damping for stability
+
+            // Stabilizing values to prevent overflow
+            for (int row = 0; row < fRowsCount + 2; row++) {
+                for (int col = 0; col < fColsCount + 2; col++) {
+                    var cell = fCells[row, col];
+                    // Limit values to prevent overflow
+                    cell.Y = Math.Max(Math.Min(cell.Y, 10.0f), -10.0f);
+                    cell.V = Math.Max(Math.Min(cell.V, 5.0f), -5.0f);
+                }
+            }
 
             for (int row = 1; row <= fRowsCount; row++) {
                 float y_prv = fCells[row, 0].Y;
@@ -138,19 +149,32 @@ namespace AquaMate.M3DViewer
 
                 for (int col = 1; col <= fColsCount; col++) {
                     float y_nxt = fCells[row, col + 1].Y;
+                    // Improved wave force calculation taking into account neighboring cells
                     float dy = 4 * y_cur - fCells[row + 1, col].Y - y_nxt - fCells[row - 1, col].Y - y_prv;
                     float v = fCells[row, col].V;
-                    float dv = -(dy * w + b * v) * dt;
+                    // Improved velocity change calculation with damping
+                    float dv = -(dy * waveFrequency + damping * v) * dt;
                     fCells[row, col].V = v + dv;
                     y_prv = y_cur;
                     y_cur = y_nxt;
                 }
             }
 
+            // Applying wave effect to cells with additional stabilization
             for (int row = 1; row <= fRowsCount; row++) {
                 for (int col = 1; col <= fColsCount; col++) {
                     var cell = fCells[row, col];
                     cell.Y += (cell.V * dt);
+
+                    // Limit height change for stability
+                    cell.Y = Math.Max(Math.Min(cell.Y, 5.0f), -5.0f);
+
+                    // Add additional waves for more realism
+                    float waveOffset = waveAmplitude * (float)Math.Sin(fCurrentTime * 0.0005f + (row + col) * 0.1f);
+                    cell.Y += waveOffset;
+
+                    // Additional damping for stability
+                    cell.Y *= 0.999f;
                 }
             }
         }

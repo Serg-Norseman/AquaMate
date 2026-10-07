@@ -15,16 +15,13 @@ namespace AquaMate.M3DViewer
     /// </summary>
     public abstract class SceneRenderer
     {
-        public static readonly float[] LightAmbient = {0.5f, 0.5f, 0.5f, 0.95f};
-        public static readonly float[] LightDiffuse = {1.0f, 1.0f, 1.0f, 1.0f};
-        public static readonly float[] LightSpecular = {1.0f, 1.0f, 1.0f, 1.0f};
-        public static readonly float[] LightPosition = {0.0f, 5.0f, -5.0f, 1.0f};
-
         public abstract void PushMatrix();
 
         public abstract void PopMatrix();
 
-        public abstract void DrawSolidSphere(double radius, int slices, int stacks);
+        public abstract void DrawSphere(double radius, int slices, int stacks);
+
+        public abstract void DrawSphere(Point3D pt, double radius, int slices, int stacks);
 
         public abstract void DrawTriangle(Point3D point1, Point3D point2, Point3D point3, Point3D normal);
 
@@ -39,10 +36,9 @@ namespace AquaMate.M3DViewer
         public abstract void Color4f(float red, float green, float blue, float alpha);
 
         public abstract void SetLight(uint index, float[] ambiParams, float[] diffParams, float[] specParams, float[] pos);
+        public abstract void UnsetLight(uint index);
 
         public abstract void SetMaterial(float[] diffParams, float[] specParams, float[] shin);
-
-        public abstract void Begin(uint mode);
 
         public abstract void End();
 
@@ -73,6 +69,8 @@ namespace AquaMate.M3DViewer
             return normal;
         }
 
+        public abstract void EnableCM(bool value);
+
         public abstract void InitScene();
 
         public abstract void BeginDrawing();
@@ -81,6 +79,7 @@ namespace AquaMate.M3DViewer
 
         public abstract void DrawText(string text, float x, float y, float z);
 
-        public abstract void DrawSphere(Point3D pt, double radius, int slices, int stacks);
+        public abstract void BeginTransparentRendering();
+        public abstract void EndTransparentRendering();
     }
 }

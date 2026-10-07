@@ -27,7 +27,7 @@ namespace AquaMate.M3DViewer
 
         private void Init(M3DBubble bubble)
         {
-            bubble.Size = RandomHelper.GetBoundedRnd(1, 3) / 1000.0f;
+            bubble.Size = RandomHelper.GetBoundedRnd(1, 5) / 1000.0f;
             bubble.X = 0.0f;
             bubble.Y = 0.0f;
             bubble.Z = 0.0f;
@@ -61,7 +61,7 @@ namespace AquaMate.M3DViewer
 
         public void DrawBubbles(SceneRenderer renderer, Point3D aeratorPt, float waterHeight, IList<M3DBubble> surfacedBubbles)
         {
-            renderer.Color4f(1.0f, 1.0f, 1.0f, 0.45f);
+            renderer.Color4f(1.0f, 1.0f, 1.0f, 0.6f);
 
             foreach (M3DBubble bubble in fBubbles) {
                 bool isSurfaced;

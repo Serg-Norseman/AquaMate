@@ -27,7 +27,12 @@ namespace AquaMate.M3DViewer.Tanks
 
     public interface ITankRenderer
     {
-        void Render(bool showWater = true, bool aeration = false, bool showInfo = false);
+        bool ShowWater { get; set; }
+        bool Aeration { get; set; }
+        bool ShowInfo { get; set; }
+        bool ShowLighter { get; set; }
+
+        void Render();
     }
 
     /// <summary>
@@ -39,24 +44,18 @@ namespace AquaMate.M3DViewer.Tanks
         public const BoxSides AllSidesWF = BoxSides.Top | BoxSides.Bottom | BoxSides.Left | BoxSides.Right | BoxSides.Back;
         public const BoxSides AllSidesWT = BoxSides.Bottom | BoxSides.Left | BoxSides.Right | BoxSides.Back | BoxSides.Front;
 
-        // materials
-        public static readonly float[] GlassDiffuse = new float[] { 0.878f, 1.0f, 1.0f, 0.5f };
-        public static readonly float[] GlassSpecular = new float[] { 0.95f, 0.95f, 0.95f, 1.0f };
-        public static readonly float[] GlassShininess = new float[] { 128.0f };
-
-        /*public static readonly float[] GlassDiffuse = new float[] { 0.588235f, 0.670588f, 0.729412f, 1.0f };
-        public static readonly float[] GlassSpecular = new float[] { 0.9f, 0.9f, 0.9f, 1.0f };
-        public static readonly float[] GlassShininess = new float[] { 96.0f };*/
-
         public const float ScaleFactor = 0.01f;
-
-        // TODO: Move to aquarium's props
-        protected const float StdWaterOffset = 2.0f;
 
         protected readonly M3DAeration fAeration;
         protected readonly SceneRenderer fScene;
         protected readonly T fTank;
         protected readonly M3DWaterSurface fWater;
+
+
+        public bool ShowWater { get; set; }
+        public bool Aeration { get; set; }
+        public bool ShowInfo { get; set; }
+        public bool ShowLighter { get; set; }
 
 
         public T Tank
@@ -71,22 +70,26 @@ namespace AquaMate.M3DViewer.Tanks
             fTank = tank;
             fAeration = new M3DAeration();
             fWater = new M3DWaterSurface();
+
+            ShowWater = false;
+            ShowLighter = false;
+            Aeration = false;
+            ShowInfo = false;
         }
 
-        public abstract void Render(bool showWater = true, bool aeration = false, bool showInfo = false);
+        public abstract void Render();
 
         public void SetGlassMaterial()
         {
-            fScene.SetMaterial(GlassDiffuse, GlassSpecular, GlassShininess);
+            fScene.SetMaterial(M3DMaterials.GlassDiffuse, M3DMaterials.GlassSpecular, M3DMaterials.GlassShininess);
         }
 
         public void SetWaterMaterial()
         {
-            fScene.SetMaterial(M3DWaterSurface.Water2Diffuse, M3DWaterSurface.Water2Specular, M3DWaterSurface.Water2Shininess);
+            fScene.SetMaterial(M3DMaterials.Water2Diffuse, M3DMaterials.Water2Specular, M3DMaterials.Water2Shininess);
         }
 
-        protected void DrawRectangularTank(float length, float width, float height, float thickness,
-                                           bool showWater = true, bool aeration = false, bool showInfo = false)
+        protected void DrawRectangularTank(float length, float width, float height, float thickness, float underfillHeight)
         {
             float fltX, fltY, fltZ;
 
@@ -96,6 +99,8 @@ namespace AquaMate.M3DViewer.Tanks
             thickness *= ScaleFactor;
 
             fScene.Translatef(0.0f, -height / 2, -width / 2);
+
+            fScene.BeginTransparentRendering();
 
             SetGlassMaterial();
 
@@ -149,7 +154,7 @@ namespace AquaMate.M3DViewer.Tanks
 
             // water cube
             var surfacedBubbles = new List<M3DBubble>();
-            float watHeight = height - thickness - (StdWaterOffset * ScaleFactor);
+            float watHeight = height - thickness - (underfillHeight * ScaleFactor);
             var x1w = x1s + thickness;
             var x2w = x2s - thickness;
             var y1w = 0;
@@ -168,11 +173,11 @@ namespace AquaMate.M3DViewer.Tanks
                 fWater.Initialize(new Point3D[] { pt1t, pt2t, pt3t, pt4t }, offset);
             }
 
-            if (showWater) {
+            if (ShowWater) {
                 SetWaterMaterial();
                 DrawBox(x1w, x2w, y1w, y2w, z1w, z2w, AllSidesWT); // without top (water) surface
 
-                if (aeration) {
+                if (Aeration) {
                     var aeraPt = new Point3D(0.0f, 0.0f, width / 2.0f);
                     fAeration.DrawBubbles(fScene, aeraPt, watHeight, surfacedBubbles);
                     // surfacedBubbles: from aeration to water surface
@@ -182,10 +187,58 @@ namespace AquaMate.M3DViewer.Tanks
             }
 
             // required without condition!
-            fWater.Next(surfacedBubbles, !aeration);
+            fWater.Next(surfacedBubbles, !Aeration);
+
+            fScene.EndTransparentRendering();
+
+            // Add a light fixture - a silver (aluminum) narrow and thin plate in the middle of the aquarium
+            // The plate is positioned at the top center of the aquarium
+            if (ShowLighter) {
+                // Save the current matrix
+                fScene.PushMatrix();
+
+                // Position the light fixture at the top center of the aquarium
+                float lightY = height + thickness * 4; // At the top, slightly below the lid
+                fScene.Translatef(0.0f, lightY, 0.0f);
+
+                // Set aluminum material for the light fixture
+                fScene.SetMaterial(M3DMaterials.AlumDiffuse, M3DMaterials.AlumSpecular, M3DMaterials.AlumShininess);
+
+                // Light fixture dimensions
+                float lightLength = length - 2 * thickness; // Slightly smaller than the internal length
+                float lightWidth = width * 0.1f;   // Narrow strip
+                float lightHeight = thickness * 2;       // Very thin plate (approximately twice as thick as the wall glass)
+
+                // x <- length, z <- width
+                var zoffs = (width - 2 * thickness - lightWidth) / 2;
+
+                // Draw the light fixture as a thin plate
+                var x1l = x1w;
+                var x2l = x2w;
+                var y1l = 0.0f;
+                var y2l = -lightHeight; // Thin plate downward from the current position
+                var z1l = z1w + zoffs;
+                var z2l = z2w - zoffs;
+
+                // Top surface of the light fixture (main)
+                DrawBox(x1l, x2l, y1l, y2l, z1l, z2l);
+
+                // Add a light source along the entire bottom surface of the light fixture
+                fScene.SetLight(2,
+                    new float[] { 0.8f, 0.8f, 0.8f, 1.0f }, // ambient
+                    new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, // diffuse
+                    new float[] { 1.0f, 1.0f, 1.0f, 1.0f }, // specular
+                    new float[] { 0.0f, lightY - lightHeight / 2, 0.0f, 1.0f } // position
+                );
+
+                // Restore the matrix
+                fScene.PopMatrix();
+            } else {
+                fScene.UnsetLight(2);
+            }
 
             // front left top point - for temperature
-            if (showInfo) {
+            if (ShowInfo) {
                 fScene.DrawText("T: 25 °C", fltX, fltY, fltZ);
             }
         }

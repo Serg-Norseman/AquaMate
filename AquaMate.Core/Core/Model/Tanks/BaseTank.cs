@@ -16,8 +16,15 @@ namespace AquaMate.Core.Model.Tanks
     /// </summary>
     public class BaseTank : ITank
     {
+        /// <summary>
+        /// The thickness of a glass (cm).
+        /// </summary>
         [Browsable(true), DisplayName("GlassThickness")]
         public float GlassThickness { get; set; }
+
+        //[Browsable(true), DisplayName("UnderfillHeight")]
+        protected internal float UnderfillHeight { get; set; } = 2.0f;
+
 
         public BaseTank()
         {
@@ -36,6 +43,7 @@ namespace AquaMate.Core.Model.Tanks
         public virtual void SetPropNames()
         {
             ALCore.SetDisplayNameValue(this, "GlassThickness", ALData.GetLSuom(LSID.GlassThickness, MeasurementType.Length));
+            //ALCore.SetDisplayNameValue(this, "UnderfillHeight", ALData.GetLSuom(LSID.UnderfillHeight, MeasurementType.Length));
         }
 
         /// <summary>

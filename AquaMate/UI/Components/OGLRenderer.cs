@@ -15,7 +15,6 @@ using AquaMate.Core.Model;
 using AquaMate.M3DViewer;
 using AquaMate.M3DViewer.Tanks;
 using BSLib;
-using OpenTK.GLControl;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
@@ -40,12 +39,14 @@ namespace AquaMate.UI.Components
     /// </summary>
     public class OGLRenderer : SceneRenderer
     {
-        private readonly GLControl fViewer;
         private int fListBase;
+        /*private QFont fFont;
+        private QFontDrawing fFontDrawing;*/
 
-        public OGLRenderer(GLControl viewer)
+        public OGLRenderer()
         {
-            fViewer = viewer;
+            /*fFont = new QFont("Arial.ttf", 14f);
+            fFontDrawing = new QFontDrawing();*/
         }
 
         public override void PushMatrix()
@@ -78,11 +79,6 @@ namespace AquaMate.UI.Components
             GL.Normal3(nx, ny, nz);
         }
 
-        public override void Begin(uint mode)
-        {
-            GL.Begin((BeginMode)mode);
-        }
-
         public override void End()
         {
             GL.End();
@@ -108,7 +104,7 @@ namespace AquaMate.UI.Components
             GL.Color4(red, green, blue, alpha);
         }
 
-        public override void DrawSolidSphere(double radius, int slices, int stacks)
+        public override void DrawSphere(double radius, int slices, int stacks)
         {
             // Generate vertices for a sphere
             for (int i = 0; i < stacks; i++) {
@@ -149,6 +145,14 @@ namespace AquaMate.UI.Components
             }
         }
 
+        public override void DrawSphere(Point3D pt, double radius, int slices, int stacks)
+        {
+            PushMatrix();
+            Translatef(pt.X, pt.Y, pt.Z);
+            DrawSphere(radius, slices, stacks);
+            PopMatrix();
+        }
+
         public override void SetMaterial(float[] diffParams, float[] specParams, float[] shin)
         {
             if (diffParams != null) {
@@ -160,7 +164,14 @@ namespace AquaMate.UI.Components
             if (shin != null) {
                 GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Shininess, shin);
             }
-            //GL.glMaterialfv(GL.GL_FRONT_AND_BACK, GL.GL_EMISSION, new float[] { 0.7f, 0.7f, 0.7f, 0.1f });
+
+            // Enable emission to create a glow effect (e.g., for glass)
+            if (diffParams != null && diffParams.Length >= 4 && diffParams[3] < 1.0f) {
+                // For translucent materials, add a small emission
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Emission, new float[] { 0.1f, 0.1f, 0.1f, 0.1f });
+            } else {
+                GL.Material(MaterialFace.FrontAndBack, MaterialParameter.Emission, new float[] { 0.0f, 0.0f, 0.0f, 1.0f });
+            }
         }
 
         public override void SetLight(uint index, float[] ambiParams, float[] diffParams, float[] specParams, float[] pos)
@@ -185,6 +196,12 @@ namespace AquaMate.UI.Components
             if (pos != null) {
                 GL.Light(light, LightParameter.Position, pos);
             }
+        }
+
+        public override void UnsetLight(uint index)
+        {
+            EnableCap lightCap = (EnableCap)((int)EnableCap.Light0 + index);
+            GL.Disable(lightCap);
         }
 
         public override void SetViewport(int width, int height, float fovY, float zNear, float zFar)
@@ -226,6 +243,14 @@ namespace AquaMate.UI.Components
             GL.End();
         }
 
+        public override void EnableCM(bool value)
+        {
+            if (value)
+                GL.Enable(EnableCap.ColorMaterial);
+            else
+                GL.Disable(EnableCap.ColorMaterial);
+        }
+
         public override void InitScene()
         {
             GL.ClearDepth(1.0f);
@@ -244,22 +269,24 @@ namespace AquaMate.UI.Components
             GL.Enable(EnableCap.PolygonSmooth);
             GL.Hint(HintTarget.PolygonSmoothHint, HintMode.Nicest);
 
-            GL.Disable(EnableCap.Light0);
-            GL.Disable(EnableCap.Light1);
-            GL.Disable(EnableCap.Light2);
+            GL.Enable(EnableCap.Light0);
+            GL.Enable(EnableCap.Light1);
+            GL.Enable(EnableCap.Light2);
             GL.Disable(EnableCap.Light3);
             GL.Disable(EnableCap.Light4);
             GL.Disable(EnableCap.Light5);
             GL.Disable(EnableCap.Light6);
             GL.Disable(EnableCap.Light7);
 
-            BuildFont();
+            // Setting up the lighting model for better blending of transparent objects
+            GL.LightModel(LightModelParameter.LightModelTwoSide, (int)OpenTK.Graphics.OpenGL.Boolean.True);
+            GL.LightModel(LightModelParameter.LightModelAmbient, new float[] { 0.2f, 0.2f, 0.2f, 1.0f });
+
+            //BuildFont();
         }
 
         public override void BeginDrawing()
         {
-            fViewer.MakeCurrent();
-
             GL.ClearColor(0.25f, 0.25f, 0.25f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
@@ -270,6 +297,9 @@ namespace AquaMate.UI.Components
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
+            GL.Enable(EnableCap.DepthTest);
+            //GL.DepthMask(false);
+
             GL.PushMatrix();
         }
 
@@ -277,7 +307,18 @@ namespace AquaMate.UI.Components
         {
             GL.PopMatrix();
             GL.Flush();
-            fViewer.SwapBuffers();
+        }
+
+        public override void BeginTransparentRendering()
+        {
+            GL.DepthMask(false);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+        }
+
+        public override void EndTransparentRendering()
+        {
+            GL.DepthMask(true);
         }
 
         private void BuildFont()
@@ -324,8 +365,12 @@ namespace AquaMate.UI.Components
             if (string.IsNullOrEmpty(text) || fListBase == 0)
                 return;
 
+            /*fFontDrawing.DrawingPrimitives.Clear();
+            fFontDrawing.Print(fFont, text, new Vector3(x, y, z), QFontAlignment.Left);
+            fFontDrawing.Draw();*/
+
             // Disable lighting to render text properly
-            GL.Disable(EnableCap.Lighting);
+            /*GL.Disable(EnableCap.Lighting);
             GL.Color3(1.0f, 1.0f, 1.0f); // White color for text
 
             // Push current matrix and set up modelview matrix
@@ -348,19 +393,11 @@ namespace AquaMate.UI.Components
 
             GL.PopAttrib();
             GL.PopMatrix();
-            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.Lighting);*/
         }
 
         [DllImport("opengl32.dll")]
         private static extern void wglUseFontBitmaps(IntPtr hdc, uint first, uint count, uint listBase);
-
-        public override void DrawSphere(Point3D pt, double radius, int slices, int stacks)
-        {
-            PushMatrix();
-            Translatef(pt.X, pt.Y, pt.Z);
-            DrawSolidSphere(radius, slices, stacks);
-            PopMatrix();
-        }
 
         #region Models
 
@@ -440,10 +477,6 @@ namespace AquaMate.UI.Components
             return result;
         }
 
-        public static readonly float[] AlumDiffuse = new float[] { 0.5f, 0.5f, 0.5f, 1.0f };
-        public static readonly float[] AlumSpecular = new float[] { 0.95f, 0.95f, 0.95f, 1.0f };
-        public static readonly float[] AlumShininess = new float[] { 128.0f };
-
         public void ObjDraw(DeviceModel morph)
         {
             GL.PushMatrix();
@@ -453,10 +486,10 @@ namespace AquaMate.UI.Components
 
             for (uint i = 0; i < morph.LightsNum; i++) {
                 var vtx = morph.Lights[i];
-                SetLight(2 + i, LightAmbient, LightDiffuse, LightSpecular, new float[] { vtx.x, vtx.y, vtx.z });
+                SetLight(2 + i, M3DMaterials.LightAmbient, M3DMaterials.LightDiffuse, M3DMaterials.LightSpecular, new float[] { vtx.x, vtx.y, vtx.z });
             }
 
-            SetMaterial(AlumDiffuse, AlumSpecular, AlumShininess);
+            SetMaterial(M3DMaterials.AlumDiffuse, M3DMaterials.AlumSpecular, M3DMaterials.AlumShininess);
 
             GL.Begin(BeginMode.Quads);
             for (int i = 0; i < morph.VertsNum; i++) {
