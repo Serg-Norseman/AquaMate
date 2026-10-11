@@ -77,9 +77,9 @@ public class AquariumDetailsTool : BaseTool
         };
 
         var lastMeasure = model.QueryLastMeasure(aquarium, "Temperature");
-        if (!double.IsNaN(lastMeasure.value)) {
+        if (!double.IsNaN(lastMeasure.Value)) {
             details.Add("## Last Measurements");
-            details.Add($"- **Temperature**: {lastMeasure.value} °C");
+            details.Add($"- **Temperature**: {lastMeasure.Value} °C");
             details.Add("");
         }
 

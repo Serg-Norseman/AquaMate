@@ -800,17 +800,17 @@ namespace AquaMate.Core
             return fDB.Query<Measure>("select * from Measure where AquariumId = ? order by [Timestamp]", aquariumId);
         }
 
-        public QDecimal QueryLastMeasure(Aquarium aquarium, string field)
+        public QMeasureValue QueryLastMeasure(Aquarium aquarium, string field)
         {
-            string query = string.Format("select [{0}] as value from Measure where AquariumId = {1} and [{2}] <> 0.00000 order by [Timestamp] desc limit 1", field, aquarium.Id, field);
-            List<QDecimal> list = fDB.Query<QDecimal>(query);
+            string query = string.Format("select [Timestamp], [{0}] as Value from Measure where AquariumId = {1} and [{2}] <> 0.00000 order by [Timestamp] desc limit 1", field, aquarium.Id, field);
+            List<QMeasureValue> list = fDB.Query<QMeasureValue>(query);
             return (list != null && list.Count > 0) ? list[0] : null;
         }
 
         public double GetCurrentMeasureValue(Aquarium aquarium, string field)
         {
-            QDecimal measure = QueryLastMeasure(aquarium, field);
-            double mVal = (measure != null) ? measure.value : double.NaN;
+            QMeasureValue measure = QueryLastMeasure(aquarium, field);
+            double mVal = (measure != null) ? measure.Value : double.NaN;
             return mVal;
         }
 
@@ -819,7 +819,7 @@ namespace AquaMate.Core
             List<MeasureValue> measures = new List<MeasureValue>();
 
             PrepareValue(aquarium, measures, "Temperature", "T", "°C", null);
-            double NO3 = PrepareValue(aquarium, measures, "NO3", "NO3", "mg/l", ALData.NO3Ranges);
+            var NO3 = PrepareValue(aquarium, measures, "NO3", "NO3", "mg/l", ALData.NO3Ranges);
             PrepareValue(aquarium, measures, "NO2", "NO2", "mg/l", ALData.NO2Ranges);
             PrepareValue(aquarium, measures, "Cl2", "Cl2", "mg/l", ALData.Cl2Ranges);
             PrepareValue(aquarium, measures, "GH", "GH", "°d", ALData.GHRanges);
@@ -831,27 +831,27 @@ namespace AquaMate.Core
             PrepareValue(aquarium, measures, "NH3", "NH3", "", ALData.NH3Ranges);
             PrepareValue(aquarium, measures, "NH4", "NH4", "", null);
 
-            double PO4 = PrepareValue(aquarium, measures, "PO4", "PO4", "", ALData.PO4Ranges);
+            var PO4 = PrepareValue(aquarium, measures, "PO4", "PO4", "", ALData.PO4Ranges);
 
-            double redfield = (!double.IsNaN(PO4) && !DoubleHelper.Equals(PO4, 0.0001, 0.0001)) ? ALData.CalcRedfield(NO3, PO4) : double.NaN;
-            PrepareValue(measures, redfield, "Redfield", "", ALData.RedfieldRanges);
+            double redfield = (NO3 != null && PO4 != null && !double.IsNaN(PO4.Value) && !DoubleHelper.Equals(PO4.Value, 0.0001, 0.0001)) ? ALData.CalcRedfield(NO3.Value, PO4.Value) : double.NaN;
+            if (!double.IsNaN(redfield))
+                PrepareValue(measures, PO4.Timestamp, redfield, "Redfield", "", ALData.RedfieldRanges);
 
             return measures;
         }
 
-        private double PrepareValue(Aquarium aquarium, IList<MeasureValue> measures, string field, string sign, string uom, ValueRange[] ranges)
+        private QMeasureValue PrepareValue(Aquarium aquarium, IList<MeasureValue> measures, string field, string sign, string uom, ValueRange[] ranges)
         {
-            if (aquarium == null) return double.NaN;
+            if (aquarium == null) return null;
 
-            QDecimal measure = QueryLastMeasure(aquarium, field);
-            double mVal = (measure != null) ? measure.value : double.NaN;
+            QMeasureValue measure = QueryLastMeasure(aquarium, field);
+            if (measure != null)
+                PrepareValue(measures, measure.Timestamp, measure.Value, sign, uom, ranges);
 
-            PrepareValue(measures, mVal, sign, uom, ranges);
-
-            return mVal;
+            return measure;
         }
 
-        private void PrepareValue(IList<MeasureValue> measures, double mVal, string sign, string uom, ValueRange[] ranges)
+        private void PrepareValue(IList<MeasureValue> measures, DateTime timestamp, double mVal, string sign, string uom, ValueRange[] ranges)
         {
             string strVal = !double.IsNaN(mVal) ? ALCore.GetDecimalStr(mVal) : string.Empty;
             string text = string.Format("{0}={1} {2}", sign, strVal, uom);
@@ -862,7 +862,7 @@ namespace AquaMate.Core
                 color = bounds.Color;
             }
 
-            var tval = new MeasureValue(sign, mVal, uom, strVal, text, color, ranges);
+            var tval = new MeasureValue(sign, timestamp, mVal, uom, strVal, text, color, ranges);
             measures.Add(tval);
         }
 

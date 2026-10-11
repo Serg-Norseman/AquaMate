@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
 using System.Drawing;
 
 namespace AquaMate.Core.Types
@@ -13,7 +14,10 @@ namespace AquaMate.Core.Types
     public class MeasureValue
     {
         public readonly string Name;
+
+        public readonly DateTime Timestamp;
         public readonly double Value;
+
         public readonly string Unit;
 
         public readonly string ValText;
@@ -23,9 +27,10 @@ namespace AquaMate.Core.Types
 
         public readonly ValueRange[] Ranges;
 
-        public MeasureValue(string name, double value, string unit, string valText, string text, Color color, ValueRange[] ranges)
+        public MeasureValue(string name, DateTime timestamp, double value, string unit, string valText, string text, Color color, ValueRange[] ranges)
         {
             Name = name;
+            Timestamp = timestamp;
             Value = value;
             Unit = unit;
             ValText = valText;

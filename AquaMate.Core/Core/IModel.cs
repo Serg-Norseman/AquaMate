@@ -89,7 +89,7 @@ namespace AquaMate.Core
 
         List<Measure> QueryMeasures();
         List<Measure> QueryMeasures(int aquariumId);
-        QDecimal QueryLastMeasure(Aquarium aquarium, string field);
+        QMeasureValue QueryLastMeasure(Aquarium aquarium, string field);
         double GetCurrentMeasureValue(Aquarium aquarium, string field);
         List<MeasureValue> CollectData(Aquarium aquarium);
 

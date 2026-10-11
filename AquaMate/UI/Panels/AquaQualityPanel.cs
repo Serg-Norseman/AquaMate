@@ -7,10 +7,8 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using AquaMate.Core.Model;
-using AquaMate.Core.Types;
 using AquaMate.UI.Components;
 
 namespace AquaMate.UI.Panels
@@ -56,7 +54,7 @@ namespace AquaMate.UI.Panels
                 int col = 0, row = 0;
                 var values = fModel.CollectData(fAquarium);
                 foreach (var mVal in values) {
-                    if (!double.IsNaN(mVal.Value) && mVal.Ranges != null) {
+                    if (!double.IsNaN(mVal.Value) && mVal.Ranges != null && (DateTime.Now - mVal.Timestamp).TotalDays <= 14) {
                         string title = mVal.Name;
                         if (!string.IsNullOrEmpty(mVal.Unit)) {
                             title += ", " + mVal.Unit;

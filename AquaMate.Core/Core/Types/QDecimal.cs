@@ -6,13 +6,18 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System;
+
 namespace AquaMate.Core.Types
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class QDecimal
     {
         public double value { get; set; }
+    }
+
+    public class QMeasureValue
+    {
+        public DateTime Timestamp { get; set; }
+        public double Value { get; set; }
     }
 }
