@@ -6,7 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-#if !NETCOREAPP30
+#if !NETCORE
 
 using System;
 using System.IO.Ports;

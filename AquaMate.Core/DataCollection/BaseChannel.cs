@@ -111,7 +111,7 @@ namespace AquaMate.DataCollection
             BaseChannel channel;
 
             if (channelName == "Serial") {
-                #if !NETCOREAPP30
+                #if !NETCORE
                 channel = new SerialChannel();
                 #else
                 channel = new RandomChannel();

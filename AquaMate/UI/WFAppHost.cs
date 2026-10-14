@@ -41,10 +41,7 @@ namespace AquaMate.UI
 
         protected override void AppInit()
         {
-#if NETCOREAPP30
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
-#endif
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

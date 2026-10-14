@@ -506,7 +506,11 @@ namespace AquaMate.Core
 
         public static double CalcRedfield(double NO3, double PO4)
         {
-            return (NO3 / PO4) / 1.45;
+            if (!double.IsNaN(PO4) && !DoubleHelper.Equals(PO4, 0.0001, 0.0001)) {
+                return (NO3 / PO4) / 1.45;
+            } else {
+                return double.NaN;
+            }
         }
 
         public static IEnumerable<ComboItem<T>> GetNamesList<T>(IProps[] names)

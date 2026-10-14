@@ -192,7 +192,7 @@ namespace AquaMate.UI.Panels
             fNutritionLV.Columns.Add(Localizer.LS(LSID.Brand), 50, HorizontalAlignment.Left);
             fNutritionLV.Columns.Add(Localizer.LS(LSID.Amount), 100, HorizontalAlignment.Right);
 
-            var records = fModel.QueryNutritions(fAquarium);
+            var records = fModel.QueryNutritions(fAquarium.Id);
             foreach (Nutrition rec in records) {
                 var item = fNutritionLV.AddItemEx(rec,
                                rec.Name,
@@ -288,8 +288,7 @@ namespace AquaMate.UI.Panels
             fCompatibilityLV.Columns.Add("Req GH", 100, HorizontalAlignment.Left);
             fCompatibilityLV.Columns.Add("Cur GH", 100, HorizontalAlignment.Right);
 
-            SpeciesTypeData[] stData;
-            stData = new SpeciesTypeData[4];
+            var stData = new SpeciesTypeData[4];
             stData[0] = new SpeciesTypeData(Localizer.LS(LSID.Fish));
             stData[1] = new SpeciesTypeData(Localizer.LS(LSID.Invertebrate));
             stData[2] = new SpeciesTypeData(Localizer.LS(LSID.Plant));
@@ -300,8 +299,7 @@ namespace AquaMate.UI.Panels
                 Species spc = fModel.GetRecord<Species>(rec.SpeciesId);
                 if (spc == null) continue;
 
-                int speciesType = (int)spc.Type;
-                var data = stData[speciesType];
+                var data = stData[(int)spc.Type];
 
                 if (spc.GHMin != 0.0f || spc.GHMax != 0.0f) {
                     data.GHMin.AddValue(spc.GHMin);
@@ -319,10 +317,9 @@ namespace AquaMate.UI.Panels
                 }
             }
 
-            double curTemp, curPH, curGH;
-            curTemp = fModel.GetCurrentMeasureValue(fAquarium, "Temperature");
-            curPH = fModel.GetCurrentMeasureValue(fAquarium, "PH");
-            curGH = fModel.GetCurrentMeasureValue(fAquarium, "GH");
+            var curTemp = fModel.GetCurrentMeasureValue(fAquarium, "Temperature");
+            var curPH = fModel.GetCurrentMeasureValue(fAquarium, "PH");
+            var curGH = fModel.GetCurrentMeasureValue(fAquarium, "GH");
 
             foreach (var data in stData) {
                 string rangeTemp = ALCore.GetRangeStr(data.TempMin.GetResult(), data.TempMax.GetResult());

@@ -3,7 +3,7 @@
     <PropertyGroup>
         <RootNamespace>AquaMate</RootNamespace>
         <TargetFramework>net8.0-windows</TargetFramework>
-        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+        <DefineConstants>NETCORE</DefineConstants>
 
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -16,7 +16,7 @@
 
     <ItemGroup>
         <Reference Include="BSLib">
-            <HintPath>..\libs\net\BSLib.dll</HintPath>
+            <HintPath>..\libs\BSLib.dll</HintPath>
         </Reference>
     </ItemGroup>
 

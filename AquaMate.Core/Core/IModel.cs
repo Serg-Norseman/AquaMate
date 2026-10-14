@@ -51,7 +51,7 @@ namespace AquaMate.Core
 
         IList<Inhabitant> QueryInhabitants();
         IList<Inhabitant> QueryInhabitants(int aquariumId);
-        List<InhabitantDispItem> PrepareInhabitants(int aquariumId);
+        List<InhabitantDispItem> PrepareInhabitants(int aquariumId, bool hideLosses);
 
         IList<Species> QuerySpecies();
         IList<Species> QuerySpecies(int type);
@@ -94,10 +94,10 @@ namespace AquaMate.Core
         List<MeasureValue> CollectData(Aquarium aquarium);
 
         IList<Nutrition> QueryNutritions();
-        IList<Nutrition> QueryNutritions(Aquarium aquarium);
+        IList<Nutrition> QueryNutritions(int aquariumId);
         IList<string> QueryNutritionBrands();
 
-        IList<Transfer> QueryTransferExpenses();
+        List<Transfer> QueryTransferExpenses();
         IList<string> QueryTransferShops();
 
         IList<Brand> QueryBrands();

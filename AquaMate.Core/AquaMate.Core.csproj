@@ -5,7 +5,7 @@
         <OutputType>Library</OutputType>
         <TargetFramework>net8.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
-        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+        <DefineConstants>NETCORE</DefineConstants>
 
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -14,25 +14,22 @@
 
     <ItemGroup>
         <Reference Include="BSLib">
-            <HintPath>..\libs\net\BSLib.dll</HintPath>
+            <HintPath>..\libs\BSLib.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.DataViz.Model">
-            <HintPath>..\libs\net\BSLib.DataViz.Model.dll</HintPath>
+            <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.Design">
-            <HintPath>..\libs\net\BSLib.Design.dll</HintPath>
+            <HintPath>..\libs\BSLib.Design.dll</HintPath>
         </Reference>
         <Reference Include="RtfWriter">
-            <HintPath>..\libs\net\RtfWriter.dll</HintPath>
+            <HintPath>..\libs\RtfWriter.dll</HintPath>
         </Reference>
         <Reference Include="ExcelLibrary">
             <HintPath>..\libs\ExcelLibrary.dll</HintPath>
         </Reference>
-        <Reference Include="ZedGraph">
-            <HintPath>..\libs\ZedGraph.dll</HintPath>
-        </Reference>
         <Reference Include="ZLMKit">
-            <HintPath>..\libs\net\ZLMKit.dll</HintPath>
+            <HintPath>..\libs\ZLMKit.dll</HintPath>
         </Reference>
     </ItemGroup>
 

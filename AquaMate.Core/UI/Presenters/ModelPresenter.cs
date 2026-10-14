@@ -56,7 +56,7 @@ namespace AquaMate.UI
                 listView.AddColumn("GH", 100, true, BSDTypes.HorizontalAlignment.Left);
 
                 Average avgLifespan = new Average();
-                var records = model.PrepareInhabitants(-1);
+                var records = model.PrepareInhabitants(-1, ALSettings.Instance.HideLosses);
                 foreach (var rec in records) {
                     if (rec.iDays > 0) {
                         avgLifespan.AddValue(rec.iDays);

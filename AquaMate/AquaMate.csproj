@@ -5,7 +5,7 @@
         <OutputType>WinExe</OutputType>
         <TargetFramework>net8.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
-        <DefineConstants>NETCORE;NETCOREAPP30</DefineConstants>
+        <DefineConstants>NETCORE</DefineConstants>
         <StartupObject>AquaMate.Program</StartupObject>
 
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -31,34 +31,28 @@
 
     <ItemGroup>
         <Reference Include="BSLib">
-            <HintPath>..\libs\net\BSLib.dll</HintPath>
+            <HintPath>..\libs\BSLib.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.DataViz.Model">
-            <HintPath>..\libs\net\BSLib.DataViz.Model.dll</HintPath>
+            <HintPath>..\libs\BSLib.DataViz.Model.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.DataViz.WFControls">
-            <HintPath>..\libs\net\BSLib.DataViz.WFControls.dll</HintPath>
+            <HintPath>..\libs\BSLib.DataViz.WFControls.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.Design">
-            <HintPath>..\libs\net\BSLib.Design.dll</HintPath>
+            <HintPath>..\libs\BSLib.Design.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.Design.WFHandlers">
-            <HintPath>..\libs\net\BSLib.Design.WFHandlers.dll</HintPath>
+            <HintPath>..\libs\BSLib.Design.WFHandlers.dll</HintPath>
         </Reference>
         <Reference Include="BSLib.Controls">
-            <HintPath>..\libs\net\BSLib.Controls.dll</HintPath>
-        </Reference>
-        <Reference Include="RtfWriter">
-            <HintPath>..\libs\net\RtfWriter.dll</HintPath>
-        </Reference>
-        <Reference Include="ExcelLibrary">
-            <HintPath>..\libs\ExcelLibrary.dll</HintPath>
+            <HintPath>..\libs\BSLib.Controls.dll</HintPath>
         </Reference>
         <Reference Include="ZedGraph">
             <HintPath>..\libs\ZedGraph.dll</HintPath>
         </Reference>
         <Reference Include="ZLMKit">
-            <HintPath>..\libs\net\ZLMKit.dll</HintPath>
+            <HintPath>..\libs\ZLMKit.dll</HintPath>
         </Reference>
     </ItemGroup>
 

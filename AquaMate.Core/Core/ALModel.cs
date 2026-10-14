@@ -33,7 +33,7 @@ namespace AquaMate.Core
         private readonly EntitiesCache fCache;
         private readonly SQLiteConnection fDB;
         private readonly TSDatabase fTSDB;
-        private IChannel fChannel;
+        private BaseChannel fChannel;
 
 
         public IBrowser Browser
@@ -176,13 +176,13 @@ namespace AquaMate.Core
         {
             T result;
             if (objId <= 0) {
-                result = default(T);
+                result = default;
             } else {
                 try {
                     result = fDB.Get<T>(objId);
                 } catch (InvalidOperationException) {
                     // record not exists
-                    result = default(T);
+                    result = default;
                 }
             }
             return result;
@@ -237,7 +237,7 @@ namespace AquaMate.Core
 
         public string GetEntityName(Entity entity)
         {
-            string result = string.Empty;
+            string result;
 
             switch (entity.EntityType) {
                 case EntityType.Aquarium:
@@ -448,8 +448,7 @@ namespace AquaMate.Core
 
         public string GetItemStateStr(int recId, ItemType itemType, out ItemState itemState)
         {
-            DateTime exclusionDate;
-            GetItemState(recId, itemType, out itemState, out exclusionDate);
+            GetItemState(recId, itemType, out itemState, out DateTime exclusionDate);
             string strState;
             if (itemState == ItemState.Unknown) {
                 strState = string.Empty;
@@ -474,7 +473,7 @@ namespace AquaMate.Core
             return fDB.Query<Inhabitant>("select inh.Id, inh.SpeciesId, inh.Sex, inh.Name from Inhabitant inh, Transfer tran where (inh.Id = tran.ItemId and tran.ItemType in (2, 3, 4, 5) and TargetId = ?)", aquariumId);
         }
 
-        public List<InhabitantDispItem> PrepareInhabitants(int aquariumId)
+        public List<InhabitantDispItem> PrepareInhabitants(int aquariumId, bool hideLosses)
         {
             var result = new List<InhabitantDispItem>();
 
@@ -506,9 +505,7 @@ namespace AquaMate.Core
 
                 if (fin && ALSettings.Instance.HideLosses) continue;
 
-                int currAqmId = 0;
-                DateTime inclusionDate, exclusionDate;
-                GetInhabitantDates(rec.Id, itemType, out inclusionDate, out exclusionDate, out currAqmId);
+                GetInhabitantDates(rec.Id, itemType, out DateTime inclusionDate, out DateTime exclusionDate, out int currAqmId);
 
                 if (aquariumId > 0 && currAqmId != aquariumId) continue;
 
@@ -521,8 +518,7 @@ namespace AquaMate.Core
 
                 int iDays = (!ALCore.IsZeroDate(exclusionDate)) ? (exclusionDate - inclusionDate).Days : 0;
 
-                ItemState itemState;
-                string strState = GetItemStateStr(rec.Id, itemType, out itemState);
+                string strState = GetItemStateStr(rec.Id, itemType, out ItemState itemState);
                 if (itemState == ItemState.Unknown || !fin) {
                     strState = Localizer.LS(ALData.ItemStates[(int)rec.State]);
                 }
@@ -816,7 +812,7 @@ namespace AquaMate.Core
 
         public List<MeasureValue> CollectData(Aquarium aquarium)
         {
-            List<MeasureValue> measures = new List<MeasureValue>();
+            var measures = new List<MeasureValue>();
 
             PrepareValue(aquarium, measures, "Temperature", "T", "°C", null);
             var NO3 = PrepareValue(aquarium, measures, "NO3", "NO3", "mg/l", ALData.NO3Ranges);
@@ -833,7 +829,7 @@ namespace AquaMate.Core
 
             var PO4 = PrepareValue(aquarium, measures, "PO4", "PO4", "", ALData.PO4Ranges);
 
-            double redfield = (NO3 != null && PO4 != null && !double.IsNaN(PO4.Value) && !DoubleHelper.Equals(PO4.Value, 0.0001, 0.0001)) ? ALData.CalcRedfield(NO3.Value, PO4.Value) : double.NaN;
+            double redfield = (NO3 != null && PO4 != null) ? ALData.CalcRedfield(NO3.Value, PO4.Value) : double.NaN;
             if (!double.IsNaN(redfield))
                 PrepareValue(measures, PO4.Timestamp, redfield, "Redfield", "", ALData.RedfieldRanges);
 
@@ -851,7 +847,7 @@ namespace AquaMate.Core
             return measure;
         }
 
-        private void PrepareValue(IList<MeasureValue> measures, DateTime timestamp, double mVal, string sign, string uom, ValueRange[] ranges)
+        private static void PrepareValue(IList<MeasureValue> measures, DateTime timestamp, double mVal, string sign, string uom, ValueRange[] ranges)
         {
             string strVal = !double.IsNaN(mVal) ? ALCore.GetDecimalStr(mVal) : string.Empty;
             string text = string.Format("{0}={1} {2}", sign, strVal, uom);
@@ -866,7 +862,7 @@ namespace AquaMate.Core
             measures.Add(tval);
         }
 
-        private double FindMeasure(IList<MeasureValue> measures, string sign)
+        private static double FindMeasure(IList<MeasureValue> measures, string sign)
         {
             foreach (MeasureValue tVal in measures) {
                 if (tVal.Name == sign) {
@@ -900,9 +896,9 @@ namespace AquaMate.Core
             return fDB.Query<Nutrition>("select * from Nutrition");
         }
 
-        public IList<Nutrition> QueryNutritions(Aquarium aquarium)
+        public IList<Nutrition> QueryNutritions(int aquariumId)
         {
-            return fDB.Query<Nutrition>("select * from Nutrition where AquariumId = ?", aquarium.Id);
+            return fDB.Query<Nutrition>("select * from Nutrition where AquariumId = ?", aquariumId);
         }
 
         public IList<string> QueryNutritionBrands()
@@ -915,7 +911,7 @@ namespace AquaMate.Core
 
         #region Expense functions
 
-        public IList<Transfer> QueryTransferExpenses()
+        public List<Transfer> QueryTransferExpenses()
         {
             return fDB.Query<Transfer>("select Timestamp, ItemType, ItemId, Type, Quantity, UnitPrice, Shop from Transfer order by [Timestamp]");
         }
@@ -982,9 +978,7 @@ namespace AquaMate.Core
         {
             try {
                 fTSDB.ReceiveData(e.SensorId, e.Value);
-
-                DataReceivedEventHandler handler = ReceivedData;
-                if (handler != null) handler(sender, e);
+                ReceivedData?.Invoke(sender, e);
             } catch (Exception ex) {
                 fLogger.WriteError("OnReceivedData()", ex);
             }
@@ -1006,7 +1000,6 @@ namespace AquaMate.Core
 
             switch (entity.EntityType) {
                 case EntityType.Aquarium: {
-                        var aqmRec = entity as Aquarium;
                         ItemType itemType = ItemType.Aquarium;
                         result = HasTransfers(fDB, entity.Id, itemType) || HasAquariumLinks(fDB, entity.Id) || HasAquariumSTT(fDB, entity.Id);
                     }
@@ -1021,21 +1014,18 @@ namespace AquaMate.Core
                     break;
 
                 case EntityType.Species: {
-                        var spcRec = entity as Species;
                         string query = string.Format("select count(*) as value from Inhabitant where SpeciesId = {0}", entity.Id);
                         result = HasCount(fDB, query);
                     }
                     break;
 
                 case EntityType.Nutrition: {
-                        var nutrRec = entity as Nutrition;
                         ItemType itemType = ItemType.Nutrition;
                         result = HasTransfers(fDB, entity.Id, itemType);
                     }
                     break;
 
                 case EntityType.Device: {
-                        var devRec = entity as Device;
                         ItemType itemType = ItemType.Device;
                         result = HasTransfers(fDB, entity.Id, itemType);
                     }
@@ -1064,7 +1054,6 @@ namespace AquaMate.Core
                     break;
 
                 case EntityType.TSPoint: {
-                        var tspRec = entity as TSPoint;
                         string query = string.Format("select count(*) as value from Device where PointId = {0}", entity.Id);
                         result = HasCount(fDB, query);
                     }

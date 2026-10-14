@@ -27,7 +27,8 @@ public class InventoryListTool : BaseTool
             Description = "List all inventory items in the database with pagination support (20 items per page)",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" },
+                    ["hide_losses"] = new MCPToolProperty { Type = "boolean", Description = "Hide losses (depleted, finished and broken items)", Default = true }
                 },
                 Required = new List<string> { }
             }
@@ -45,18 +46,19 @@ public class InventoryListTool : BaseTool
         if (inventoryItems.Count == 0)
             return MCPContent.CreateSimpleContent("No inventory items found.");
 
+        bool hideLosses = MCPHelper.GetOptionalBool(args, "hide_losses", true);
+
         return MCPHelper.PageableTable("inventory items", args, inventoryItems.Count, (int index) => {
             if (index == -1) {
                 return "| Id | Name | Brand | Type | Note | State |";
             } else {
                 var item = inventoryItems[index];
                 string strType = item.Type.ToString();
-
                 ItemType itemType = ALCore.GetItemType(item.Type);
-                ItemState itemState;
-                string strState = model.GetItemStateStr(item.Id, itemType, out itemState);
+                string strState = model.GetItemStateStr(item.Id, itemType, out ItemState itemState);
 
                 bool fin = (itemState == ItemState.Finished || itemState == ItemState.Broken);
+                if (fin && hideLosses) return string.Empty;
 
                 return $"|{item.Id}|{item.Name}|{item.Brand}|{strType}|{item.Note}|{strState}|";
             }

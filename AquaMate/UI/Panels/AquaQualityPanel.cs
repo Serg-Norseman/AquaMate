@@ -6,8 +6,8 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using System.Windows.Forms;
+using AquaMate.Core;
 using AquaMate.Core.Model;
 using AquaMate.UI.Components;
 
@@ -54,7 +54,7 @@ namespace AquaMate.UI.Panels
                 int col = 0, row = 0;
                 var values = fModel.CollectData(fAquarium);
                 foreach (var mVal in values) {
-                    if (!double.IsNaN(mVal.Value) && mVal.Ranges != null && (DateTime.Now - mVal.Timestamp).TotalDays <= 14) {
+                    if (mVal.Ranges != null && ALCore.IsValidMeasure(mVal)) {
                         string title = mVal.Name;
                         if (!string.IsNullOrEmpty(mVal.Unit)) {
                             title += ", " + mVal.Unit;

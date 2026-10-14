@@ -6,7 +6,6 @@
  *  See LICENSE file in the project root for full license information.
  */
 
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -200,7 +199,7 @@ namespace AquaMate.UI.Panels
         private void DrawMeasure(Graphics gfx, int index, Font font, int x, int y)
         {
             MeasureValue tVal = fValues[index];
-            if (!string.IsNullOrEmpty(tVal.Text) && !double.IsNaN(tVal.Value)) {
+            if (ALCore.IsValidMeasure(tVal)) {
                 DrawText(gfx, tVal.Text, font, tVal.Color, x, y);
             }
         }

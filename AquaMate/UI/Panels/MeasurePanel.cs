@@ -40,6 +40,7 @@ namespace AquaMate.UI.Panels
             AddAction("Delete", LSID.Delete, "btn_rec_delete.gif", DeleteHandler);
             AddAction("Chart", LSID.Chart, "btn_chart.gif", ViewChartHandler);
             AddAction("Export", LSID.Export, "btn_excel.gif", ExportHandler);
+            AddAction("TestControl", LSID.None, null, TestControlHandler);
 
             var aquariums = fModel.QueryAquariums();
             string[] items = new string[aquariums.Count + 1];
@@ -75,6 +76,13 @@ namespace AquaMate.UI.Panels
         private void ExportHandler(object sender, EventArgs e)
         {
             Export();
+        }
+
+        private void TestControlHandler(object sender, EventArgs e)
+        {
+            using (var testCtl = new TestControlDlg()) {
+                testCtl.ShowDialog(this);
+            }
         }
     }
 }

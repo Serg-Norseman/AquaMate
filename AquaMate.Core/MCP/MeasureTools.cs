@@ -56,7 +56,7 @@ public class MeasureListTool : BaseTool
 
         return MCPHelper.PageableTable("measures", args, measures.Count, (int index) => {
             if (index == -1) {
-                return "| Id | Aquarium | Timestamp | Temp (°C) | pH | GH | KH | NO3 | NO2 | Cl2 | CO2 |";
+                return "| Id | Aquarium | Timestamp | Temp (°C) | pH | GH | KH | NO3 | NO2 | Cl2 | CO2 | NH | NH3 | NH4 | PO4 |";
             } else {
                 var measure = measures[index];
                 var aquarium = model.GetRecord<Aquarium>(measure.AquariumId);
@@ -70,7 +70,11 @@ public class MeasureListTool : BaseTool
                        $"{ALCore.GetDecimalStr(measure.NO3, 2, true)}|" +
                        $"{ALCore.GetDecimalStr(measure.NO2, 2, true)}|" +
                        $"{ALCore.GetDecimalStr(measure.Cl2, 2, true)}|" +
-                       $"{ALCore.GetDecimalStr(measure.CO2, 2, true)}|";
+                       $"{ALCore.GetDecimalStr(measure.CO2, 2, true)}|" +
+                       $"{ALCore.GetDecimalStr(measure.NH, 2, true)}|" +
+                       $"{ALCore.GetDecimalStr(measure.NH3, 2, true)}|" +
+                       $"{ALCore.GetDecimalStr(measure.NH4, 2, true)}|" +
+                       $"{ALCore.GetDecimalStr(measure.PO4, 2, true)}|";
             }
         });
     }

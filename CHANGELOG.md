@@ -1,5 +1,6 @@
 
 ## ??.??.2026 [v1.5.0]
+- Minor various improvements.
 - Added built-in MCP server.
 - Added the function of viewing the transfers of selected items.
 - Added support of soils (inventory subtype).

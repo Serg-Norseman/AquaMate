@@ -149,6 +149,11 @@ namespace AquaMate.Core
             return ALCore.GetDecimalStr(min) + " - " + ALCore.GetDecimalStr(max);
         }
 
+        public static bool IsValidMeasure(MeasureValue mVal)
+        {
+            return !double.IsNaN(mVal.Value) && (DateTime.Now - mVal.Timestamp).TotalDays <= 14;
+        }
+
         public static string GetTimespanText(DateTime startDate, DateTime endDate)
         {
             // Calculate the span in days

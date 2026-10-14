@@ -63,9 +63,7 @@ public class DeviceListTool : BaseTool
                 string aquariumName = aquarium?.Name ?? "Unknown";
                 string strType = device.Type.ToString();
 
-                ItemState itemState;
-                string strState = model.GetItemStateStr(device.Id, ItemType.Device, out itemState);
-
+                string strState = model.GetItemStateStr(device.Id, ItemType.Device, out ItemState itemState);
                 bool fin = (itemState == ItemState.Broken);
 
                 double curValue = model.GetCurrentValue(device.PointId);

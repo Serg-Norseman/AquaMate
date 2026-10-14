@@ -41,6 +41,7 @@ public class BudgetListTool : BaseTool
             return MCPContent.CreateSimpleContent("❌ Model is not available.");
 
         var transfers = model.QueryTransferExpenses();
+        transfers.Sort((x, y) => { return -x.Timestamp.CompareTo(y.Timestamp); });
 
         if (transfers.Count == 0)
             return MCPContent.CreateSimpleContent("No budget items found.");

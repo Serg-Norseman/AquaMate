@@ -9,6 +9,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using AquaMate.Core;
+using AquaMate.Core.Types;
 using ZLMKit;
 using ZLMKit.MCP;
 using ZLMKit.Protocols;
@@ -26,7 +27,8 @@ public class NutritionListTool : BaseTool
             Description = "List all nutrition items in the database with pagination support (20 items per page)",
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
-                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" }
+                    ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" },
+                    ["hide_losses"] = new MCPToolProperty { Type = "boolean", Description = "Hide losses (depleted, finished and broken items)", Default = true }
                 },
                 Required = new List<string> { }
             }
@@ -43,15 +45,19 @@ public class NutritionListTool : BaseTool
         if (nutritions.Count == 0)
             return MCPContent.CreateSimpleContent("No nutrition items found.");
 
+        bool hideLosses = MCPHelper.GetOptionalBool(args, "hide_losses", true);
+
         return MCPHelper.PageableTable("nutritions", args, nutritions.Count, (int index) => {
             if (index == -1) {
                 return "| Id | Name | Brand | Amount | State | Note |";
             } else {
                 var nutrition = nutritions[index];
-                string state = nutrition.State.ToString();
+                string strState = model.GetItemStateStr(nutrition.Id, ItemType.Nutrition, out ItemState itemState);
+                bool fin = (itemState == ItemState.Finished);
+                if (fin && hideLosses) return string.Empty;
 
                 return $"|{nutrition.Id}|{nutrition.Name}|{nutrition.Brand ?? "-"}|" +
-                       $"{ALCore.GetDecimalStr(nutrition.Amount)}|{state}|{nutrition.Note ?? "-"}|";
+                       $"{ALCore.GetDecimalStr(nutrition.Amount)}|{strState}|{nutrition.Note ?? "-"}|";
             }
         });
     }

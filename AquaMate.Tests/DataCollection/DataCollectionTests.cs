@@ -48,7 +48,7 @@ namespace AquaMate.DataCollection
     [TestFixture]
     public class DataCollectionTests
     {
-#if !NETCOREAPP30
+#if !NETCORE
         [Test]
         public void Test_Common()
         {

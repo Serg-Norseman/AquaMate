@@ -76,10 +76,18 @@ public class AquariumDetailsTool : BaseTool
             ""
         };
 
-        var lastMeasure = model.QueryLastMeasure(aquarium, "Temperature");
-        if (!double.IsNaN(lastMeasure.Value)) {
+        var lastMeasures = model.CollectData(aquarium);
+        if (lastMeasures.Count > 0) {
             details.Add("## Last Measurements");
-            details.Add($"- **Temperature**: {lastMeasure.Value} °C");
+            foreach (var mVal in lastMeasures) {
+                if (ALCore.IsValidMeasure(mVal)) {
+                    string title = mVal.Name;
+                    if (!string.IsNullOrEmpty(mVal.Unit)) {
+                        title += ", " + mVal.Unit;
+                    }
+                    details.Add($"- **{title}**: {mVal.ValText}");
+                }
+            }
             details.Add("");
         }
 

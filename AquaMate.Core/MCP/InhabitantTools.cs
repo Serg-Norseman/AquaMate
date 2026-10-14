@@ -27,7 +27,8 @@ public class InhabitantListTool : BaseTool
             InputSchema = new MCPToolInputSchema {
                 Properties = new Dictionary<string, MCPToolProperty> {
                     ["page"] = new MCPToolProperty { Type = "integer", Description = "Page number (1-based, default: 1)" },
-                    ["aquarium_id"] = new MCPToolProperty { Type = "integer", Description = "Filter by aquarium ID (optional)" }
+                    ["aquarium_id"] = new MCPToolProperty { Type = "integer", Description = "Filter by aquarium ID (optional)" },
+                    ["hide_losses"] = new MCPToolProperty { Type = "boolean", Description = "Hide losses (deceased, sold, and relocated inhabitants)", Default = true }
                 },
                 Required = new List<string> { }
             }
@@ -42,7 +43,9 @@ public class InhabitantListTool : BaseTool
 
         int aquariumId = MCPHelper.GetOptionalInt(args, "aquarium_id", -1);
 
-        var inhabitants = model.PrepareInhabitants(aquariumId);
+        bool hideLosses = MCPHelper.GetOptionalBool(args, "hide_losses", true);
+
+        var inhabitants = model.PrepareInhabitants(aquariumId, hideLosses);
         if (inhabitants.Count == 0)
             return MCPContent.CreateSimpleContent("No inhabitants found.");
 
