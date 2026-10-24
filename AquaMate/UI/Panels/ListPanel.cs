@@ -153,13 +153,14 @@ namespace AquaMate.UI.Panels
             }
         }
 
-        protected override void AddHandler(object sender, EventArgs e)
+        public void AddRecord(Dictionary<string, object> parameters)
         {
             try {
                 R record = new R();
 
                 using (var dlg = new D()) {
                     dlg.SetContext(fModel, record);
+                    dlg.SetParameters(parameters);
 
                     if (dlg.ShowModal()) {
                         fModel.AddRecord(record);
@@ -170,6 +171,11 @@ namespace AquaMate.UI.Panels
             } catch (Exception ex) {
                 fLogger.WriteError("AddHandler()", ex);
             }
+        }
+
+        protected override void AddHandler(object sender, EventArgs e)
+        {
+            AddRecord(null);
         }
 
         protected override void EditHandler(object sender, EventArgs e)

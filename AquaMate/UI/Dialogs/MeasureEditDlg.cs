@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using AquaMate.Core;
 using AquaMate.Core.Model;
@@ -43,6 +44,38 @@ namespace AquaMate.UI.Dialogs
         public void SetContext(IModel model, Measure record)
         {
             fPresenter.SetContext(model, record);
+        }
+
+        public override void SetParameters(Dictionary<string, object> parameters)
+        {
+            foreach (KeyValuePair<string, object> param in parameters) {
+                double? paramVal = (double?)param.Value;
+                string strVal = paramVal.HasValue ? paramVal.Value.ToString() : "-";
+
+                switch (param.Key) {
+                    case "NO3":
+                        txtNO3.Text = strVal;
+                        break;
+                    case "NO2":
+                        txtNO2.Text = strVal;
+                        break;
+                    case "GH":
+                        txtGH.Text = strVal;
+                        break;
+                    case "KH":
+                        txtKH.Text = strVal;
+                        break;
+                    case "PH":
+                        txtPH.Text = strVal;
+                        break;
+                    case "PO4":
+                        txtPO4.Text = strVal;
+                        break;
+                    case "NH3/4":
+                        txtNHtot.Text = strVal;
+                        break;
+                }
+            }
         }
 
         private void btnAccept_Click(object sender, EventArgs e)

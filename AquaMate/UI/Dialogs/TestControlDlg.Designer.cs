@@ -18,6 +18,7 @@ namespace AquaMate.UI.Dialogs
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripLabel toolStripLabel2;
         private System.ComponentModel.IContainer components = null;
+        private ToolStripButton btnFix;
 
         protected override void Dispose(bool disposing)
         {
@@ -29,7 +30,6 @@ namespace AquaMate.UI.Dialogs
 
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestControlDlg));
             splitContainer1 = new SplitContainer();
             dgvMeasurements = new DataGridView();
             toolStrip2 = new ToolStrip();
@@ -42,6 +42,7 @@ namespace AquaMate.UI.Dialogs
             btnDeleteBrand = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripLabel2 = new ToolStripLabel();
+            btnFix = new ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -83,7 +84,7 @@ namespace AquaMate.UI.Dialogs
             // 
             // toolStrip2
             // 
-            toolStrip2.Items.AddRange(new ToolStripItem[] { btnCalculate, toolStripSeparator1, toolStripLabel1 });
+            toolStrip2.Items.AddRange(new ToolStripItem[] { btnCalculate, btnFix, toolStripSeparator1, toolStripLabel1 });
             toolStrip2.Location = new Point(0, 0);
             toolStrip2.Name = "toolStrip2";
             toolStrip2.Size = new Size(1000, 25);
@@ -95,7 +96,7 @@ namespace AquaMate.UI.Dialogs
             btnCalculate.DisplayStyle = ToolStripItemDisplayStyle.Text;
             btnCalculate.ImageTransparentColor = Color.Magenta;
             btnCalculate.Name = "btnCalculate";
-            btnCalculate.Size = new Size(48, 22);
+            btnCalculate.Size = new Size(60, 22);
             btnCalculate.Text = "Calculate";
             btnCalculate.Click += btnCalculate_Click;
             // 
@@ -108,7 +109,7 @@ namespace AquaMate.UI.Dialogs
             // 
             toolStripLabel1.ForeColor = SystemColors.HotTrack;
             toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new Size(100, 22);
+            toolStripLabel1.Size = new Size(67, 22);
             toolStripLabel1.Text = "Test Results";
             // 
             // dgvAccuracy
@@ -134,7 +135,7 @@ namespace AquaMate.UI.Dialogs
             btnAddBrand.DisplayStyle = ToolStripItemDisplayStyle.Text;
             btnAddBrand.ImageTransparentColor = Color.Magenta;
             btnAddBrand.Name = "btnAddBrand";
-            btnAddBrand.Size = new Size(99, 22);
+            btnAddBrand.Size = new Size(67, 22);
             btnAddBrand.Text = "Add Brand";
             btnAddBrand.Click += btnAddBrand_Click;
             // 
@@ -143,7 +144,7 @@ namespace AquaMate.UI.Dialogs
             btnDeleteBrand.DisplayStyle = ToolStripItemDisplayStyle.Text;
             btnDeleteBrand.ImageTransparentColor = Color.Magenta;
             btnDeleteBrand.Name = "btnDeleteBrand";
-            btnDeleteBrand.Size = new Size(91, 22);
+            btnDeleteBrand.Size = new Size(78, 22);
             btnDeleteBrand.Text = "Delete Brand";
             btnDeleteBrand.Click += btnDeleteBrand_Click;
             // 
@@ -156,8 +157,17 @@ namespace AquaMate.UI.Dialogs
             // 
             toolStripLabel2.ForeColor = SystemColors.HotTrack;
             toolStripLabel2.Name = "toolStripLabel2";
-            toolStripLabel2.Size = new Size(147, 22);
+            toolStripLabel2.Size = new Size(122, 22);
             toolStripLabel2.Text = "Accuracy Coefficients";
+            // 
+            // btnFix
+            // 
+            btnFix.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btnFix.ImageTransparentColor = Color.Magenta;
+            btnFix.Name = "btnFix";
+            btnFix.Size = new Size(26, 22);
+            btnFix.Text = "Fix";
+            btnFix.Click += btnFix_Click;
             // 
             // TestControlDlg
             // 

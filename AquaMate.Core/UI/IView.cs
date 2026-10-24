@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using AquaMate.Core;
 using AquaMate.Core.Model;
 
@@ -42,5 +43,6 @@ namespace AquaMate.UI
         where TEntity : IEntity
     {
         void SetContext(IModel model, TEntity record);
+        void SetParameters(Dictionary<string, object> parameters);
     }
 }

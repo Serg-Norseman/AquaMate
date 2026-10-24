@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using AquaMate.Tests;
+using AquaMate.UI.Panels;
+using BSLib;
 
 namespace AquaMate.UI.Dialogs
 {
@@ -18,9 +20,12 @@ namespace AquaMate.UI.Dialogs
     {
         private BindingList<TestAccuracy> _accuracyMatrix;
         private readonly List<string> _parameters = new List<string> { "NO3", "NO2", "GH", "KH", "PH", "PO4", "NH3/4" };
+        private readonly MeasurePanel fMeasurePanel;
 
-        public TestControlDlg()
+        public TestControlDlg(MeasurePanel measurePanel)
         {
+            fMeasurePanel = measurePanel;
+
             InitializeComponent();
             LoadData();
             SetupMeasurementsGrid();
@@ -129,8 +134,11 @@ namespace AquaMate.UI.Dialogs
             }
         }
 
+        private Dictionary<string, object> fParameters = new Dictionary<string, object>();
+
         private void btnCalculate_Click(object sender, EventArgs e)
         {
+            fParameters.Clear();
             int totalRowIndex = dgvMeasurements.Rows.Count - 2;
 
             for (int col = 1; col < dgvMeasurements.Columns.Count; col++) {
@@ -141,14 +149,23 @@ namespace AquaMate.UI.Dialogs
                     string brand = dgvMeasurements.Rows[row].Cells[0].Value?.ToString();
                     var cellValue = dgvMeasurements.Rows[row].Cells[col].Value;
 
-                    if (cellValue != null && double.TryParse(cellValue.ToString().Replace(".", ","), out double val)) {
+                    if (cellValue != null) {
+                        double val = ConvertHelper.ParseFloat(cellValue.ToString(), double.NaN, true);
                         measurements.Add(new CurrentMeasurement { TestName = brand, Value = val });
                     }
                 }
 
                 var avg = TestRepository.CalculateWeightedAverage(measurements, _accuracyMatrix, paramName);
                 dgvMeasurements.Rows[totalRowIndex].Cells[col].Value = avg.HasValue ? avg.Value.ToString() : "-";
+
+                fParameters.Add(paramName, avg);
             }
+        }
+
+        private void btnFix_Click(object sender, EventArgs e)
+        {
+            Close();
+            fMeasurePanel.AddRecord(fParameters);
         }
     }
 }

@@ -80,7 +80,7 @@ namespace AquaMate.UI.Panels
 
         private void TestControlHandler(object sender, EventArgs e)
         {
-            using (var testCtl = new TestControlDlg()) {
+            using (var testCtl = new TestControlDlg(this)) {
                 testCtl.ShowDialog(this);
             }
         }

@@ -6,6 +6,7 @@
  *  See LICENSE file in the project root for full license information.
  */
 
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace AquaMate.UI.Dialogs
@@ -24,6 +25,11 @@ namespace AquaMate.UI.Dialogs
         public bool ShowModal()
         {
             return (base.ShowDialog() == DialogResult.OK);
+        }
+
+        public virtual void SetParameters(Dictionary<string, object> parameters)
+        {
+            // dummy
         }
     }
 }
